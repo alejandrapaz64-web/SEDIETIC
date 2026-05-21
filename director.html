@@ -420,12 +420,12 @@ table.rt td:first-child{padding-left:10px;}
         <div class="tbl-wrap">
           <table class="rt">
             <thead id="hetero-thead"><tr>
-              <th style="min-width:260px;text-align:left;padding-left:10px;">RPA</th>
-              <th class="col-gold" style="min-width:76px;">Al inicio (%)</th>
-              <th class="col-gold" style="min-width:76px;">Proyección (%)</th>
-              <th class="col-green" style="min-width:76px;">Hoy (%)</th>
+              <th id="th-dir-rpa" style="min-width:260px;text-align:left;padding-left:10px;">RPA</th>
+              <th id="th-dir-c1" class="col-gold" style="min-width:90px;">Al inicio (%)</th>
+              <th id="th-dir-c2" class="col-gold" style="min-width:90px;">Proyección (%)</th>
+              <th id="th-dir-c3" class="col-green" style="min-width:76px;display:none;">Hoy (%)</th>
               <!-- Columnas de coevaluación se agregan dinámicamente -->
-              <th class="col-blue" style="min-width:90px;">Su evaluación (%)</th>
+              <th id="th-dir-eval" class="col-blue" style="min-width:90px;">Su evaluación (%)</th>
             </tr></thead>
             <tbody id="hetero-body"></tbody>
           </table>
@@ -611,6 +611,14 @@ var CF={'CBI-1':'CBI','CBI-2':'CBI','CBI-3':'CBI','CBI-4':'CBI','CTEI-1':'CTEI',
 var ASIG=[{id:'A01',n:'Diseño de Proyecto',a:1,c:['CBI-2','CTEI-3','CINV-2','CINV-3']},{id:'A02',n:'Conceptualización 1',a:1,c:['CTEI-1','CINV-1']},{id:'A03',n:'Trabajo de campo 1',a:1,c:['CBI-2','CBI-4','CTEI-2','CINV-1','CINV-2']},{id:'A04',n:'Análisis de datos 1',a:1,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},{id:'A05',n:'Difusión y Socialización 1',a:1,c:['CTEI-1','CTEI-2','CINV-3']},{id:'A06',n:'Escritura Académica 1',a:1,c:['CBI-3','CINV-1','CINV-3']},{id:'A07',n:'Observación 1',a:1,c:['CBI-3']},{id:'A08',n:'Exploración 1',a:1,c:['CBI-4']},{id:'A09',n:'Indagación 1',a:1,c:['CBI-1','CBI-3']},{id:'A10',n:'Actividades empáticas 1',a:1,c:['CBI-3']},{id:'A11',n:'Definición y Síntesis 1',a:1,c:['CBI-1','CBI-4']},{id:'A12',n:'Ideación 1',a:1,c:['CBI-4']},{id:'A13',n:'Análisis 1',a:1,c:['CBI-1','CBI-2']},{id:'A14',n:'Electiva 1',a:1,c:['CBI-3','CTEI-1','CTEI-3']},{id:'A15',n:'Conceptualización 2',a:2,c:['CTEI-1','CINV-1']},{id:'A16',n:'Trabajo de campo 2',a:2,c:['CBI-2','CBI-4','CTEI-2','CINV-1','CINV-2']},{id:'A17',n:'Análisis de datos 2',a:2,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},{id:'A18',n:'Difusión y Socialización 2',a:2,c:['CTEI-1','CTEI-2','CINV-3']},{id:'A19',n:'Escritura Académica 2',a:2,c:['CBI-3','CINV-1','CINV-3']},{id:'A20',n:'Observación 2',a:2,c:['CBI-3']},{id:'A21',n:'Indagación 2',a:2,c:['CBI-1','CBI-3']},{id:'A22',n:'Ideación 2',a:2,c:['CBI-4']},{id:'A23',n:'Prototipado 1',a:2,c:['CBI-1']},{id:'A24',n:'Pilotaje',a:2,c:['CBI-3']},{id:'A25',n:'Implementación 1',a:2,c:['CBI-1','CBI-4']},{id:'A26',n:'Electiva 2',a:2,c:['CBI-3','CTEI-1','CTEI-3']},{id:'A27',n:'Conceptualización 3',a:3,c:['CTEI-1','CINV-1']},{id:'A28',n:'Trabajo de campo 3',a:3,c:['CBI-2','CBI-4','CTEI-2','CINV-1','CINV-2']},{id:'A29',n:'Análisis de datos 3',a:3,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},{id:'A30',n:'Difusión y Socialización 3',a:3,c:['CTEI-1','CTEI-2','CINV-3']},{id:'A31',n:'Escritura Académica 3',a:3,c:['CBI-3','CINV-1','CINV-3']},{id:'A32',n:'Indagación 3',a:3,c:['CBI-1','CBI-3']},{id:'A33',n:'Prototipado 2',a:3,c:['CBI-1']},{id:'A34',n:'Implementación 2',a:3,c:['CBI-1','CBI-4']},{id:'A35',n:'Electiva 3',a:3,c:['CBI-3','CTEI-1','CTEI-3']}];
 
 var estSel=null,todosEsts=[],resGlobal=null,anoEstudiante=null;
+var HIST_DIR=[];
+
+function calcularPeriodoDir(cohorte,sumarAnos){
+  if(!cohorte)return'';
+  var m=cohorte.match(/^(\d{4})-(\d)$/);
+  if(!m)return'';
+  return (parseInt(m[1])+sumarAnos)+'-'+m[2];
+}
 
 function doLogin(){
   var u=(document.getElementById('login-user').value||'').trim();
@@ -893,18 +901,25 @@ function selEst(id){
   }
     // Buscar en LISTA_F1_FULL la fila que corresponde a este id + año del filtro
     var anoParaForm=anoFiltro&&anoFiltro!=='todos'?anoFiltro:'1';
-    fetch(APPS_URL+'?tipo=LISTA_F1_FULL')
-    .then(function(r){return r.json();})
-    .then(function(d){
-      var todos=d.estudiantes||[];
-      // Buscar fila exacta: mismo id y mismo año del filtro
+    // Cargar histórico completo + fila del año actual en paralelo
+    Promise.all([
+      fetch(APPS_URL+'?tipo=HISTORICO_F1&id='+encodeURIComponent(idS)).then(function(r){return r.json();}).catch(function(){return{historico:[]};}),
+      fetch(APPS_URL+'?tipo=LISTA_F1_FULL').then(function(r){return r.json();}).catch(function(){return{estudiantes:[]};})
+    ]).then(function(results){
+      var hist=results[0].historico||[];
+      HIST_DIR=hist;
+      var todos=results[1].estudiantes||[];
       var fila=todos.find(function(e){
         return String(e.id||e.estudiante_id).trim()===idS && String(e.ano).trim()===anoParaForm;
       });
-      // Fallback: cualquier fila de ese estudiante
       if(!fila) fila=todos.find(function(e){return String(e.id||e.estudiante_id).trim()===idS;});
+      // Si no hay fila del año actual pero hay histórico, usar el del año correcto
+      if(!fila){
+        var hf=hist.find(function(h){return String(h.ano).trim()===anoParaForm;});
+        if(hf) fila=hf;
+      }
       if(fila){
-        estSel={id:idS,nombre:fila.nombre||fila.estudiante_nombre,cohorte:fila.cohorte,ano:fila.ano,periodo:fila.periodo,f1:fila};
+        estSel={id:idS,nombre:fila.nombre||fila.estudiante_nombre||idS,cohorte:fila.cohorte,ano:fila.ano,periodo:fila.periodo,f1:fila};
         anoEstudiante=fila.ano||null;
         actualizarPonderacionesPorAno(anoParaForm);
         document.querySelectorAll('.est-item').forEach(function(el){el.classList.remove('selected');});
@@ -916,7 +931,6 @@ function selEst(id){
         document.getElementById('form-dir').classList.add('show');
         document.getElementById('form-dir').scrollIntoView({behavior:'smooth',block:'start'});
       } else {
-        // Sin F1: abrir igual para que el director pueda evaluar
         estSel={id:idS,nombre:idS,f1:null};anoEstudiante=null;
         actualizarPonderacionesPorAno(anoParaForm);
         document.getElementById('est-sel-nombre').textContent=idS;
@@ -924,14 +938,6 @@ function selEst(id){
         buildHeteroTable(null);
         document.getElementById('form-dir').classList.add('show');
       }
-    })
-    .catch(function(){
-      estSel={id:idS,nombre:idS,f1:null};anoEstudiante=null;
-      actualizarPonderacionesPorAno(anoParaForm);
-      document.getElementById('est-sel-nombre').textContent=idS;
-      document.getElementById('est-sel-card').classList.add('show');
-      buildHeteroTable(null);
-      document.getElementById('form-dir').classList.add('show');
     });
 }
 
@@ -984,6 +990,45 @@ function actualizarPonderacionesPorAno(ano){
     if(nota)nota.textContent='Año 2: sin pasantía. Ponderación sugerida: 25% auto + 25% co + 50% hetero.';
   }
   validPond();
+  // Actualizar encabezados si ya hay estudiante seleccionado
+  if(estSel){
+    var cohD=estSel?limpiarCohorte(estSel.cohorte):'';
+    actualizarEncabezadosDir(String(ano),cohD);
+  }
+}
+
+function actualizarEncabezadosDir(anoStr, coh){
+  var th1=document.getElementById('th-dir-c1');
+  var th2=document.getElementById('th-dir-c2');
+  var th3=document.getElementById('th-dir-c3');
+  var thE=document.getElementById('th-dir-eval');
+  var cohIni=coh||'';
+  var coh3=calcularPeriodoDir(cohIni,3);
+  var coh1=calcularPeriodoDir(cohIni,1);
+  var coh2=calcularPeriodoDir(cohIni,2);
+  // Reset estilo th-dir-eval
+  if(thE){thE.style.background='';thE.innerHTML='Su evaluación (%)';}
+  if(anoStr==='0'){
+    if(th1)th1.innerHTML='Auto Inicial'+(cohIni?'<br><small>('+cohIni+')</small>':'');
+    if(th2)th2.innerHTML='Proyección 3 años'+(coh3?'<br><small>('+coh3+')</small>':'');
+    if(th3){th3.style.display='none';}
+    if(thE)thE.innerHTML='Su evaluación (%)';
+  } else if(anoStr==='1'){
+    if(th1)th1.innerHTML='Auto Inicial'+(cohIni?'<br><small>('+cohIni+') ★ Ref.</small>':'');
+    if(th2)th2.innerHTML='Proyección 3 años'+(coh3?'<br><small>('+coh3+') ★ Ref.</small>':'');
+    if(th3){th3.style.display='none';}
+    if(thE)thE.innerHTML='Heteroevaluación<br>Final A1'+(coh1?'<br><small>('+coh1+')</small>':'');
+  } else if(anoStr==='2'){
+    if(th1)th1.innerHTML='Auto Ini. '+(cohIni||'')+'<br><small>+ Proy. '+(coh3||'')+' ★ Ref.</small>';
+    if(th2)th2.innerHTML='Final Año 1'+(coh1?'<br><small>('+coh1+') ★ Ref.</small>':'');
+    if(th3){th3.style.display='none';}
+    if(thE){thE.style.background='#c8922a';thE.style.color='#fff';thE.innerHTML='Heteroevaluación<br>Final A2'+(coh2?'<br><small>('+coh2+')</small>':'');}
+  } else if(anoStr==='3'){
+    if(th1)th1.innerHTML='Auto Ini. '+(cohIni||'')+'<br><small>+ Proy. '+(coh3||'')+' ★ Ref.</small>';
+    if(th2)th2.innerHTML='Final A1 '+(coh1||'')+'<br><small>+ Final A2 '+(coh2||'')+' ★ Ref.</small>';
+    if(th3){th3.style.display='none';}
+    if(thE){thE.style.background='#c8922a';thE.style.color='#fff';thE.innerHTML='Heteroevaluación<br>Final A3'+(coh3?'<br><small>('+coh3+')</small>':'');}
+  }
 }
 
 function buildHeteroTable(f1){
@@ -1051,22 +1096,67 @@ function buildHeteroTable(f1){
   var anoStr2=String(anoFiltro&&anoFiltro!=='todos'?anoFiltro:(anoEstudiante||'1'));
   var tieneCo=coListDir.length>0&&(anoStr2==='2'||anoStr2==='3');
 
+  // Obtener datos del histórico
+  var anoStr2b=String(anoFiltro&&anoFiltro!=='todos'?anoFiltro:(anoEstudiante||'1'));
+  var _h0=HIST_DIR.find(function(h){return String(h.ano)==='0';});
+  var _h1=HIST_DIR.find(function(h){return String(h.ano)==='1';});
+  var _h2=HIST_DIR.find(function(h){return String(h.ano)==='2';});
+  var cohDir=estSel?limpiarCohorte(estSel.cohorte):'';
+  actualizarEncabezadosDir(anoStr2b, cohDir);
+
   RPAS_ORD.forEach(function(rid){
-    var ini=f1?parseFloat(f1[rid+'_inicio'])||0:null;
-    var pro=f1?parseFloat(f1[rid+'_proyeccion'])||0:null;
-    var act=f1?parseFloat(f1[rid+'_actual'])||0:null;
+    // ini y pro siempre desde año 0
+    function getVal(reg,campo){
+      if(!reg)return null;
+      var v=reg[campo];
+      if(v===undefined||v===null||v==='')return null;
+      var n=Number(v);
+      return isNaN(n)?null:n;
+    }
+    var ini=getVal(_h0,rid+'_inicio');
+    var pro=getVal(_h0,rid+'_proyeccion');
+    // col2 y col3 según año
+    var col2val=null;
+    if(anoStr2b==='2') col2val=getVal(_h1,rid+'_actual');
+    else if(anoStr2b==='3'){
+      var v1=getVal(_h1,rid+'_actual');
+      var v2=getVal(_h2,rid+'_actual');
+      col2val={v1:v1,v2:v2};
+    }
+    // Para año 0 y 1: ini y pro vienen directamente del f1 si no hay histórico
+    if(!_h0&&f1){
+      ini=getVal(f1,rid+'_inicio');
+      pro=getVal(f1,rid+'_proyeccion');
+    }
 
     function fmtRef(v,colorOk){
       if(v===null||v===undefined)return'<span style="color:var(--g400);font-size:10px;">—</span>';
       if(v===0)return'<span style="background:var(--rbg);color:var(--rojo);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;">SIN DATOS</span>';
       return'<span style="color:'+(colorOk||'var(--g600)')+';font-weight:600;">'+v+'%</span>';
     }
+    function fmtApilado(v1,v2){
+      return fmtRef(v1,'var(--verde)')+'<br>'+fmtRef(v2,'var(--verde)');
+    }
 
     var tr=document.createElement('tr');
+    var c2html='';
+    if(anoStr2b==='0'||anoStr2b==='1'){
+      c2html='<td class="col-gold" style="text-align:center">'+fmtRef(pro)+'</td>';
+    } else if(anoStr2b==='2'){
+      c2html='<td class="col-gold" style="text-align:center">'+fmtRef(col2val,'var(--verde)')+'</td>';
+    } else {
+      c2html='<td class="col-gold" style="text-align:center">'+fmtApilado(col2val?col2val.v1:null,col2val?col2val.v2:null)+'</td>';
+    }
+    // Col1: para año 0/1 = ini solo; para año 2/3 = apilada ini+pro
+    var c1html='';
+    if(anoStr2b==='0'||anoStr2b==='1'){
+      c1html='<td class="col-gold" style="text-align:center">'+fmtRef(ini)+'</td>';
+    } else {
+      c1html='<td class="col-gold" style="text-align:center">'+fmtRef(ini)+'<br>'+fmtRef(pro)+'</td>';
+    }
+
     var cells='<td><span class="rid">'+rid+'</span> <span class="rdsc">'+RPAS_DESC[rid]+'</span></td>'
-      +'<td class="col-gold" style="text-align:center">'+fmtRef(ini)+'</td>'
-      +'<td class="col-gold" style="text-align:center">'+fmtRef(pro)+'</td>'
-      +'<td class="col-green" style="text-align:center">'+fmtRef(act,'var(--verde)')+'</td>';
+      +c1html+c2html;
 
     // Columnas de coevaluación (solo año 2 y 3)
     if(tieneCo){
@@ -1989,11 +2079,13 @@ function descargarPDF(){
   // ── GRÁFICAS AL FINAL DEL REPORTE ───────────────────────────────────
   // Preparar datos
   var f1PDF = estSel ? estSel.f1 : null;
+  var _h0PDF=HIST_DIR.find(function(h){return String(h.ano)==='0';});
   var RPAS_PDF=['RPA10','RPA11','RPA5','RPA4','RPA12','RPA6','RPA13','RPA1','RPA2','RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18','RPA9','RPA19','RPA20','RPA21','RPA22'];
   var rD=[],rP=[],rH=[];
   RPAS_PDF.forEach(function(rid){
-    rD.push(f1PDF?Math.round(parseFloat(f1PDF[rid+'_inicio'])||0):0);
-    rP.push(f1PDF?Math.round(parseFloat(f1PDF[rid+'_proyeccion'])||0):0);
+    var srcIni=_h0PDF||f1PDF;
+    rD.push(srcIni?Math.round(parseFloat(srcIni[rid+'_inicio'])||0):0);
+    rP.push(srcIni?Math.round(parseFloat(srcIni[rid+'_proyeccion'])||0):0);
     rH.push(Math.round(resGlobal.rpasC[rid]||0));
   });
   var COMP_PDF=['CBI-1','CBI-2','CBI-3','CBI-4','CTEI-1','CTEI-2','CTEI-3','CINV-1','CINV-2','CINV-3'];
