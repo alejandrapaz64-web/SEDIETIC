@@ -6,6 +6,7 @@
 <title>SEDIETIC — Administración | Universidad de La Sabana</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{
@@ -305,6 +306,7 @@ table.prev tr:hover td{background:var(--azul-p);}
       <button class="tab-btn" onclick="switchTab('tab-config',this);cargarConfig()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:5px;"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>Configuración
       </button>
+      <button class="tab-btn" onclick="switchTab('tab-notas',this);cargarNotasFinales()">📊 Gestión de Notas</button>
     </div>
   </div>
 
@@ -731,6 +733,38 @@ table.prev tr:hover td{background:var(--azul-p);}
         <div style="margin-top:20px;display:flex;gap:10px;align-items:center;">
           <button onclick="guardarContrasenas()" style="padding:10px 24px;background:var(--azul);color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">🔒 Guardar contraseñas</button>
           <span style="font-size:11px;color:var(--gris-t);">Solo se actualizan los campos que no estén vacíos.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: GESTIÓN DE NOTAS -->
+    <div class="tab-panel" id="tab-notas">
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px 24px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+          <input type="text" id="gn-f-cohorte" placeholder="Cohorte (ej. 2025-2)" oninput="aplicarFiltrosNotas()" style="padding:8px 12px;font-size:12px;border:1.5px solid #e2e8f0;border-radius:8px;width:150px;">
+          <select id="gn-f-ano" onchange="aplicarFiltrosNotas()" style="padding:8px 12px;font-size:12px;border:1.5px solid #e2e8f0;border-radius:8px;">
+            <option value="">Todos los años</option><option value="1">Año 1</option><option value="2">Año 2</option><option value="3">Año 3</option>
+          </select>
+          <input type="text" id="gn-f-est" placeholder="Estudiante (nombre o ID)" oninput="aplicarFiltrosNotas()" style="padding:8px 12px;font-size:12px;border:1.5px solid #e2e8f0;border-radius:8px;width:220px;">
+          <button onclick="cargarNotasFinales()" style="padding:8px 14px;border:1.5px solid var(--azul-b);border-radius:8px;font-size:11px;font-weight:600;color:var(--azul);background:var(--azul-p);cursor:pointer;">↺ Actualizar</button>
+          <button onclick="exportarNotasExcel()" style="padding:8px 14px;border:none;border-radius:8px;font-size:11px;font-weight:700;color:#fff;background:#166534;cursor:pointer;">📗 Exportar Excel</button>
+          <button onclick="exportarNotasPDF()" style="padding:8px 14px;border:none;border-radius:8px;font-size:11px;font-weight:700;color:#fff;background:var(--azul);cursor:pointer;">📕 Exportar PDF</button>
+        </div>
+        <div id="gn-info" style="font-size:11px;color:var(--gris-t);margin-bottom:8px;"></div>
+        <div style="overflow-x:auto;max-height:560px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead><tr style="background:var(--azul);position:sticky;top:0;">
+              <th onclick="ordenarNotas('cohorte')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">Cohorte ⇅</th>
+              <th onclick="ordenarNotas('id')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">ID ⇅</th>
+              <th onclick="ordenarNotas('nombre')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">Estudiante ⇅</th>
+              <th onclick="ordenarNotas('asignatura')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">Asignatura ⇅</th>
+              <th onclick="ordenarNotas('definitiva')" style="padding:8px 10px;color:#fff;text-align:center;cursor:pointer;">Definitiva ⇅</th>
+              <th onclick="ordenarNotas('ano')" style="padding:8px 10px;color:#fff;text-align:center;cursor:pointer;">Año ⇅</th>
+              <th onclick="ordenarNotas('fecha')" style="padding:8px 10px;color:#fff;text-align:center;cursor:pointer;">Fecha ⇅</th>
+              <th style="padding:8px 10px;color:#fff;text-align:center;">Evaluador</th>
+            </tr></thead>
+            <tbody id="gn-tbody"><tr><td colspan="8" style="padding:20px;text-align:center;color:var(--gris-t);">Cargando...</td></tr></tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -4018,6 +4052,95 @@ function guardarConfig(){
       el.textContent='Error de conexión con el servidor.';
       setTimeout(function(){el.style.display='none';},4000);
     });
+}
+
+// ══════════════════════════════════════════════════════════════
+// MÓDULO GESTIÓN DE NOTAS — consulta (NOTAS_FINALES)
+// ══════════════════════════════════════════════════════════════
+var notasFinalesDB=[],notasFinalesOrden={campo:'nombre',asc:true};
+
+function cargarNotasFinales(){
+  document.getElementById('gn-tbody').innerHTML='<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--gris-t);">Cargando...</td></tr>';
+  fetch(APPS_URL+'?tipo=CONSULTAR_NOTAS_FINALES')
+    .then(function(r){return r.json();})
+    .then(function(d){notasFinalesDB=d.notas||[];aplicarFiltrosNotas();})
+    .catch(function(){document.getElementById('gn-tbody').innerHTML='<tr><td colspan="8" style="padding:20px;text-align:center;color:#991b1b;">Error al cargar.</td></tr>';});
+}
+
+function aplicarFiltrosNotas(){
+  var fc=(document.getElementById('gn-f-cohorte').value||'').toLowerCase().trim();
+  var fa=document.getElementById('gn-f-ano').value||'';
+  var fe=(document.getElementById('gn-f-est').value||'').toLowerCase().trim();
+  var filtradas=notasFinalesDB.filter(function(n){
+    if(fc&&(n.cohorte||'').toLowerCase().indexOf(fc)===-1)return false;
+    if(fa&&String(n.ano)!==fa)return false;
+    if(fe&&(n.id||'').toLowerCase().indexOf(fe)===-1&&(n.nombre||'').toLowerCase().indexOf(fe)===-1)return false;
+    return true;
+  });
+  renderNotasFinales(filtradas);
+}
+
+function ordenarNotas(campo){
+  if(notasFinalesOrden.campo===campo)notasFinalesOrden.asc=!notasFinalesOrden.asc;
+  else{notasFinalesOrden.campo=campo;notasFinalesOrden.asc=true;}
+  aplicarFiltrosNotas();
+}
+
+function renderNotasFinales(lista){
+  var campo=notasFinalesOrden.campo,asc=notasFinalesOrden.asc;
+  lista=lista.slice().sort(function(a,b){
+    var va=a[campo],vb=b[campo];
+    if(campo==='definitiva'){va=parseFloat(va)||0;vb=parseFloat(vb)||0;}
+    if(va<vb)return asc?-1:1;if(va>vb)return asc?1:-1;return 0;
+  });
+  document.getElementById('gn-info').textContent='Mostrando '+Math.min(lista.length,200)+' de '+lista.length+' registros.';
+  var tb='';
+  lista.slice(0,200).forEach(function(n){
+    tb+='<tr><td style="padding:6px 10px;">'+(n.cohorte||'—')+'</td><td style="padding:6px 10px;font-family:monospace;">'+(n.id||'—')+'</td>'
+      +'<td style="padding:6px 10px;">'+(n.nombre||'—')+'</td><td style="padding:6px 10px;">'+(n.asignatura||'—')+'</td>'
+      +'<td style="padding:6px 10px;text-align:center;font-weight:700;">'+(n.definitiva!==undefined&&n.definitiva!==''?Number(n.definitiva).toFixed(1):'—')+'</td>'
+      +'<td style="padding:6px 10px;text-align:center;">'+(n.ano||'—')+'</td><td style="padding:6px 10px;text-align:center;">'+(n.fecha||'—')+'</td>'
+      +'<td style="padding:6px 10px;text-align:center;">'+(n.evaluador_tipo||'—')+'</td></tr>';
+  });
+  document.getElementById('gn-tbody').innerHTML=tb||'<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--gris-t);">Sin resultados.</td></tr>';
+  window._notasFinalesFiltradas=lista;
+}
+
+function exportarNotasExcel(){
+  var lista=window._notasFinalesFiltradas||[];
+  if(!lista.length){alert('No hay registros para exportar.');return;}
+  var ws=XLSX.utils.json_to_sheet(lista.map(function(n){
+    return{Cohorte:n.cohorte,ID:n.id,'Nombres y apellidos':n.nombre,'Nombre de Asignatura':n.asignatura,Definitiva:n.definitiva,fecha_generacion:n.fecha,evaluador_tipo:n.evaluador_tipo,'año':n.ano};
+  }));
+  var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Notas Finales');
+  var h=new Date(),ymd=h.getFullYear()+String(h.getMonth()+1).padStart(2,'0')+String(h.getDate()).padStart(2,'0');
+  XLSX.writeFile(wb,'Reporte_Notas_'+ymd+'.xlsx');
+}
+
+function exportarNotasPDF(){
+  var lista=window._notasFinalesFiltradas||[];
+  if(!lista.length){alert('No hay registros para exportar.');return;}
+  var jsPDF=window.jspdf.jsPDF;
+  var docNF=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  var azul=[0,51,102],dorado=[200,146,42],pageW=297,margin=12;
+  function header(){
+    docNF.setFillColor(azul[0],azul[1],azul[2]);docNF.rect(0,0,pageW,28,'F');
+    docNF.setFillColor(dorado[0],dorado[1],dorado[2]);docNF.rect(0,28,pageW,1.5,'F');
+    docNF.setFillColor(255,255,255);docNF.roundedRect(margin,6,42,16,3,3,'F');
+    try{docNF.addImage(LOGO_B64,'PNG',margin+1,7,40,14);}catch(e){}
+    docNF.setTextColor(255,255,255);docNF.setFont('helvetica','bold');docNF.setFontSize(10);
+    docNF.text('Doctorado en Innovacion Educativa con uso de TIC',margin+48,12);
+    docNF.setFont('helvetica','normal');docNF.setFontSize(7);
+    docNF.text('SEDIETIC v3.0  |  Reporte de Notas Finales  |  '+new Date().toLocaleDateString('es-CO'),margin+48,18);
+  }
+  header();
+  var rows=lista.map(function(n){return[n.cohorte||'-',n.id||'-',n.nombre||'-',n.asignatura||'-',n.definitiva!==undefined&&n.definitiva!==''?Number(n.definitiva).toFixed(1):'-',n.ano||'-',n.fecha||'-',n.evaluador_tipo||'-'];});
+  docNF.autoTable({startY:34,margin:{left:margin,right:margin},
+    head:[['Cohorte','ID','Estudiante','Asignatura','Definitiva','Año','Fecha','Evaluador']],
+    body:rows,headStyles:{fillColor:azul,textColor:255,fontSize:8},bodyStyles:{fontSize:7.5},
+    didDrawPage:function(){if(docNF.internal.getCurrentPageInfo().pageNumber>1)header();}});
+  var h=new Date(),ymd=h.getFullYear()+String(h.getMonth()+1).padStart(2,'0')+String(h.getDate()).padStart(2,'0');
+  docNF.save('Reporte_Notas_'+ymd+'.pdf');
 }
 </script>
 </body>
