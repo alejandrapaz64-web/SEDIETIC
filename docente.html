@@ -78,6 +78,9 @@ body{font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;bac
 .ano-filter-btn{padding:7px 14px;border:1.5px solid var(--g200);border-radius:8px;font-size:12px;font-weight:600;color:var(--g400);cursor:pointer;background:var(--g100);transition:all .15s;font-family:inherit;}
 .ano-filter-btn:hover{border-color:var(--azul-l);color:var(--azul);background:var(--azul-p);}
 .ano-filter-btn.on{background:var(--azul);color:white;border-color:var(--azul);}
+.ano-filter-btn.tool{background:#fff;color:var(--azul);border-color:var(--azul-l);white-space:nowrap;}
+.ano-filter-btn.tool:hover{background:var(--azul-p);border-color:var(--azul);}
+.ano-filter-btn.tool.on{background:var(--azul);color:#fff;border-color:var(--azul);}
 
 .ano-badge-0{background:#fce7f3;color:#9d174d;}
 .ano-badge-1{background:#dbeafe;color:#1e40af;}
@@ -306,13 +309,13 @@ table.rt td:first-child{padding-left:10px;}
     <div class="login-uni">Universidad de La Sabana · Facultad de Educación</div>
     <div class="login-prog">Doctorado en Innovación Educativa <span>con uso de TIC</span></div>
     <div class="login-snies">SNIES 109126 · PROVENTUS A1 Minciencias</div>
-    <div class="login-dir-badge">DIRECTOR DEL PROGRAMA</div>
+    <div class="login-dir-badge">CUERPO DOCENTE</div>
     <div class="login-desc">
-      Sistema SEDIETIC — Módulo de heteroevaluación y generación de informe de competencias doctorales. Acceso exclusivo para el Dr. Andrés Chiappe Laverde, Director del programa.
+      Sistema SEDIETIC — Módulo de heteroevaluación y generación de informe de competencias doctorales. Acceso exclusivo para los docentes evaluadores del programa.
     </div>
   </div>
   <div class="login-right">
-    <h2>Acceso Director</h2>
+    <h2>Acceso Docente</h2>
     <p>Ingrese sus credenciales institucionales para continuar</p>
     <div class="lf" style="position:relative;"><label>Usuario</label><input type="text" id="login-user" placeholder="Ingrese su usuario" autocomplete="off"></div>
     <div class="lf"><label>Contraseña</label><input type="password" id="login-pass" placeholder="Ingrese su contraseña" onkeydown="if(event.key==='Enter')doLogin()"></div>
@@ -372,7 +375,7 @@ table.rt td:first-child{padding-left:10px;}
       <div class="panel-sub">Seleccione el año a evaluar y la cohorte para filtrar la lista de estudiantes que ya diligenciaron su autoevaluación.</div>
 
       <!-- FILTRO AÑO + COHORTE -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
         <div>
           <div style="font-size:11px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">Año a evaluar</div>
           <div style="display:flex;gap:6px;" id="ano-filter-btns">
@@ -381,7 +384,6 @@ table.rt td:first-child{padding-left:10px;}
             <button class="ano-filter-btn" data-ano="2" onclick="filtrarPorAno(2)">Año 2</button>
             <button class="ano-filter-btn" data-ano="3" onclick="filtrarPorAno(3)">Año 3</button>
             <button class="ano-filter-btn" data-ano="todos" onclick="filtrarPorAno('todos')">Todos</button>
-            <button class="ano-filter-btn" data-ano="percepcion" onclick="abrirPanelPercepcionDoc()" style="background:linear-gradient(135deg,#003366,#1e40af);color:#fff;border-color:#003366;margin-left:8px;">★ Año 0 vs Año 3 — Percepción</button>
           </div>
         </div>
         <div>
@@ -390,6 +392,11 @@ table.rt td:first-child{padding-left:10px;}
             <option value="">Todas las cohortes</option>
           </select>
         </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+        <button class="ano-filter-btn tool" data-ano="percepcion" onclick="abrirPanelPercepcionDoc()">★ Año 0 vs Año 3 — Percepción</button>
+        <button class="ano-filter-btn tool" onclick="abrirPanelGestionNotasDoc()">📊 Gestión de Notas</button>
       </div>
 
       <!-- SELECTOR DE PERIODO ACADÉMICO -->
@@ -2040,6 +2047,7 @@ function calcularYGuardar(){
     aplicarFiltros();
   };
   xhrF2.send(JSON.stringify(datosF2));
+  persistirNotasFinales('docente');
 
   generarAnalisisIA(prom,C,asigNotas,rpasC);
 }
@@ -3184,6 +3192,115 @@ function descargarPDFPercepcionDoc(p) {
   doc.save('SEDIETIC_Percepcion_'+(p.nombre||'').replace(/\s+/g,'_')+'_Ano0_vs_Ano3.pdf');
 }
 
+// ══════════════════════════════════════════════════════════════
+// MÓDULO GESTIÓN DE NOTAS — persistencia y consulta (NOTAS_FINALES)
+// ══════════════════════════════════════════════════════════════
+function persistirNotasFinales(evaluadorTipo){
+  if(!resGlobal||!resGlobal.asigNotas)return;
+  var anosFiltroPersist=anoFiltro==='todos'?[1,2,3]:[parseInt(anoFiltro||anoEstudiante||'1')];
+  var lista=[];
+  ASIG.forEach(function(s){
+    if(anosFiltroPersist.indexOf(s.a)===-1)return;
+    lista.push({nombre:s.n,nota:resGlobal.asigNotas[s.id]});
+  });
+  if(lista.length===0)return;
+  var payload={tipo:'GUARDAR_NOTAS_FINALES',cohorte:limpiarCohorte(estSel.cohorte),id:estSel.id,nombre:estSel.nombre,
+    ano:(anoFiltro&&anoFiltro!=='todos'?anoFiltro:(anoEstudiante||'1')),evaluador_tipo:evaluadorTipo,fecha:resGlobal.fecha,asignaturas:lista};
+  var xhrNF=new XMLHttpRequest();
+  xhrNF.open('POST',APPS_URL,true);
+  xhrNF.setRequestHeader('Content-Type','text/plain');
+  xhrNF.send(JSON.stringify(payload));
+}
+
+function abrirPanelGestionNotasDoc(){document.getElementById('panel-notas-doc').style.display='block';cargarNotasFinales();}
+function cerrarPanelGestionNotasDoc(){document.getElementById('panel-notas-doc').style.display='none';}
+
+var notasFinalesDB=[],notasFinalesOrden={campo:'nombre',asc:true};
+
+function cargarNotasFinales(){
+  document.getElementById('gn-tbody').innerHTML='<tr><td colspan="8" style="padding:20px;text-align:center;color:#8f97b0;">Cargando...</td></tr>';
+  fetch(APPS_URL+'?tipo=CONSULTAR_NOTAS_FINALES')
+    .then(function(r){return r.json();})
+    .then(function(d){notasFinalesDB=d.notas||[];aplicarFiltrosNotas();})
+    .catch(function(){document.getElementById('gn-tbody').innerHTML='<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--rojo);">Error al cargar.</td></tr>';});
+}
+
+function aplicarFiltrosNotas(){
+  var fc=(document.getElementById('gn-f-cohorte').value||'').toLowerCase().trim();
+  var fa=document.getElementById('gn-f-ano').value||'';
+  var fe=(document.getElementById('gn-f-est').value||'').toLowerCase().trim();
+  var filtradas=notasFinalesDB.filter(function(n){
+    if(fc&&(n.cohorte||'').toLowerCase().indexOf(fc)===-1)return false;
+    if(fa&&String(n.ano)!==fa)return false;
+    if(fe&&(n.id||'').toLowerCase().indexOf(fe)===-1&&(n.nombre||'').toLowerCase().indexOf(fe)===-1)return false;
+    return true;
+  });
+  renderNotasFinales(filtradas);
+}
+
+function ordenarNotas(campo){
+  if(notasFinalesOrden.campo===campo)notasFinalesOrden.asc=!notasFinalesOrden.asc;
+  else{notasFinalesOrden.campo=campo;notasFinalesOrden.asc=true;}
+  aplicarFiltrosNotas();
+}
+
+function renderNotasFinales(lista){
+  var campo=notasFinalesOrden.campo,asc=notasFinalesOrden.asc;
+  lista=lista.slice().sort(function(a,b){
+    var va=a[campo],vb=b[campo];
+    if(campo==='definitiva'){va=parseFloat(va)||0;vb=parseFloat(vb)||0;}
+    if(va<vb)return asc?-1:1;if(va>vb)return asc?1:-1;return 0;
+  });
+  document.getElementById('gn-info').textContent='Mostrando '+Math.min(lista.length,200)+' de '+lista.length+' registros.';
+  var tb='';
+  lista.slice(0,200).forEach(function(n){
+    tb+='<tr><td style="padding:6px 10px;">'+(n.cohorte||'—')+'</td><td style="padding:6px 10px;font-family:monospace;">'+(n.id||'—')+'</td>'
+      +'<td style="padding:6px 10px;">'+(n.nombre||'—')+'</td><td style="padding:6px 10px;">'+(n.asignatura||'—')+'</td>'
+      +'<td style="padding:6px 10px;text-align:center;font-weight:700;">'+(n.definitiva!==undefined&&n.definitiva!==''?Number(n.definitiva).toFixed(1):'—')+'</td>'
+      +'<td style="padding:6px 10px;text-align:center;">'+(n.ano||'—')+'</td><td style="padding:6px 10px;text-align:center;">'+(n.fecha||'—')+'</td>'
+      +'<td style="padding:6px 10px;text-align:center;">'+(n.evaluador_tipo||'—')+'</td></tr>';
+  });
+  document.getElementById('gn-tbody').innerHTML=tb||'<tr><td colspan="8" style="padding:20px;text-align:center;color:#8f97b0;">Sin resultados.</td></tr>';
+  window._notasFinalesFiltradas=lista;
+}
+
+function exportarNotasExcel(){
+  var lista=window._notasFinalesFiltradas||[];
+  if(!lista.length){alert('No hay registros para exportar.');return;}
+  var ws=XLSX.utils.json_to_sheet(lista.map(function(n){
+    return{Cohorte:n.cohorte,ID:n.id,'Nombres y apellidos':n.nombre,'Nombre de Asignatura':n.asignatura,Definitiva:n.definitiva,fecha_generacion:n.fecha,evaluador_tipo:n.evaluador_tipo,'año':n.ano};
+  }));
+  var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Notas Finales');
+  var h=new Date(),ymd=h.getFullYear()+String(h.getMonth()+1).padStart(2,'0')+String(h.getDate()).padStart(2,'0');
+  XLSX.writeFile(wb,'Reporte_Notas_'+ymd+'.xlsx');
+}
+
+function exportarNotasPDF(){
+  var lista=window._notasFinalesFiltradas||[];
+  if(!lista.length){alert('No hay registros para exportar.');return;}
+  var jsPDF=window.jspdf.jsPDF;
+  var doc2=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  var azul=[0,51,102],dorado=[200,146,42],pageW=297,margin=12;
+  function header(){
+    doc2.setFillColor(azul[0],azul[1],azul[2]);doc2.rect(0,0,pageW,28,'F');
+    doc2.setFillColor(dorado[0],dorado[1],dorado[2]);doc2.rect(0,28,pageW,1.5,'F');
+    doc2.setFillColor(255,255,255);doc2.roundedRect(margin,6,42,16,3,3,'F');
+    try{doc2.addImage(LOGO_B64,'PNG',margin+1,7,40,14);}catch(e){}
+    doc2.setTextColor(255,255,255);doc2.setFont('helvetica','bold');doc2.setFontSize(10);
+    doc2.text('Doctorado en Innovacion Educativa con uso de TIC',margin+48,12);
+    doc2.setFont('helvetica','normal');doc2.setFontSize(7);
+    doc2.text('SEDIETIC v3.0  |  Reporte de Notas Finales  |  '+new Date().toLocaleDateString('es-CO'),margin+48,18);
+  }
+  header();
+  var rows=lista.map(function(n){return[n.cohorte||'-',n.id||'-',n.nombre||'-',n.asignatura||'-',n.definitiva!==undefined&&n.definitiva!==''?Number(n.definitiva).toFixed(1):'-',n.ano||'-',n.fecha||'-',n.evaluador_tipo||'-'];});
+  doc2.autoTable({startY:34,margin:{left:margin,right:margin},
+    head:[['Cohorte','ID','Estudiante','Asignatura','Definitiva','Año','Fecha','Evaluador']],
+    body:rows,headStyles:{fillColor:azul,textColor:255,fontSize:8},bodyStyles:{fontSize:7.5},
+    didDrawPage:function(){if(doc2.internal.getCurrentPageInfo().pageNumber>1)header();}});
+  var h=new Date(),ymd=h.getFullYear()+String(h.getMonth()+1).padStart(2,'0')+String(h.getDate()).padStart(2,'0');
+  doc2.save('Reporte_Notas_'+ymd+'.pdf');
+}
+
 </script>
 <!-- ══════════════════════════════════════════════════════════
      PANEL DOCENTE: AÑO 0 vs AÑO 3 — PERCEPCIÓN
@@ -3212,6 +3329,47 @@ function descargarPDFPercepcionDoc(p) {
     <div id="perc-doc-loading" style="display:none;text-align:center;padding:20px;font-size:12px;color:var(--g400);">Cargando percepciones...</div>
     <div id="perc-doc-tbody">
       <div style="text-align:center;padding:24px;color:var(--g400);font-size:12px;">Seleccione un estudiante de la lista.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PANEL DOCENTE: GESTIÓN DE NOTAS
+     ══════════════════════════════════════════════════════════ -->
+<div id="panel-notas-doc" style="display:none;padding:20px 16px 40px;max-width:1200px;margin:0 auto;">
+  <div style="background:var(--azul);color:#fff;border-radius:12px 12px 0 0;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">📊 Gestión de Notas</div>
+      <div style="font-size:12px;opacity:.85;margin-top:3px;">Consulta histórica de notas finales por cohorte, año y estudiante</div>
+    </div>
+    <button onclick="cerrarPanelGestionNotasDoc()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:12px;font-weight:600;">✕ Cerrar</button>
+  </div>
+  <div style="background:#fff;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:20px 24px;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+      <input type="text" id="gn-f-cohorte" placeholder="Cohorte (ej. 2025-2)" oninput="aplicarFiltrosNotas()" style="padding:8px 12px;font-size:12px;border:1.5px solid #e2e8f0;border-radius:8px;width:150px;">
+      <select id="gn-f-ano" onchange="aplicarFiltrosNotas()" style="padding:8px 12px;font-size:12px;border:1.5px solid #e2e8f0;border-radius:8px;">
+        <option value="">Todos los años</option><option value="1">Año 1</option><option value="2">Año 2</option><option value="3">Año 3</option>
+      </select>
+      <input type="text" id="gn-f-est" placeholder="Estudiante (nombre o ID)" oninput="aplicarFiltrosNotas()" style="padding:8px 12px;font-size:12px;border:1.5px solid #e2e8f0;border-radius:8px;width:220px;">
+      <button onclick="cargarNotasFinales()" style="padding:8px 14px;border:1.5px solid var(--azul-l);border-radius:8px;font-size:11px;font-weight:600;color:var(--azul);background:#f0f4ff;cursor:pointer;">↺ Actualizar</button>
+      <button onclick="exportarNotasExcel()" style="padding:8px 14px;border:none;border-radius:8px;font-size:11px;font-weight:700;color:#fff;background:#166534;cursor:pointer;">📗 Exportar Excel</button>
+      <button onclick="exportarNotasPDF()" style="padding:8px 14px;border:none;border-radius:8px;font-size:11px;font-weight:700;color:#fff;background:var(--azul);cursor:pointer;">📕 Exportar PDF</button>
+    </div>
+    <div id="gn-info" style="font-size:11px;color:#8f97b0;margin-bottom:8px;"></div>
+    <div style="overflow-x:auto;max-height:520px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="background:#003366;position:sticky;top:0;">
+          <th onclick="ordenarNotas('cohorte')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">Cohorte ⇅</th>
+          <th onclick="ordenarNotas('id')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">ID ⇅</th>
+          <th onclick="ordenarNotas('nombre')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">Estudiante ⇅</th>
+          <th onclick="ordenarNotas('asignatura')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">Asignatura ⇅</th>
+          <th onclick="ordenarNotas('definitiva')" style="padding:8px 10px;color:#fff;text-align:center;cursor:pointer;">Definitiva ⇅</th>
+          <th onclick="ordenarNotas('ano')" style="padding:8px 10px;color:#fff;text-align:center;cursor:pointer;">Año ⇅</th>
+          <th onclick="ordenarNotas('fecha')" style="padding:8px 10px;color:#fff;text-align:center;cursor:pointer;">Fecha ⇅</th>
+          <th style="padding:8px 10px;color:#fff;text-align:center;">Evaluador</th>
+        </tr></thead>
+        <tbody id="gn-tbody"><tr><td colspan="8" style="padding:20px;text-align:center;color:#8f97b0;">Seleccione "Actualizar" para cargar.</td></tr></tbody>
+      </table>
     </div>
   </div>
 </div>
