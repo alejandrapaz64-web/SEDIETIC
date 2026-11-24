@@ -7,13 +7,13 @@
 <style>
 /* ═══ VARIABLES INSTITUCIONALES ═══ */
 :root {
-  --azul:    #003366;
-  --azul-m:  #002952;
-  --azul-c:  #1a4a7a;
+  --azul:    #143762;
+  --azul-m:  #0f2c4f;
+  --azul-c:  #2b5d97;
   --azul-bg: #f0f4f9;
   --azul-p:  #e8eef6;
   --azul-b:  #b8cce0;
-  --dorado:  #c8922a;
+  --dorado:  #3b79be;
   --blanco:  #ffffff;
   --gris-1:  #f5f7fa;
   --gris-2:  #eaecf0;
@@ -94,7 +94,7 @@ body {
   background: var(--gris-1); color: var(--texto);
   transition: border-color .2s, box-shadow .2s;
 }
-.lf input:focus { border-color: var(--azul); background: var(--blanco); box-shadow: 0 0 0 3px rgba(0,51,102,.1); }
+.lf input:focus { border-color: var(--azul); background: var(--blanco); box-shadow: 0 0 0 3px rgba(20,55,98,.1); }
 .lf input::placeholder { color: var(--gris-3); }
 .btn-login {
   width: 100%; padding: 12px;
@@ -148,8 +148,8 @@ body {
 .hdr-prog { font-size: 13px; font-weight: 700; color: #ffffff !important; }
 .hdr-badge {
   font-size: 10px; color: rgba(255,255,255,.85);
-  background: rgba(200,146,42,.2);
-  border: 1px solid rgba(200,146,42,.4);
+  background: rgba(59,121,190,.2);
+  border: 1px solid rgba(59,121,190,.4);
   padding: 3px 10px; border-radius: 20px; font-weight: 600;
 }
 .hdr-bot { padding: 10px 0 14px; background: var(--azul); }
@@ -217,7 +217,7 @@ body {
   background: var(--gris-1);
   transition: border-color .2s, box-shadow .2s;
 }
-.busq-input:focus { border-color: var(--azul); background: var(--blanco); box-shadow: 0 0 0 3px rgba(0,51,102,.08); }
+.busq-input:focus { border-color: var(--azul); background: var(--blanco); box-shadow: 0 0 0 3px rgba(20,55,98,.08); }
 .busq-input::placeholder { color: var(--gris-3); }
 .busq-input:disabled { opacity: .5; cursor: not-allowed; }
 .busq-results {
@@ -280,7 +280,7 @@ body {
   font-family: monospace; font-weight: 700;
   letter-spacing: 2px; outline: none; background: var(--blanco);
 }
-.val-inp:focus { border-color: var(--dorado); box-shadow: 0 0 0 3px rgba(200,146,42,.15); }
+.val-inp:focus { border-color: var(--dorado); box-shadow: 0 0 0 3px rgba(59,121,190,.15); }
 .val-btn {
   padding: 10px 18px; background: var(--azul);
   color: #ffffff; border: none;
@@ -332,7 +332,7 @@ table.rt td:first-child { padding-left: 12px; }
   color: var(--texto); padding: 5px 2px 5px 6px; text-align: right;
 }
 .ps { font-size: 11px; color: var(--gris-t); padding-right: 5px; font-family: monospace; }
-.col-ini  { background: rgba(200,146,42,.05); }
+.col-ini  { background: rgba(59,121,190,.05); }
 .col-hoy  { background: rgba(22,101,52,.05); }
 
 /* AVISO AÑO 1 */
@@ -482,6 +482,94 @@ table.rt td:first-child { padding-left: 12px; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style id="nexo-theme">
+/* ══ NEXO DOCTORAL — capa visual unificada para SEDIETIC (solo estilos; no altera lógica) ══ */
+:root{
+  --nx-navy:#143762;--nx-navy-2:#0f2c4f;--nx-accent:#3b79be;--nx-accent-2:#2b5d97;
+  --nx-bg:#f0f2f5;--nx-line:#e3e6ea;--nx-text:#414f64;--nx-ink:#1e2a3d;--nx-muted:#9fb0c4;
+  --azul:#143762;--azul-m:#0f2c4f;--azul-c:#2b5d97;--dorado:#3b79be;--dorado-c:#6a9bd1;
+  --azul-bg:#f0f2f5;--azul-p:#e8eff7;--azul-b:#c3d3e6;--azul-l:#b6c7db;
+  --gris-f:#f0f2f5;--gris-l:#e3e6ea;--gris-1:#f5f6f8;--gris-2:#e3e6ea;--gris-3:#c3cad4;--gris-t:#5b6677;--texto:#1e2a3d;
+  --g50:#f5f6f8;--g100:#eef0f3;--g200:#e3e6ea;--g400:#8792a2;--g600:#414f64;--g800:#1e2a3d;
+}
+body{font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--nx-bg);color:var(--nx-ink);}
+
+/* ── Cabecera ── */
+.hdr{background:var(--nx-navy)!important;border-bottom:none!important;box-shadow:none!important;position:relative;overflow:hidden;padding-bottom:34px;}
+.hdr::before{content:'';position:absolute;right:-140px;top:-180px;width:560px;height:560px;border-radius:50%;background:rgba(255,255,255,.035);pointer-events:none;}
+.hdr::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:34px;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C420,62 980,10 1440,6 L1440,60 L0,60 Z' fill='%23f0f2f5'/%3E%3C/svg%3E") bottom/100% 100% no-repeat;}
+.hdr>*{position:relative;z-index:1;}
+.hdr-top{border-bottom:1px solid rgba(255,255,255,.12)!important;padding-top:16px!important;padding-bottom:16px!important;gap:14px;flex-wrap:wrap;}
+.hdr-esc,.hdr-logo-box{height:56px!important;background:#fff!important;border-radius:10px!important;padding:8px 14px!important;box-shadow:0 4px 14px rgba(0,0,0,.18)!important;}
+.hdr-logo,.hdr-logo-row{gap:16px!important;}
+.hdr-logo>div:last-child,.hdr-logo-row>div:last-child{padding-left:16px;border-left:1px solid rgba(255,255,255,.2);}
+.hdr .hdr-uni{font-size:11px!important;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.62)!important;margin-bottom:3px;}
+.hdr .hdr-prog{font-size:15px!important;font-weight:500!important;color:#fff!important;}
+.hdr .hdr-badge{background:transparent!important;border:1px solid rgba(255,255,255,.28)!important;color:rgba(255,255,255,.85)!important;font-size:10px!important;font-weight:700!important;letter-spacing:1.4px;text-transform:uppercase;padding:7px 14px!important;border-radius:999px!important;}
+.hdr .hdr-badge *{color:inherit!important;}
+.hdr-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.nexo-pill{display:inline-flex;align-items:center;gap:6px;color:#fff!important;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.06);transition:background .2s,border-color .2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.nexo-pill:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.7);}
+.hdr-bot{padding-top:22px!important;padding-bottom:6px!important;background:transparent!important;}
+.hdr .hdr-title{font-family:'Playfair Display',Georgia,serif!important;font-size:32px!important;font-weight:700!important;line-height:1.15;letter-spacing:-.3px;color:#fff!important;}
+.hdr .hdr-title::before{content:'NEXO Evalúa · SEDIETIC';display:block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:10px;}
+.hdr .hdr-title em,.hdr .hdr-title span{color:var(--nx-muted)!important;font-style:normal!important;}
+.hdr .hdr-title>span[style]{color:#fff!important;}
+.hdr .hdr-sub{font-size:13.5px!important;color:rgba(255,255,255,.72)!important;margin-top:8px!important;line-height:1.6;}
+
+/* ── Acceso (login) ── */
+.login-page{background:var(--nx-navy)!important;}
+.login-left{background:var(--nx-navy)!important;border-right:none!important;position:relative;overflow:hidden;}
+.login-left::before{content:'';position:absolute;left:-160px;bottom:-200px;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.035);}
+.login-left::after{content:'';position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;border:1px solid rgba(255,255,255,.07);}
+.login-left>*{position:relative;z-index:1;}
+.login-logo-wrap{border-radius:14px!important;box-shadow:0 8px 28px rgba(0,0,0,.25)!important;}
+.login-uni{font-weight:700;letter-spacing:2.4px!important;color:rgba(255,255,255,.6)!important;}
+.login-prog{font-family:'Playfair Display',Georgia,serif;font-size:30px!important;font-weight:700!important;line-height:1.2!important;}
+.login-prog span{color:var(--nx-muted)!important;}
+.login-admin-badge,.login-dir-badge{background:transparent!important;border:1px solid rgba(255,255,255,.35)!important;color:#fff!important;letter-spacing:1.6px!important;border-radius:999px!important;padding:7px 16px!important;}
+.login-desc{border-left:2px solid rgba(255,255,255,.25)!important;color:rgba(255,255,255,.72)!important;}
+.login-right{background:#fff!important;}
+.login-right h2{font-family:'Playfair Display',Georgia,serif;font-size:28px!important;color:var(--nx-navy)!important;}
+.login-right h2::before{content:'NEXO Evalúa · SEDIETIC';display:block;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--nx-accent);margin-bottom:10px;}
+.lf input{border-radius:10px!important;border-color:var(--nx-line)!important;background:#f5f6f8!important;}
+.lf input:focus{border-color:var(--nx-navy)!important;background:#fff!important;box-shadow:0 0 0 3px rgba(20,55,98,.1)!important;}
+.btn-login{border-radius:10px!important;background:var(--nx-navy)!important;letter-spacing:.3px;}
+.btn-login:hover{background:var(--nx-navy-2)!important;}
+
+.lf>span[onclick]{top:auto!important;bottom:10px;transform:none!important;}
+/* ── Tarjetas y paneles ── */
+.card,.sel-panel,.rcard{position:relative;border:1px solid var(--nx-line)!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(20,55,98,.04),0 8px 24px rgba(20,55,98,.05)!important;}
+.card::before,.sel-panel::before,.rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--nx-navy),var(--nx-accent));z-index:2;pointer-events:none;}
+.card-hdr,.rcard-hdr{background:#fff!important;border-bottom:1px solid #eef0f3!important;padding-top:14px!important;padding-bottom:12px!important;}
+.card-title,.rcard-title{font-family:'Playfair Display',Georgia,serif!important;font-size:16px!important;color:var(--nx-navy)!important;}
+.step-num,.card-num,.rcard-num{border-radius:8px!important;background:var(--nx-navy)!important;}
+.panel-title{color:var(--nx-navy)!important;font-size:18px!important;}
+.btn,.btn-dl,.btn-asistente,.btn-copy{border-radius:8px;}
+.btn-p{background:var(--nx-navy)!important;}
+.btn-p:hover{background:var(--nx-navy-2)!important;}
+.stat-card{border-radius:14px!important;border-color:var(--nx-line)!important;}
+.stat-num{font-family:'Playfair Display',Georgia,serif;color:var(--nx-navy)!important;}
+
+/* ── Pestañas ── */
+.tabs{border-bottom:1px solid var(--nx-line)!important;box-shadow:none!important;}
+.tab-btn.on,.dir-tab-btn.dir-tab-on{color:var(--nx-navy)!important;border-bottom-color:var(--nx-navy)!important;}
+
+@media (max-width:768px){
+  .hdr .hdr-title{font-size:24px!important;}
+  .hdr-esc,.hdr-logo-box{height:44px!important;}
+  .hdr-logo>div:last-child,.hdr-logo-row>div:last-child{padding-left:10px;}
+  .login-prog{font-size:24px!important;}
+}
+@media (max-width:480px){
+  .hdr .hdr-title{font-size:20px!important;}
+  .hdr .hdr-uni{letter-spacing:1.2px;}
+  .nexo-pill{padding:6px 12px;font-size:10px;}
+}
+</style>
 </head>
 <body>
 
@@ -494,7 +582,7 @@ table.rt td:first-child { padding-left: 12px; }
     <div class="login-uni">Universidad de La Sabana · Facultad de Educación</div>
     <div class="login-prog">Doctorado en Innovación Educativa con uso de TIC</div>
     <div class="login-snies">SNIES 109126 · PROVENTUS A1 Minciencias</div>
-    <div class="login-admin-badge">ADMINISTRACIÓN DEL SISTEMA</div>
+    <div class="login-admin-badge">ACCESO ESTUDIANTES</div>
     <div class="login-desc">
       Sistema SEDIETIC — Instrumento de Evaluación y Coevaluación de los 22 Resultados Previstos de Aprendizaje (RPAs). Acceso exclusivo para estudiantes activos del programa doctoral.
     </div>
@@ -535,7 +623,7 @@ table.rt td:first-child { padding-left: 12px; }
           <div class="hdr-prog">Doctorado en Innovación Educativa con uso de TIC</div>
         </div>
       </div>
-      <span class="hdr-badge">SEDIETIC v3.0 · SNIES 109126</span>
+      <div class="hdr-actions"><a class="nexo-pill" href="https://alejandrapaz64-web.github.io/portal-doctoral-/" target="_blank" rel="noopener noreferrer" title="Volver al ecosistema NEXO Doctoral">&#8592; NEXO Doctoral</a><span class="hdr-badge">SEDIETIC · SNIES 109126</span></div>
     </div>
     <div class="hdr-inner hdr-bot">
       <div>
@@ -970,10 +1058,10 @@ function finalizarConfirmacion(d, cohorteAsignada, anoAsignado, labels) {
   document.getElementById('bloque-confirmar').style.display = 'none';
 
   // Calcular años válidos según cohorte y poblar selector
-  poblarSelectorAnos(cohorteAsignada, d.periodoActivo || '');
+  poblarSelectorAnos(cohorteAsignada, d.periodoActivo || '', d.ano || '');
 }
 
-function poblarSelectorAnos(cohorte, periodoActivo) {
+function poblarSelectorAnos(cohorte, periodoActivo, anoAdmin) {
   var sel = document.getElementById('sel-ano-eval');
   var hint = document.getElementById('hint-ano-eval');
   sel.innerHTML = '<option value="">— Seleccione —</option>';
@@ -990,6 +1078,9 @@ function poblarSelectorAnos(cohorte, periodoActivo) {
       if (semCursados < 0) semCursados = 0;
     }
   }
+  // Año habilitado desde el panel admin: solo amplía las opciones, nunca las reduce
+  var minSemAdmin = {'2': 3, '3': 5}[String(anoAdmin || '')];
+  if (minSemAdmin && semCursados < minSemAdmin) semCursados = minSemAdmin;
 
   // Definir años válidos según semestres cursados
   // 0-2 sem → puede hacer Inicio Año 1 y/o Final Año 1
@@ -1034,7 +1125,7 @@ function poblarSelectorAnos(cohorte, periodoActivo) {
     sel.appendChild(sep);
     var optP = document.createElement('option');
     optP.value = 'percepcion'; optP.textContent = '★ Año 0 vs Año 3 — Percepción';
-    optP.style.cssText = 'font-weight:700;color:#003366;background:#f0f4ff;';
+    optP.style.cssText = 'font-weight:700;color:#143762;background:#f0f4ff;';
     sel.appendChild(optP);
   }
 }
@@ -1180,7 +1271,7 @@ function mostrarPopupSobreescribirPerc() {
     + '<div style="display:flex;flex-direction:column;gap:10px;">'
     + '<button onclick="habilitarSobreescribirPerc()" style="padding:12px;background:#991b1b;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">✎ Sobreescribir percepción</button>'
     + '<button onclick="descargarPDFPercepcion()" style="padding:12px;background:#166534;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">⬇ Descargar copia PDF</button>'
-    + '<button onclick="document.getElementById(\'overlay-perc-sobreescribir\').remove()" style="padding:11px;background:#fff;color:#003366;border:1.5px solid #003366;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Cerrar</button>'
+    + '<button onclick="document.getElementById(\'overlay-perc-sobreescribir\').remove()" style="padding:11px;background:#fff;color:#143762;border:1.5px solid #143762;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Cerrar</button>'
     + '</div></div></div>';
   document.body.appendChild(overlay);
 }
@@ -1196,7 +1287,7 @@ function descargarPDFPercepcion() {
   if (!estSel) return;
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  var azul=[0,51,102], dorado=[200,146,42], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
+  var azul=[20,55,98], dorado=[59,121,190], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
   var pageW=210, margin=14, colW=182, y=0;
   var RD={RPA10:'Identifica necesidades u oportunidades para la innovación.',RPA11:'Participa del diseño de soluciones innovadoras.',RPA5:'Argumenta la escogencia de perspectiva de análisis.',RPA4:'Describe las fases para revisión sistemática de literatura.',RPA12:'Planea y concreta procesos de innovación.',RPA6:'Interactúa activamente con sus pares académicos.',RPA13:'Realiza difusión efectiva en eventos académicos.',RPA1:'Describe claramente el problema de investigación.',RPA2:'Formula una pregunta de investigación.',RPA14:'Plantea objetivos coherentes con la pregunta.',RPA3:'Argumenta la elección del diseño metodológico.',RPA15:'Apoya procesos de innovación del proyecto.',RPA7:'Identifica diferencias entre tipos de artículos.',RPA8:'Participa en escritura y publicación científica.',RPA16:'Escucha activamente a personas involucradas.',RPA17:'Genera propuestas innovadoras colaborativas.',RPA18:'Participa de la implementación de modelos educativos.',RPA9:'Consulta efectivamente bases de datos especializadas.',RPA19:'Documenta observaciones del contexto del problema.',RPA20:'Participa del testeo de modelos o prototipos.',RPA21:'Participa del diseño y construcción de prototipos.',RPA22:'Escoge y aplica instrumentos de investigación.'};
   var RO=['RPA10','RPA11','RPA5','RPA4','RPA12','RPA6','RPA13','RPA1','RPA2','RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18','RPA9','RPA19','RPA20','RPA21','RPA22'];
@@ -1225,7 +1316,7 @@ function descargarPDFPercepcion() {
 function _generarPDFPercepcion(dat, cohInicio, cohEgreso) {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  var azul=[0,51,102], dorado=[200,146,42], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
+  var azul=[20,55,98], dorado=[59,121,190], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
   var pageW=210, margin=14, colW=182, y=0;
   var RD={RPA10:'Identifica necesidades u oportunidades para la innovación.',RPA11:'Participa del diseño de soluciones innovadoras.',RPA5:'Argumenta la escogencia de perspectiva de análisis.',RPA4:'Describe las fases para revisión sistemática de literatura.',RPA12:'Planea y concreta procesos de innovación.',RPA6:'Interactúa activamente con sus pares académicos.',RPA13:'Realiza difusión efectiva en eventos académicos.',RPA1:'Describe claramente el problema de investigación.',RPA2:'Formula una pregunta de investigación.',RPA14:'Plantea objetivos coherentes con la pregunta.',RPA3:'Argumenta la elección del diseño metodológico.',RPA15:'Apoya procesos de innovación del proyecto.',RPA7:'Identifica diferencias entre tipos de artículos.',RPA8:'Participa en escritura y publicación científica.',RPA16:'Escucha activamente a personas involucradas.',RPA17:'Genera propuestas innovadoras colaborativas.',RPA18:'Participa de la implementación de modelos educativos.',RPA9:'Consulta efectivamente bases de datos especializadas.',RPA19:'Documenta observaciones del contexto del problema.',RPA20:'Participa del testeo de modelos o prototipos.',RPA21:'Participa del diseño y construcción de prototipos.',RPA22:'Escoge y aplica instrumentos de investigación.'};
   var RO=['RPA10','RPA11','RPA5','RPA4','RPA12','RPA6','RPA13','RPA1','RPA2','RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18','RPA9','RPA19','RPA20','RPA21','RPA22'];
@@ -1391,15 +1482,15 @@ function actualizarColumnasRPA(ano) {
     th3.innerHTML = 'Final Año 1'+(coh1?'<br><small style="font-weight:600;opacity:.85;">('+coh1+')</small>':'')+'<br><small style="font-weight:400;opacity:.8;">(0–100%)</small>';
     th3.style.display = '';
   } else if (ano === '2') {
-    th1.innerHTML = '<span style="font-size:10px;line-height:1.4">Auto Inicial<br><small style="font-weight:600;color:#c8922a;">'+(cohInicio||'')+'</small><br><small style="font-weight:400;opacity:.65;">★ Ref.</small><br><small style="font-weight:400;opacity:.9;">+ Proy. '+(coh3||'')+'</small></span>';
+    th1.innerHTML = '<span style="font-size:10px;line-height:1.4">Auto Inicial<br><small style="font-weight:600;color:#3b79be;">'+(cohInicio||'')+'</small><br><small style="font-weight:400;opacity:.65;">★ Ref.</small><br><small style="font-weight:400;opacity:.9;">+ Proy. '+(coh3||'')+'</small></span>';
     th1.style.display = '';
-    th2.innerHTML = '<span style="font-size:10px;line-height:1.4">Final Año 1<br><small style="font-weight:600;color:#c8922a;">'+(coh1||'')+'</small><br><small style="font-weight:400;opacity:.65;">★ Ref.</small></span>';
+    th2.innerHTML = '<span style="font-size:10px;line-height:1.4">Final Año 1<br><small style="font-weight:600;color:#3b79be;">'+(coh1||'')+'</small><br><small style="font-weight:400;opacity:.65;">★ Ref.</small></span>';
     th2.style.display = '';
     th3.innerHTML = '<span style="font-size:10px;line-height:1.4;color:#fff;">Final Año 2<br><small style="font-weight:700;">'+(coh2||'')+'</small><br><small style="opacity:.85;">(0–100%)</small></span>';
     th3.style.background = 'var(--dorado)'; th3.style.color = '#fff';
     th3.style.display = '';
   } else if (ano === '3') {
-    th1.innerHTML = '<span style="font-size:10px;line-height:1.4">Auto Inicial<br><small style="font-weight:600;color:#c8922a;">'+(cohInicio||'')+'</small><br><small style="font-weight:400;opacity:.65;">★ Ref.</small><br><small style="font-weight:400;opacity:.9;">+ Proy. '+(coh3||'')+'</small></span>';
+    th1.innerHTML = '<span style="font-size:10px;line-height:1.4">Auto Inicial<br><small style="font-weight:600;color:#3b79be;">'+(cohInicio||'')+'</small><br><small style="font-weight:400;opacity:.65;">★ Ref.</small><br><small style="font-weight:400;opacity:.9;">+ Proy. '+(coh3||'')+'</small></span>';
     th1.style.display = '';
     th2.innerHTML = '<span style="font-size:10px;line-height:1.4">Final A1 '+(coh1||'')+'<br>Final A2 '+(coh2||'')+'<br><small style="font-weight:400;opacity:.65;">★ Ref.</small></span>';
     th2.style.display = '';
@@ -1510,11 +1601,11 @@ function mostrarOverlayYaEval(yaEval) {
   var overlay = document.createElement('div');
   overlay.id = 'overlay-ya-eval';
   overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,26,64,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  var fechaTxt = yaEval.fecha ? 'Fecha de registro: <strong style="color:#003366">' + yaEval.fecha + '</strong>' : '';
+  var fechaTxt = yaEval.fecha ? 'Fecha de registro: <strong style="color:#143762">' + yaEval.fecha + '</strong>' : '';
   var div = document.createElement('div');
   div.style.cssText = 'background:white;border-radius:14px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden;';
   div.innerHTML =
-    '<div style="background:#003366;padding:18px 24px;display:flex;align-items:center;gap:10px;">'
+    '<div style="background:#143762;padding:18px 24px;display:flex;align-items:center;gap:10px;">'
     + '<span style="font-size:22px;">&#9888;&#65039;</span>'
     + '<h2 style="color:white;font-size:16px;font-weight:700;margin:0;">Evaluaci\u00f3n ya registrada</h2>'
     + '</div>'
@@ -1522,13 +1613,13 @@ function mostrarOverlayYaEval(yaEval) {
     + '<p style="font-size:15px;color:#1e2338;font-weight:700;margin:0 0 6px;">' + estSel.nombre + '</p>'
     + '<p style="font-size:13px;color:#475569;margin:0 0 4px;">A\u00f1o: ' + (yaEval.ano||'?') + ' &middot; Cohorte: ' + limpiarCohorte(yaEval.cohorte) + (yaEval.periodo?' &middot; Periodo: '+yaEval.periodo:'') + '</p>'
     + (fechaTxt ? '<p style="font-size:12px;color:#64748b;margin:0 0 14px;">' + fechaTxt + '</p>' : '<p style="margin:0 0 14px;"></p>')
-    + '<div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;padding:12px 14px;margin-bottom:18px;">'
+    + '<div style="background:#e8eff7;border:1px solid #f59e0b;border-radius:8px;padding:12px 14px;margin-bottom:18px;">'
     + '<p style="font-size:13px;color:#92400e;margin:0;">Si contin\u00faas, tu evaluaci\u00f3n anterior ser\u00e1 <strong>reemplazada</strong> en el sistema SEDIETIC.</p>'
     + '</div>'
     + '<div style="display:flex;flex-direction:column;gap:10px;">'
-    + '<button id="ov-continuar" style="padding:12px;background:#003366;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Continuar y reemplazar evaluaci\u00f3n</button>'
+    + '<button id="ov-continuar" style="padding:12px;background:#143762;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Continuar y reemplazar evaluaci\u00f3n</button>'
     + '<button id="ov-descargar" style="padding:12px;background:#166534;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">&#11015; Descargar evaluaci\u00f3n anterior (PDF)</button>'
-    + '<button id="ov-cancelar" style="padding:12px;background:white;color:#003366;border:2px solid #003366;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Cancelar</button>'
+    + '<button id="ov-cancelar" style="padding:12px;background:white;color:#143762;border:2px solid #143762;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Cancelar</button>'
     + '</div></div>';
   overlay.appendChild(div);
   document.body.appendChild(overlay);
@@ -1599,15 +1690,15 @@ function mostrarPopupDuplicado(prev, heteroHecha) {
       + '<p style="font-size:13px;color:#991b1b;font-weight:700;margin:0;">🔒 No se puede modificar — su evaluación ya está en proceso finalizada por el director académico.</p>'
       + '</div>'
       + '<button id="btn-dl-previo" style="padding:11px;background:#166534;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;width:100%;">⬇ Descargar copia PDF de la evaluación</button>'
-      + '<button id="btn-cerrar-popup" style="padding:11px;background:white;color:#003366;border:2px solid #003366;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;">Cerrar</button>';
+      + '<button id="btn-cerrar-popup" style="padding:11px;background:white;color:#143762;border:2px solid #143762;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;">Cerrar</button>';
   } else {
     // Director NO evaluó → puede sobreescribir
-    botonesHtml = '<div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;padding:12px 14px;margin-bottom:10px;">'
+    botonesHtml = '<div style="background:#e8eff7;border:1px solid #f59e0b;border-radius:8px;padding:12px 14px;margin-bottom:10px;">'
       + '<p style="font-size:13px;color:#92400e;margin:0;">⚠ Si sobreescribes, la evaluación anterior será reemplazada en el sistema.</p>'
       + '</div>'
       + '<button id="btn-sobreescribir" style="padding:11px;background:#991b1b;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;width:100%;">✎ Sobreescribir evaluación</button>'
       + '<button id="btn-dl-previo" style="padding:11px;background:#166534;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;">⬇ Descargar copia PDF de la evaluación anterior</button>'
-      + '<button id="btn-cerrar-popup" style="padding:11px;background:white;color:#003366;border:2px solid #003366;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;">Cerrar</button>';
+      + '<button id="btn-cerrar-popup" style="padding:11px;background:white;color:#143762;border:2px solid #143762;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;">Cerrar</button>';
   }
 
   pop.innerHTML = '<div style="background:white;border-radius:14px;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);">'
@@ -1844,7 +1935,7 @@ function buildRPA() {
       var h0 = HISTORICO_F1.find(function(h){ return String(h.ano) === '0'; });
       var anoRef0 = h0 && h0.periodo ? h0.periodo.split('-')[0] : '';
       col1 = '<td class="col-ini" style="text-align:center"><span style="font-size:11px;font-weight:700;color:var(--azul);background:#e8eef6;border-radius:5px;padding:4px 8px;display:inline-block;">' + vIni + '%' + (anoRef0 ? '<br><small style="font-weight:400;opacity:.7;">'+anoRef0+'</small>' : '') + '</span></td>';
-      col2 = '<td class="col-ini" style="text-align:center"><span style="font-size:11px;font-weight:700;color:#854d0e;background:#fef3c7;border-radius:5px;padding:4px 8px;display:inline-block;">' + vPro + '%' + (anoRef0 ? '<br><small style="font-weight:400;opacity:.7;">'+anoRef0+'</small>' : '') + '</span></td>';
+      col2 = '<td class="col-ini" style="text-align:center"><span style="font-size:11px;font-weight:700;color:#854d0e;background:#e8eff7;border-radius:5px;padding:4px 8px;display:inline-block;">' + vPro + '%' + (anoRef0 ? '<br><small style="font-weight:400;opacity:.7;">'+anoRef0+'</small>' : '') + '</span></td>';
       col3 = '<td class="col-hoy" style="text-align:center"><div class="iw" style="border-color:#86efac"><input type="number" class="ri" id="act_' + r.id + '" min="0" max="100" step="10" placeholder="0"><span class="ps">%</span></div></td>';
     } else if (ano === '2') {
       var vIni2 = getRefIni(r.id);
@@ -1976,7 +2067,7 @@ function buildPeers() {
   var w = document.getElementById('peers-wrap'); w.innerHTML = '';
 
   if (!COMPANEROS_COHORTE.length) {
-    w.innerHTML = '<div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;padding:14px 16px;font-size:12px;color:#854d0e;font-weight:600;">⚠ No se encontraron compañeros de la misma cohorte registrados en el sistema.</div>';
+    w.innerHTML = '<div style="background:#e8eff7;border:1px solid #f59e0b;border-radius:8px;padding:14px 16px;font-size:12px;color:#854d0e;font-weight:600;">⚠ No se encontraron compañeros de la misma cohorte registrados en el sistema.</div>';
     return;
   }
 
@@ -2268,7 +2359,7 @@ function _renderHistoricoPDF(doc,historico,yIn,margin,colW,azul,dorado,verde,ama
     doc.text('Cohorte: '+hCoh+(hPer?' \u00b7 Periodo: '+hPer:'')+(hreg.fecha?' \u00b7 '+hreg.fecha.split('T')[0]:''),margin+5,y+11);
     y+=14;
     var isAno0=hAno==='0';
-    doc.setFillColor(0,51,102);doc.rect(margin,y,colW,6,'F');
+    doc.setFillColor(20,55,98);doc.rect(margin,y,colW,6,'F');
     doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.5);
     doc.text('RPA',margin+2,y+4);doc.text('Descripci\u00f3n',margin+15,y+4);
     if(isAno0){doc.text('Auto Inicial ('+hCoh+')',margin+colW*0.58,y+4);doc.text('Proyecci\u00f3n al egreso',margin+colW*0.78,y+4);}
@@ -2309,7 +2400,7 @@ function descargarPDFEst(){
   if(!d){alert('Guarda el instrumento primero para generar el PDF.');return;}
   var jsPDF=window.jspdf.jsPDF;
   var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  var azul=[0,51,102],dorado=[200,146,42],verde=[22,101,52],amar=[133,77,14],rojo=[153,27,27];
+  var azul=[20,55,98],dorado=[59,121,190],verde=[22,101,52],amar=[133,77,14],rojo=[153,27,27];
   var pageW=210,margin=14,colW=182,y=0;
   var RD={RPA10:'Identifica necesidades u oportunidades para la innovaci\u00f3n.',RPA11:'Participa del dise\u00f1o de soluciones innovadoras.',RPA5:'Argumenta la escogencia de perspectiva de an\u00e1lisis.',RPA4:'Describe las fases para revisi\u00f3n sistem\u00e1tica de literatura.',RPA12:'Planea y concreta procesos de innovaci\u00f3n.',RPA6:'Interact\u00faa activamente con sus pares acad\u00e9micos.',RPA13:'Realiza difusi\u00f3n efectiva en eventos acad\u00e9micos.',RPA1:'Describe claramente el problema de investigaci\u00f3n.',RPA2:'Formula una pregunta de investigaci\u00f3n.',RPA14:'Plantea objetivos coherentes con la pregunta.',RPA3:'Argumenta la elecci\u00f3n del dise\u00f1o metodol\u00f3gico.',RPA15:'Apoya procesos de innovaci\u00f3n del proyecto.',RPA7:'Identifica diferencias entre tipos de art\u00edculos.',RPA8:'Participa en escritura y publicaci\u00f3n cient\u00edfica.',RPA16:'Escucha activamente a personas involucradas.',RPA17:'Genera propuestas innovadoras colaborativas.',RPA18:'Participa de la implementaci\u00f3n de modelos educativos.',RPA9:'Consulta efectivamente bases de datos especializadas.',RPA19:'Documenta observaciones del contexto del problema.',RPA20:'Participa del testeo de modelos o prototipos.',RPA21:'Participa del dise\u00f1o y construcci\u00f3n de prototipos.',RPA22:'Escoge y aplica instrumentos de investigaci\u00f3n.'};
   var RO=['RPA10','RPA11','RPA5','RPA4','RPA12','RPA6','RPA13','RPA1','RPA2','RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18','RPA9','RPA19','RPA20','RPA21','RPA22'];
@@ -2562,7 +2653,7 @@ function descargarPDFEst(){
   // Footer
   var tot=doc.internal.getNumberOfPages();
   for(var pg=1;pg<=tot;pg++){doc.setPage(pg);doc.setFillColor(azul[0],azul[1],azul[2]);doc.rect(0,287,pageW,10,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','normal');doc.setFontSize(6);doc.text('SEDIETIC v3.0  |  Universidad de La Sabana  |  SNIES 109126',pageW/2,292,{align:'center'});doc.text('Pg. '+pg+' / '+tot,pageW-margin,292,{align:'right'});}
-  var nom=(d.estudiante_nombre||'informe').replace(/[^a-zA-Z0-9]/g,'_');
+  var nom=(d.estudiante_nombre||'informe').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_');
   doc.save('SEDIETIC_Autoevaluacion_'+nom+'_'+d._per+'.pdf');
 }
 
@@ -2592,7 +2683,7 @@ function verificarPercepcionExistente() {
       // Sin Año 0 — no se puede hacer la percepción
       var avisoDiv = document.getElementById('aviso-ano1');
       if (avisoDiv) {
-        avisoDiv.style.cssText = 'display:block;margin-top:12px;background:#fef3c7;border:1px solid #c8922a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;';
+        avisoDiv.style.cssText = 'display:block;margin-top:12px;background:#e8eff7;border:1px solid #3b79be;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;';
         avisoDiv.innerHTML = '<strong>⚠ Percepción no disponible:</strong> Esta sección requiere que hayas completado tu <strong>Evaluación Inicial (Inicio Año 1 — Año 0)</strong>. Por favor regístrala primero.';
       }
       // Restaurar selector

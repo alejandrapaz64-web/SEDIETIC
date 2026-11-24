@@ -6,8 +6,8 @@
 <title>SEDIETIC - Calculadora | Universidad de La Sabana</title>
 <style>
 :root{
-  --azul:#003366;--azul-m:#002C5F;--azul-p:#e6eef5;--azul-l:#a8c0d8;
-  --dorado:#C8922A;--g50:#f7f9fc;--g100:#eef1f7;--g200:#dde2ed;
+  --azul:#143762;--azul-m:#0f2c4f;--azul-p:#e6eef5;--azul-l:#a8c0d8;
+  --dorado:#3b79be;--g50:#f7f9fc;--g100:#eef1f7;--g200:#dde2ed;
   --g400:#8f97b0;--g600:#4a5168;--g800:#1e2338;
   --verde:#166534;--vbg:#dcfce7;--vbd:#86efac;
   --amar:#854d0e;--abg:#fef9c3;--abd:#fde047;
@@ -15,14 +15,14 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--g50);color:var(--g800);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;}
-.hdr{background:var(--azul);border-bottom:5px solid var(--dorado);box-shadow:0 2px 12px rgba(0,51,102,0.25);}
+.hdr{background:var(--azul);border-bottom:5px solid var(--dorado);box-shadow:0 2px 12px rgba(20,55,98,0.25);}
 .hdr-top{display:flex;align-items:center;justify-content:space-between;padding:14px 24px 12px;border-bottom:1px solid rgba(255,255,255,.12);}
 .hdr-logo{display:flex;align-items:center;gap:12px;}
 .hdr-esc{height:50px;background:white;border-radius:8px;display:flex;align-items:center;overflow:hidden;padding:6px 12px;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
 .hdr-esc img{height:100%;width:auto;object-fit:contain;}
 .hdr-uni{font-size:11px;color:rgba(255,255,255,.65);}
 .hdr-prog{font-size:15px;font-weight:700;color:white;letter-spacing:0.2px;}
-.hdr-badge{font-size:10px;color:rgba(255,255,255,.9);background:rgba(200,146,42,.2);border:1px solid rgba(200,146,42,.5);padding:4px 12px;border-radius:20px;font-weight:600;letter-spacing:0.5px;}
+.hdr-badge{font-size:10px;color:rgba(255,255,255,.9);background:rgba(59,121,190,.2);border:1px solid rgba(59,121,190,.5);padding:4px 12px;border-radius:20px;font-weight:600;letter-spacing:0.5px;}
 .hdr-bot{padding:12px 24px 16px;}
 .hdr-title{font-size:24px;font-weight:900;color:white;margin-bottom:4px;letter-spacing:-0.3px;font-family:Georgia,serif;}
 .hdr-title span{color:var(--dorado);font-style:italic;}
@@ -198,7 +198,7 @@ body{background:var(--g50);color:var(--g800);font-family:'Inter',system-ui,sans-
 .btn-movil-ir{width:100%;padding:13px;background:white;color:var(--azul);border:2px solid var(--azul);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .btn-movil-ir:active{opacity:.85;}
 .btn-movil-cerrar{width:100%;padding:10px;background:transparent;color:var(--g400);border:none;font-size:13px;cursor:pointer;}
-.panel-repo-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,51,102,0.92);z-index:9500;align-items:center;justify-content:center;padding:16px;}
+.panel-repo-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(20,55,98,0.92);z-index:9500;align-items:center;justify-content:center;padding:16px;}
 .panel-repo-inner{background:white;border-radius:14px;padding:20px;width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column;gap:12px;overflow-y:auto;}
 .panel-repo-title{font-size:15px;font-weight:700;color:var(--azul);text-align:center;}
 .panel-repo-sub{font-size:12px;color:var(--g600);background:var(--azul-p);border-radius:8px;padding:10px 12px;line-height:1.6;}
@@ -329,6 +329,100 @@ body{background:var(--g50);color:var(--g800);font-family:'Inter',system-ui,sans-
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style id="nexo-theme">
+/* ══ NEXO DOCTORAL — capa visual unificada para SEDIETIC (solo estilos; no altera lógica) ══ */
+:root{
+  --nx-navy:#143762;--nx-navy-2:#0f2c4f;--nx-accent:#3b79be;--nx-accent-2:#2b5d97;
+  --nx-bg:#f0f2f5;--nx-line:#e3e6ea;--nx-text:#414f64;--nx-ink:#1e2a3d;--nx-muted:#9fb0c4;
+  --azul:#143762;--azul-m:#0f2c4f;--azul-c:#2b5d97;--dorado:#3b79be;--dorado-c:#6a9bd1;
+  --azul-bg:#f0f2f5;--azul-p:#e8eff7;--azul-b:#c3d3e6;--azul-l:#b6c7db;
+  --gris-f:#f0f2f5;--gris-l:#e3e6ea;--gris-1:#f5f6f8;--gris-2:#e3e6ea;--gris-3:#c3cad4;--gris-t:#5b6677;--texto:#1e2a3d;
+  --g50:#f5f6f8;--g100:#eef0f3;--g200:#e3e6ea;--g400:#8792a2;--g600:#414f64;--g800:#1e2a3d;
+}
+body{font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--nx-bg);color:var(--nx-ink);}
+
+/* ── Cabecera ── */
+.hdr{background:var(--nx-navy)!important;border-bottom:none!important;box-shadow:none!important;position:relative;overflow:hidden;padding-bottom:34px;}
+.hdr::before{content:'';position:absolute;right:-140px;top:-180px;width:560px;height:560px;border-radius:50%;background:rgba(255,255,255,.035);pointer-events:none;}
+.hdr::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:34px;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C420,62 980,10 1440,6 L1440,60 L0,60 Z' fill='%23f0f2f5'/%3E%3C/svg%3E") bottom/100% 100% no-repeat;}
+.hdr>*{position:relative;z-index:1;}
+.hdr-top{border-bottom:1px solid rgba(255,255,255,.12)!important;padding-top:16px!important;padding-bottom:16px!important;gap:14px;flex-wrap:wrap;}
+.hdr-esc,.hdr-logo-box{height:56px!important;background:#fff!important;border-radius:10px!important;padding:8px 14px!important;box-shadow:0 4px 14px rgba(0,0,0,.18)!important;}
+.hdr-logo,.hdr-logo-row{gap:16px!important;}
+.hdr-logo>div:last-child,.hdr-logo-row>div:last-child{padding-left:16px;border-left:1px solid rgba(255,255,255,.2);}
+.hdr .hdr-uni{font-size:11px!important;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.62)!important;margin-bottom:3px;}
+.hdr .hdr-prog{font-size:15px!important;font-weight:500!important;color:#fff!important;}
+.hdr .hdr-badge{background:transparent!important;border:1px solid rgba(255,255,255,.28)!important;color:rgba(255,255,255,.85)!important;font-size:10px!important;font-weight:700!important;letter-spacing:1.4px;text-transform:uppercase;padding:7px 14px!important;border-radius:999px!important;}
+.hdr .hdr-badge *{color:inherit!important;}
+.hdr-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.nexo-pill{display:inline-flex;align-items:center;gap:6px;color:#fff!important;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.06);transition:background .2s,border-color .2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.nexo-pill:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.7);}
+.hdr-bot{padding-top:22px!important;padding-bottom:6px!important;background:transparent!important;}
+.hdr .hdr-title{font-family:'Playfair Display',Georgia,serif!important;font-size:32px!important;font-weight:700!important;line-height:1.15;letter-spacing:-.3px;color:#fff!important;}
+.hdr .hdr-title::before{content:'NEXO Evalúa · SEDIETIC';display:block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:10px;}
+.hdr .hdr-title em,.hdr .hdr-title span{color:var(--nx-muted)!important;font-style:normal!important;}
+.hdr .hdr-title>span[style]{color:#fff!important;}
+.hdr .hdr-sub{font-size:13.5px!important;color:rgba(255,255,255,.72)!important;margin-top:8px!important;line-height:1.6;}
+
+/* ── Acceso (login) ── */
+.login-page{background:var(--nx-navy)!important;}
+.login-left{background:var(--nx-navy)!important;border-right:none!important;position:relative;overflow:hidden;}
+.login-left::before{content:'';position:absolute;left:-160px;bottom:-200px;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.035);}
+.login-left::after{content:'';position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;border:1px solid rgba(255,255,255,.07);}
+.login-left>*{position:relative;z-index:1;}
+.login-logo-wrap{border-radius:14px!important;box-shadow:0 8px 28px rgba(0,0,0,.25)!important;}
+.login-uni{font-weight:700;letter-spacing:2.4px!important;color:rgba(255,255,255,.6)!important;}
+.login-prog{font-family:'Playfair Display',Georgia,serif;font-size:30px!important;font-weight:700!important;line-height:1.2!important;}
+.login-prog span{color:var(--nx-muted)!important;}
+.login-admin-badge,.login-dir-badge{background:transparent!important;border:1px solid rgba(255,255,255,.35)!important;color:#fff!important;letter-spacing:1.6px!important;border-radius:999px!important;padding:7px 16px!important;}
+.login-desc{border-left:2px solid rgba(255,255,255,.25)!important;color:rgba(255,255,255,.72)!important;}
+.login-right{background:#fff!important;}
+.login-right h2{font-family:'Playfair Display',Georgia,serif;font-size:28px!important;color:var(--nx-navy)!important;}
+.login-right h2::before{content:'NEXO Evalúa · SEDIETIC';display:block;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--nx-accent);margin-bottom:10px;}
+.lf input{border-radius:10px!important;border-color:var(--nx-line)!important;background:#f5f6f8!important;}
+.lf input:focus{border-color:var(--nx-navy)!important;background:#fff!important;box-shadow:0 0 0 3px rgba(20,55,98,.1)!important;}
+.btn-login{border-radius:10px!important;background:var(--nx-navy)!important;letter-spacing:.3px;}
+.btn-login:hover{background:var(--nx-navy-2)!important;}
+
+.lf>span[onclick]{top:auto!important;bottom:10px;transform:none!important;}
+/* ── Tarjetas y paneles ── */
+.card,.sel-panel,.rcard{position:relative;border:1px solid var(--nx-line)!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(20,55,98,.04),0 8px 24px rgba(20,55,98,.05)!important;}
+.card::before,.sel-panel::before,.rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--nx-navy),var(--nx-accent));z-index:2;pointer-events:none;}
+.card-hdr,.rcard-hdr{background:#fff!important;border-bottom:1px solid #eef0f3!important;padding-top:14px!important;padding-bottom:12px!important;}
+.card-title,.rcard-title{font-family:'Playfair Display',Georgia,serif!important;font-size:16px!important;color:var(--nx-navy)!important;}
+.step-num,.card-num,.rcard-num{border-radius:8px!important;background:var(--nx-navy)!important;}
+.panel-title{color:var(--nx-navy)!important;font-size:18px!important;}
+.btn,.btn-dl,.btn-asistente,.btn-copy{border-radius:8px;}
+.btn-p{background:var(--nx-navy)!important;}
+.btn-p:hover{background:var(--nx-navy-2)!important;}
+.stat-card{border-radius:14px!important;border-color:var(--nx-line)!important;}
+.stat-num{font-family:'Playfair Display',Georgia,serif;color:var(--nx-navy)!important;}
+
+/* ── Pestañas ── */
+.tabs{border-bottom:1px solid var(--nx-line)!important;box-shadow:none!important;}
+.tab-btn.on,.dir-tab-btn.dir-tab-on{color:var(--nx-navy)!important;border-bottom-color:var(--nx-navy)!important;}
+
+@media (max-width:768px){
+  .hdr .hdr-title{font-size:24px!important;}
+  .hdr-esc,.hdr-logo-box{height:44px!important;}
+  .hdr-logo>div:last-child,.hdr-logo-row>div:last-child{padding-left:10px;}
+  .login-prog{font-size:24px!important;}
+}
+@media (max-width:480px){
+  .hdr .hdr-title{font-size:20px!important;}
+  .hdr .hdr-uni{letter-spacing:1.2px;}
+  .nexo-pill{padding:6px 12px;font-size:10px;}
+}
+.main{min-height:calc(100vh - 240px)!important;}
+.pnl-l,.pnl-r{max-height:calc(100vh - 240px)!important;}
+@media (max-width:1024px){.main{min-height:calc(100vh - 290px)!important;}.pnl-l,.pnl-r{max-height:calc(100vh - 290px)!important;}}
+@media (max-width:768px){.pnl-l,.pnl-r{max-height:none!important;}}
+.lbox-title{font-family:'Playfair Display',Georgia,serif;font-size:20px!important;}
+#calc-login{background:var(--nx-navy)!important;}
+</style>
 </head>
 <body>
 
@@ -388,15 +482,15 @@ async function calcLogin(){
              onerror="this.style.display='none'">
       </div>
       <div>
-        <div class="hdr-uni">Universidad de La Sabana - Facultad de Educacion</div>
-        <div class="hdr-prog">Doctorado en Innovacion Educativa con uso de TIC</div>
+        <div class="hdr-uni">Universidad de La Sabana · Facultad de Educación</div>
+        <div class="hdr-prog">Doctorado en Innovación Educativa con uso de TIC</div>
       </div>
     </div>
-    <span class="hdr-badge">SEDIETIC v3.0 - SNIES 109126</span>
+    <div class="hdr-actions"><a class="nexo-pill" href="https://alejandrapaz64-web.github.io/portal-doctoral-/" target="_blank" rel="noopener noreferrer" title="Volver al ecosistema NEXO Doctoral">&#8592; NEXO Doctoral</a><span class="hdr-badge">SEDIETIC · SNIES 109126</span></div>
   </div>
   <div class="hdr-bot">
-    <div class="hdr-title">Sistema de Evaluacion de <span>Competencias Doctorales</span></div>
-    <div class="hdr-sub">Sistema SEDIETIC basado en RPAs &mdash; Modelo validado del programa</div>
+    <div class="hdr-title">Calculadora de <span>Competencias Doctorales</span></div>
+    <div class="hdr-sub">Cálculo en cascada RPA → competencia → asignatura · Modelo validado del programa</div>
   </div>
 </div>
 
@@ -994,6 +1088,7 @@ function ejecutarGuardado(sinAnalisis) {
   var fecha = new Date().toISOString().slice(0,10);
 
   var datos = {
+    tipo: 'GUARDAR_EVALUACION',
     estudiante: nom,
     cohorte: cohorte,
     ano: anoActivo === 0 ? 'Todos' : String(anoActivo),
@@ -1095,8 +1190,8 @@ function descargarPDF() {
     var y = 0;
 
     // Colores institucionales
-    var azul = [0, 51, 102];
-    var dorado = [200, 146, 42];
+    var azul = [20,55,98];
+    var dorado = [59,121,190];
     var verde = [22, 101, 52];
     var amar = [133, 77, 14];
     var rojo = [153, 27, 27];
@@ -1444,7 +1539,7 @@ function descargarPDF() {
     }
 
     // Guardar
-    var nomArchivo = nom.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
+    var nomArchivo = nom.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
     var sufAno = anoActivo === 0 ? '_TodosLosAnos' : '_' + anoLabel(anoActivo).replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
     doc.save('SEDIETIC_' + nomArchivo + sufAno + '_' + new Date().toISOString().slice(0, 10) + '.pdf');
 

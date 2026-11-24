@@ -11,7 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <style>
-:root{--azul:#003366;--azul-m:#002C5F;--azul-p:#e6eef5;--azul-l:#a8c0d8;--dorado:#C8922A;--g50:#f7f9fc;--g100:#eef1f7;--g200:#dde2ed;--g400:#8f97b0;--g600:#4a5168;--g800:#1e2338;--verde:#166534;--vbg:#dcfce7;--vbd:#86efac;--rojo:#991b1b;--rbg:#fee2e2;--rbd:#fca5a5;--amar:#854d0e;--abg:#fef9c3;--abd:#fde047;}
+:root{--azul:#143762;--azul-m:#0f2c4f;--azul-p:#e6eef5;--azul-l:#a8c0d8;--dorado:#3b79be;--g50:#f7f9fc;--g100:#eef1f7;--g200:#dde2ed;--g400:#8f97b0;--g600:#4a5168;--g800:#1e2338;--verde:#166534;--vbg:#dcfce7;--vbd:#86efac;--rojo:#991b1b;--rbg:#fee2e2;--rbd:#fca5a5;--amar:#854d0e;--abg:#fef9c3;--abd:#fde047;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;background:#f0f4f8;color:var(--g800);}
 /* ═══ LOGIN INSTITUCIONAL SPLIT ═══ */
@@ -31,7 +31,7 @@ body{font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;bac
 .lf{margin-bottom:16px;}
 .lf label{display:block;font-size:11px;font-weight:600;color:var(--azul);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
 .lf input{width:100%;padding:11px 14px;border:1.5px solid var(--g200);border-radius:8px;font-size:14px;font-family:inherit;outline:none;background:var(--g50);color:var(--g800);transition:border-color .2s,box-shadow .2s;}
-.lf input:focus{border-color:var(--azul);background:white;box-shadow:0 0 0 3px rgba(0,51,102,.1);}
+.lf input:focus{border-color:var(--azul);background:white;box-shadow:0 0 0 3px rgba(20,55,98,.1);}
 .lf input::placeholder{color:var(--g400);}
 .btn-login{width:100%;padding:12px;background:var(--azul);color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s;margin-top:4px;}
 .btn-login:hover{background:var(--azul-m);}
@@ -47,7 +47,7 @@ body{font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;bac
 .hdr-esc img{height:100%;width:auto;object-fit:contain;display:block;}
 .hdr-uni{font-size:10px;color:rgba(255,255,255,.6);}
 .hdr-prog{font-size:14px;font-weight:700;color:white;}
-.hdr-badge{font-size:10px;color:rgba(255,255,255,.9);background:rgba(200,146,42,.2);border:1px solid rgba(200,146,42,.4);padding:4px 12px;border-radius:20px;font-weight:600;}
+.hdr-badge{font-size:10px;color:rgba(255,255,255,.9);background:rgba(59,121,190,.2);border:1px solid rgba(59,121,190,.4);padding:4px 12px;border-radius:20px;font-weight:600;}
 .hdr-bot{padding:10px 24px 14px;}
 .hdr-title{font-size:20px;font-weight:900;color:white;font-family:'Playfair Display',serif;}
 .hdr-title em{color:rgba(255,255,255,.9);font-style:italic;}
@@ -79,7 +79,7 @@ body{font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;bac
 .ano-filter-btn.tool.on{background:var(--azul);color:#fff;border-color:var(--azul);}
 
 .ano-badge-0{background:#f3e8ff;color:#6b21a8;}.ano-badge-1{background:#dbeafe;color:#1e40af;}
-.ano-badge-2{background:#fef3c7;color:#92400e;}
+.ano-badge-2{background:#e8eff7;color:#92400e;}
 .ano-badge-3{background:#f3e8ff;color:#6b21a8;}
 .est-check{color:var(--verde);font-size:16px;display:none;}
 .est-item.selected .est-check{display:block;}
@@ -124,9 +124,9 @@ table.rt td:first-child{padding-left:8px;}
 .ri{width:44px;border:none;outline:none;background:transparent;font-family:monospace;font-size:13px;font-weight:500;color:var(--g800);padding:5px 3px 5px 6px;text-align:right;}
 .ps{font-size:11px;color:var(--g400);padding-right:5px;font-family:monospace;}
 .val-ref{font-size:12px;font-weight:600;color:var(--g600);text-align:center;}
-.col-gold{background:rgba(200,146,42,.05);}
+.col-gold{background:rgba(59,121,190,.05);}
 .col-green{background:rgba(22,101,52,.05);}
-.col-blue{background:rgba(0,51,102,.04);}
+.col-blue{background:rgba(20,55,98,.04);}
 .pond-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px;}
 .pond-item{background:var(--g50);border:1.5px solid var(--g200);border-radius:8px;padding:10px;text-align:center;}
 .pond-item label{font-size:10px;font-weight:600;color:var(--g600);display:block;margin-bottom:6px;line-height:1.4;}
@@ -183,7 +183,7 @@ table.rt td:first-child{padding-left:8px;}
 .ia-sub{font-size:11px;color:rgba(255,255,255,.65);}
 .ia-content{padding:16px 20px;font-size:13px;line-height:1.8;color:var(--g800);}
 .ia-loading{padding:20px;text-align:center;color:var(--g400);font-style:italic;font-size:13px;}
-.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,51,102,.2);border-top-color:var(--azul);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(20,55,98,.2);border-top-color:var(--azul);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .ia-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
 /* BOTONES COPIA/ASISTENTES */
@@ -191,7 +191,7 @@ table.rt td:first-child{padding-left:8px;}
 .btn-gpt{background:#10a37f;color:white;}
 .btn-gpt:hover{background:#0d8a6c;}
 .btn-claude{background:var(--dorado);color:white;}
-.btn-claude:hover{background:#a07020;}
+.btn-claude:hover{background:#2b5d97;}
 .btn-copiar{background:var(--g100);color:var(--g800);border:1px solid var(--g200);}
 .btn-copiar:hover{background:var(--azul-p);color:var(--azul);}
 /* DESCARGA */
@@ -290,6 +290,94 @@ table.rt td:first-child{padding-left:8px;}
   .ri   { width: 46px !important; }
 }
 </style>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style id="nexo-theme">
+/* ══ NEXO DOCTORAL — capa visual unificada para SEDIETIC (solo estilos; no altera lógica) ══ */
+:root{
+  --nx-navy:#143762;--nx-navy-2:#0f2c4f;--nx-accent:#3b79be;--nx-accent-2:#2b5d97;
+  --nx-bg:#f0f2f5;--nx-line:#e3e6ea;--nx-text:#414f64;--nx-ink:#1e2a3d;--nx-muted:#9fb0c4;
+  --azul:#143762;--azul-m:#0f2c4f;--azul-c:#2b5d97;--dorado:#3b79be;--dorado-c:#6a9bd1;
+  --azul-bg:#f0f2f5;--azul-p:#e8eff7;--azul-b:#c3d3e6;--azul-l:#b6c7db;
+  --gris-f:#f0f2f5;--gris-l:#e3e6ea;--gris-1:#f5f6f8;--gris-2:#e3e6ea;--gris-3:#c3cad4;--gris-t:#5b6677;--texto:#1e2a3d;
+  --g50:#f5f6f8;--g100:#eef0f3;--g200:#e3e6ea;--g400:#8792a2;--g600:#414f64;--g800:#1e2a3d;
+}
+body{font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--nx-bg);color:var(--nx-ink);}
+
+/* ── Cabecera ── */
+.hdr{background:var(--nx-navy)!important;border-bottom:none!important;box-shadow:none!important;position:relative;overflow:hidden;padding-bottom:34px;}
+.hdr::before{content:'';position:absolute;right:-140px;top:-180px;width:560px;height:560px;border-radius:50%;background:rgba(255,255,255,.035);pointer-events:none;}
+.hdr::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:34px;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C420,62 980,10 1440,6 L1440,60 L0,60 Z' fill='%23f0f2f5'/%3E%3C/svg%3E") bottom/100% 100% no-repeat;}
+.hdr>*{position:relative;z-index:1;}
+.hdr-top{border-bottom:1px solid rgba(255,255,255,.12)!important;padding-top:16px!important;padding-bottom:16px!important;gap:14px;flex-wrap:wrap;}
+.hdr-esc,.hdr-logo-box{height:56px!important;background:#fff!important;border-radius:10px!important;padding:8px 14px!important;box-shadow:0 4px 14px rgba(0,0,0,.18)!important;}
+.hdr-logo,.hdr-logo-row{gap:16px!important;}
+.hdr-logo>div:last-child,.hdr-logo-row>div:last-child{padding-left:16px;border-left:1px solid rgba(255,255,255,.2);}
+.hdr .hdr-uni{font-size:11px!important;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.62)!important;margin-bottom:3px;}
+.hdr .hdr-prog{font-size:15px!important;font-weight:500!important;color:#fff!important;}
+.hdr .hdr-badge{background:transparent!important;border:1px solid rgba(255,255,255,.28)!important;color:rgba(255,255,255,.85)!important;font-size:10px!important;font-weight:700!important;letter-spacing:1.4px;text-transform:uppercase;padding:7px 14px!important;border-radius:999px!important;}
+.hdr .hdr-badge *{color:inherit!important;}
+.hdr-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.nexo-pill{display:inline-flex;align-items:center;gap:6px;color:#fff!important;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.06);transition:background .2s,border-color .2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.nexo-pill:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.7);}
+.hdr-bot{padding-top:22px!important;padding-bottom:6px!important;background:transparent!important;}
+.hdr .hdr-title{font-family:'Playfair Display',Georgia,serif!important;font-size:32px!important;font-weight:700!important;line-height:1.15;letter-spacing:-.3px;color:#fff!important;}
+.hdr .hdr-title::before{content:'NEXO Evalúa · SEDIETIC';display:block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:10px;}
+.hdr .hdr-title em,.hdr .hdr-title span{color:var(--nx-muted)!important;font-style:normal!important;}
+.hdr .hdr-title>span[style]{color:#fff!important;}
+.hdr .hdr-sub{font-size:13.5px!important;color:rgba(255,255,255,.72)!important;margin-top:8px!important;line-height:1.6;}
+
+/* ── Acceso (login) ── */
+.login-page{background:var(--nx-navy)!important;}
+.login-left{background:var(--nx-navy)!important;border-right:none!important;position:relative;overflow:hidden;}
+.login-left::before{content:'';position:absolute;left:-160px;bottom:-200px;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.035);}
+.login-left::after{content:'';position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;border:1px solid rgba(255,255,255,.07);}
+.login-left>*{position:relative;z-index:1;}
+.login-logo-wrap{border-radius:14px!important;box-shadow:0 8px 28px rgba(0,0,0,.25)!important;}
+.login-uni{font-weight:700;letter-spacing:2.4px!important;color:rgba(255,255,255,.6)!important;}
+.login-prog{font-family:'Playfair Display',Georgia,serif;font-size:30px!important;font-weight:700!important;line-height:1.2!important;}
+.login-prog span{color:var(--nx-muted)!important;}
+.login-admin-badge,.login-dir-badge{background:transparent!important;border:1px solid rgba(255,255,255,.35)!important;color:#fff!important;letter-spacing:1.6px!important;border-radius:999px!important;padding:7px 16px!important;}
+.login-desc{border-left:2px solid rgba(255,255,255,.25)!important;color:rgba(255,255,255,.72)!important;}
+.login-right{background:#fff!important;}
+.login-right h2{font-family:'Playfair Display',Georgia,serif;font-size:28px!important;color:var(--nx-navy)!important;}
+.login-right h2::before{content:'NEXO Evalúa · SEDIETIC';display:block;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--nx-accent);margin-bottom:10px;}
+.lf input{border-radius:10px!important;border-color:var(--nx-line)!important;background:#f5f6f8!important;}
+.lf input:focus{border-color:var(--nx-navy)!important;background:#fff!important;box-shadow:0 0 0 3px rgba(20,55,98,.1)!important;}
+.btn-login{border-radius:10px!important;background:var(--nx-navy)!important;letter-spacing:.3px;}
+.btn-login:hover{background:var(--nx-navy-2)!important;}
+
+.lf>span[onclick]{top:auto!important;bottom:10px;transform:none!important;}
+/* ── Tarjetas y paneles ── */
+.card,.sel-panel,.rcard{position:relative;border:1px solid var(--nx-line)!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(20,55,98,.04),0 8px 24px rgba(20,55,98,.05)!important;}
+.card::before,.sel-panel::before,.rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--nx-navy),var(--nx-accent));z-index:2;pointer-events:none;}
+.card-hdr,.rcard-hdr{background:#fff!important;border-bottom:1px solid #eef0f3!important;padding-top:14px!important;padding-bottom:12px!important;}
+.card-title,.rcard-title{font-family:'Playfair Display',Georgia,serif!important;font-size:16px!important;color:var(--nx-navy)!important;}
+.step-num,.card-num,.rcard-num{border-radius:8px!important;background:var(--nx-navy)!important;}
+.panel-title{color:var(--nx-navy)!important;font-size:18px!important;}
+.btn,.btn-dl,.btn-asistente,.btn-copy{border-radius:8px;}
+.btn-p{background:var(--nx-navy)!important;}
+.btn-p:hover{background:var(--nx-navy-2)!important;}
+.stat-card{border-radius:14px!important;border-color:var(--nx-line)!important;}
+.stat-num{font-family:'Playfair Display',Georgia,serif;color:var(--nx-navy)!important;}
+
+/* ── Pestañas ── */
+.tabs{border-bottom:1px solid var(--nx-line)!important;box-shadow:none!important;}
+.tab-btn.on,.dir-tab-btn.dir-tab-on{color:var(--nx-navy)!important;border-bottom-color:var(--nx-navy)!important;}
+
+@media (max-width:768px){
+  .hdr .hdr-title{font-size:24px!important;}
+  .hdr-esc,.hdr-logo-box{height:44px!important;}
+  .hdr-logo>div:last-child,.hdr-logo-row>div:last-child{padding-left:10px;}
+  .login-prog{font-size:24px!important;}
+}
+@media (max-width:480px){
+  .hdr .hdr-title{font-size:20px!important;}
+  .hdr .hdr-uni{letter-spacing:1.2px;}
+  .nexo-pill{padding:6px 12px;font-size:10px;}
+}
+</style>
 </head>
 <body>
 
@@ -312,9 +400,8 @@ table.rt td:first-child{padding-left:8px;}
   <div class="login-right">
     <h2>Acceso Director</h2>
     <p>Ingrese sus credenciales institucionales para continuar</p>
-    <div class="lf" style="position:relative;"><label>Usuario</label><input type="text" id="login-user" placeholder="Ingrese su usuario" autocomplete="off"></div>
-    <div class="lf"><label>Contraseña</label><input type="password" id="login-pass" placeholder="Ingrese su contraseña" onkeydown="if(event.key==='Enter')doLogin()"></div>
-<span onclick="var i=document.getElementById('login-pass');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈';" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;user-select:none;color:#8f97b0;">👁</span>
+    <div class="lf"><label>Usuario</label><input type="text" id="login-user" placeholder="Ingrese su usuario" autocomplete="off"></div>
+    <div class="lf" style="position:relative;"><label>Contraseña</label><input type="password" id="login-pass" placeholder="Ingrese su contraseña" onkeydown="if(event.key==='Enter')doLogin()"><span onclick="var i=document.getElementById('login-pass');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈';" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;user-select:none;color:#8f97b0;">👁</span></div>
     <button class="btn-login" onclick="doLogin()">Ingresar al sistema</button>
     <div class="login-err" id="login-err">Usuario o contraseña incorrectos.</div>
     <div class="login-foot">
@@ -340,7 +427,7 @@ table.rt td:first-child{padding-left:8px;}
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
-        <span class="hdr-badge">SEDIETIC v3.0 · Director · SNIES 109126</span>
+        <a class="nexo-pill" href="https://alejandrapaz64-web.github.io/portal-doctoral-/" target="_blank" rel="noopener noreferrer" title="Volver al ecosistema NEXO Doctoral">&#8592; NEXO Doctoral</a><span class="hdr-badge">SEDIETIC · Director</span>
         <button onclick="cerrarSesion()" style="padding:5px 14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:white;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">Cerrar sesión</button>
       </div>
     </div>
@@ -418,7 +505,7 @@ table.rt td:first-child{padding-left:8px;}
 
       <div class="card">
         <div class="card-hdr"><div class="card-num" id="card-num-hetero">3</div><div class="card-title">Autoevaluación del Estudiante — referencia y heteroevaluación</div><span class="card-hint">Valores del estudiante en gris · Su evaluación en azul</span></div>
-        <div style="background:var(--abg);border-bottom:1px solid var(--abd);padding:10px 16px;font-size:12px;color:var(--amar);">
+        <div style="background:#eef4fb;border-bottom:1px solid #c3d3e6;padding:10px 16px;font-size:12px;color:#204f88;">
           <strong>Instrucción:</strong> Los valores en gris son los registrados por el estudiante. Ingrese su valoración en la columna azul para cada RPA.
           <span id="aviso-ano1-dir" style="display:none;margin-left:12px;color:var(--azul-m);"><strong>Año 1:</strong> No aplica coevaluación ni pasantía — ponderación 50% auto / 50% heteroevaluación.</span>
         </div>
@@ -603,17 +690,17 @@ function actualizarEncDir(ano,coh){
     t1.innerHTML='Auto Ini. ('+c0+')<br><small>+ Proy. ('+c3+') ★ Ref.</small>';
     t2.innerHTML='Autoevaluación Año 1'+(c1?'<br><small>('+c1+') ★ Ref.</small>':'');
     if(t3)t3.style.display='none';
-    if(tE){tE.style.background='#c8922a';tE.style.color='#fff';tE.style.minWidth='78px';tE.innerHTML='Heteroevaluación<br><small>Año 1'+(c1?' ('+c1+')':'')+'</small>';}
+    if(tE){tE.style.background='#3b79be';tE.style.color='#fff';tE.style.minWidth='78px';tE.innerHTML='Heteroevaluación<br><small>Año 1'+(c1?' ('+c1+')':'')+'</small>';}
   }else if(ano==='2'){
     t1.innerHTML='Auto Ini. ('+c0+')<br><small>+ Proy. ('+c3+') ★ Ref.</small>';
     t2.innerHTML='Autoevaluación Año 1'+(c1?'<br><small>('+c1+') ★ Ref.</small>':'');
     if(t3){t3.style.display='';t3.innerHTML='Autoevaluación Año 2'+(c2?'<br><small>('+c2+') ★ Ref.</small>':'');}
-    if(tE){tE.style.background='#c8922a';tE.style.color='#fff';tE.innerHTML='Heteroevaluación<br><small>Año 2'+(c2?' ('+c2+')':'')+'</small>';}
+    if(tE){tE.style.background='#3b79be';tE.style.color='#fff';tE.innerHTML='Heteroevaluación<br><small>Año 2'+(c2?' ('+c2+')':'')+'</small>';}
   }else if(ano==='3'){
     t1.innerHTML='Auto Ini. ('+c0+')<br><small>+ Proy. ('+c3+') ★ Ref.</small>';
     t2.innerHTML='Autoevaluación A1 ('+c1+')<br><small>+ Autoevaluación A2 ('+c2+') ★ Ref.</small>';
     if(t3){t3.style.display='';t3.innerHTML='Autoevaluación Año 3'+(c3?'<br><small>('+c3+') ★ Ref.</small>':'');}
-    if(tE){tE.style.background='#c8922a';tE.style.color='#fff';tE.innerHTML='Heteroevaluación<br><small>Año 3'+(c3?' ('+c3+')':'')+'</small>';}
+    if(tE){tE.style.background='#3b79be';tE.style.color='#fff';tE.innerHTML='Heteroevaluación<br><small>Año 3'+(c3?' ('+c3+')':'')+'</small>';}
   }
 }
 
@@ -879,7 +966,7 @@ function renderLista(lista){
       var asig=String(dc.estudiantesAsignados||'');
       return asig.split(',').map(function(x){return x.trim();}).indexOf(_idItemStr)>=0;
     });
-    var _docBadge=_docItem?('<span style="background:#fff3cd;border:1px solid #c8922a;color:#92400e;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:4px;white-space:nowrap;">&#128100; '+_docItem.nombre+'</span>'):'';
+    var _docBadge=_docItem?('<span style="background:#e8eff7;border:1px solid #3b79be;color:#204f88;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:4px;white-space:nowrap;">&#128100; '+_docItem.nombre+'</span>'):'';
     return'<div class="est-item'+(ev?' ya-eval':'')+' " id="item-'+e.id+'" data-eid="'+e.id+'" data-ano="'+e.ano+'" onclick="'+fnClick+'">'
       +'<div><div class="est-nombre" style="font-size:12px;">'+e.nombre+' '+anoBadge(e.ano)+badge+_docBadge+'</div>'
       +'<div class="est-meta">ID: '+e.id+' &middot; '+cl+'</div>'
@@ -980,7 +1067,7 @@ function selEst(id){
           return asig.split(',').map(function(x){return x.trim();}).indexOf(_idStr)>=0;
         });
         if(_docAsig&&_docAsig.nombre){
-          _docDiv.innerHTML='<span style="display:inline-flex;align-items:center;gap:6px;background:#fff3cd;border:1.5px solid var(--dorado);color:#92400e;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.3px;">&#128100; Docente asignado: '+_docAsig.nombre+'</span>';
+          _docDiv.innerHTML='<span style="display:inline-flex;align-items:center;gap:6px;background:#e8eff7;border:1.5px solid var(--dorado);color:#204f88;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.3px;">&#128100; Docente asignado: '+_docAsig.nombre+'</span>';
           _docDiv.style.display='block';
         } else {
           _docDiv.style.display='none';
@@ -1124,7 +1211,7 @@ function mostrarObservacionesCoevaluacion(coList, f1) {
     + '<div style="padding:16px;display:flex;flex-direction:column;gap:12px;">';
 
   conObs.forEach(function(co) {
-    html2 += '<div style="background:#fffbeb;border:1px solid #f59e0b;border-left:4px solid var(--dorado);border-radius:8px;padding:14px 16px;">'
+    html2 += '<div style="background:#f3f7fc;border:1px solid #c3d3e6;border-left:4px solid var(--dorado);border-radius:8px;padding:14px 16px;">'
       + '<div style="font-size:11px;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">'
       + 'Coevaluado: <span style="color:var(--g600);">' + (estSel ? estSel.nombre : '—') + '</span>'
       + ' &nbsp;·&nbsp; Evaluado por: <span style="color:var(--g600);">' + co.nombre + '</span></div>'
@@ -1271,7 +1358,7 @@ function buildHeteroTable(f1){
         });
         var _coAvg=_coVals.length>0?Math.round(_coVals.reduce(function(a,b){return a+b;},0)/_coVals.length):0;
         var _coLabel=coListDir.length>1?'<div style="font-size:8px;color:#92400e;opacity:.7;">prom. '+coListDir.length+' coev.</div>':'';
-        cells+='<td class="col-co" style="text-align:center;background:rgba(200,146,42,.06);">'+fmtRef(_coAvg,'#92400e')+_coLabel+'</td>';
+        cells+='<td class="col-co" style="text-align:center;background:rgba(59,121,190,.06);">'+fmtRef(_coAvg,'#92400e')+_coLabel+'</td>';
       } else {
         cells+='<td class="col-co" style="text-align:center;background:#f8fafc;color:#94a3b8;font-size:10px;font-style:italic;">—</td>';
       }
@@ -1526,7 +1613,7 @@ async function descargarExcel(){
   var n_co=coList.length;
   var anoNum=parseInt(resGlobal.ano||'1');
 
-  var AZUL='003366',DORADO='C8922A',VERDE_H='166534',ROJO_H='991B1B',AMAR_H='854D0E';
+  var AZUL='143762',DORADO='3B79BE',VERDE_H='166534',ROJO_H='991B1B',AMAR_H='854D0E';
   var AZUL_C='E6EEF5',VERDE_C='DCFCE7',ROJO_C='FEE2E2',AMAR_C='FEF9C3',GRIS='F7F9FC',GRIS2='EEF1F7';
 
   function hdrS(bg,fg){return{font:{bold:true,color:{rgb:fg||'FFFFFF'},name:'Arial',sz:9},fill:{patternType:'solid',fgColor:{rgb:bg||AZUL}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{top:{style:'thin',color:{rgb:'DDE2ED'}},bottom:{style:'thin',color:{rgb:'DDE2ED'}},left:{style:'thin',color:{rgb:'DDE2ED'}},right:{style:'thin',color:{rgb:'DDE2ED'}}}};}
@@ -1829,7 +1916,7 @@ async function descargarExcel(){
 
   XLSX.utils.book_append_sheet(wb,ws5,'Histórico');
 
-  var nom=(resGlobal.nombre||'informe').replace(/[^a-zA-Z0-9]/g,'_');
+  var nom=(resGlobal.nombre||'informe').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_');
 
   // ── Serializar con SheetJS a ArrayBuffer para post-procesar con JSZip ──
   var wbBin = XLSX.write(wb, {bookSST:false, type:'array', cellStyles:true});
@@ -1841,9 +1928,9 @@ async function descargarExcel(){
                 'RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18',
                 'RPA9','RPA19','RPA20','RPA21','RPA22'];
   var _cohG = limpiarCohorte(estSel&&estSel.cohorte?estSel.cohorte:'');
-  var _coh1G = calcPD(_cohG,2)||'';
-  var _coh2G = calcPD(_cohG,4)||'';
-  var _coh3G = calcPD(_cohG,6)||'';
+  var _coh1G = calcPD(_cohG,1)||'';
+  var _coh2G = calcPD(_cohG,2)||'';
+  var _coh3G = calcPD(_cohG,3)||'';
   var rpaLbls=[], rpaDiag=[], rpaProy=[], rpaHoy=[], rpaH1=[], rpaH2=[];
   RPAS_G.forEach(function(rid){
     rpaLbls.push(rid);
@@ -1858,7 +1945,7 @@ async function descargarExcel(){
   // Series dinámicas por año — igual que PDF
   var _anoGrafX=String(resGlobal.ano||anoEstudiante||'1');
   var _grafSeriesX=[rpaDiag,rpaProy];
-  var _grafColsX=['991B1B','CA8A04'];
+  var _grafColsX=['991B1B','3E8484'];
   var _grafTitlesX=[
     'Diagnóstico entrada ('+_cohG+')',
     'Proyección egreso ('+_coh3G+')'
@@ -1948,8 +2035,13 @@ async function descargarExcel(){
 
   // CHART 1 — Líneas de RPAs: series dinámicas por año (igual que PDF)
   var _seriesXml='';
+  // Sin evaluación inicial (Año 0): no graficar series en 0%
+  (function(){var sinD=!rpaDiag.some(function(v){return v>0;}),sinP=!rpaProy.some(function(v){return v>0;});
+    if(sinP){_grafSeriesX.splice(1,1);_grafColsX.splice(1,1);_grafTitlesX.splice(1,1);}
+    if(sinD){_grafSeriesX.splice(0,1);_grafColsX.splice(0,1);_grafTitlesX.splice(0,1);}
+  })();
   _grafSeriesX.forEach(function(vals,si){
-    _seriesXml+=_ser(si,_grafTitlesX[si]||('Serie '+(si+1)),_grafColsX[si]||'003366',rpaLbls,vals);
+    _seriesXml+=_ser(si,_grafTitlesX[si]||('Serie '+(si+1)),_grafColsX[si]||'143762',rpaLbls,vals);
   });
   var chart1 = _chartSpace(_lineChart(_seriesXml, 3, 4, 0, 100, 10));
 
@@ -2065,7 +2157,7 @@ function descargarPDF(){
   if(!resGlobal){alert('Calcule el informe primero.');return;}
   var jsPDF=window.jspdf.jsPDF;
   var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  var azul=[0,51,102],dorado=[200,146,42],verde=[22,101,52],amar=[133,77,14],rojo=[153,27,27];
+  var azul=[20,55,98],dorado=[59,121,190],verde=[22,101,52],amar=[133,77,14],rojo=[153,27,27];
   var pageW=210,margin=14,colW=182,y=0;
   function semColor(n){return n>=4?verde:n>=3?amar:rojo;}
   function semText(n){return n>=4?'VERDE':n>=3?'AMARILLO':'ROJO';}
@@ -2162,9 +2254,9 @@ function descargarPDF(){
   var _h2PDF=HIST_DIR.find(function(h){return String(h.ano)==='2';});
   // Cohorte para leyenda proyección
   var _cohPDF=limpiarCohorte(estSel&&estSel.cohorte?estSel.cohorte:'');
-  var _coh3PDF=calcPD(_cohPDF,6)||''; // proyección a 3 años = cohorte + 6 semestres
-  var _coh1PDF=calcPD(_cohPDF,2)||'';
-  var _coh2PDF=calcPD(_cohPDF,4)||'';
+  var _coh3PDF=calcPD(_cohPDF,3)||''; // proyección al egreso = cohorte + 3 años (ej. 2024-1 → 2027-1)
+  var _coh1PDF=calcPD(_cohPDF,1)||'';
+  var _coh2PDF=calcPD(_cohPDF,2)||'';
   var rD=[],rP=[],rH=[],rH1=[],rH2=[];
   RPAS_PDF.forEach(function(rid){
     rD.push(Math.round(parseFloat(_h0PDF[rid+'_inicio'])||0));
@@ -2179,7 +2271,7 @@ function descargarPDF(){
   // Construir series según año evaluado
   var _anoGraf=String(resGlobal.ano||anoEstudiante||'1');
   var grafSeries=[rD,rP];
-  var grafColors=['#991B1B','#CA8A04'];
+  var grafColors=['#991B1B','#3e8484'];
   var grafTitles=['Diagnóstico de entrada ('+_cohPDF+')','Proyección al egreso ('+_coh3PDF+')'];
   if(_anoGraf==='1'){
     grafSeries.push(rH);grafColors.push('#1e40af');grafTitles.push('Final Año 1 ('+_coh1PDF+')');
@@ -2191,6 +2283,12 @@ function descargarPDF(){
     if(rH2.some(function(v){return v>0;})){grafSeries.push(rH2);grafColors.push('#3b82f6');grafTitles.push('Final Año 2 ('+_coh2PDF+')');}
     grafSeries.push(rH);grafColors.push('#1e3a8a');grafTitles.push('Final Año 3 ('+_coh3PDF+')');
   }
+  // Sin evaluación inicial (Año 0): no dibujar líneas en 0%; se deja nota en la leyenda
+  (function(){var sinD=!rD.some(function(v){return v>0;}),sinP=!rP.some(function(v){return v>0;});
+    if(sinP){grafSeries.splice(1,1);grafColors.splice(1,1);grafTitles.splice(1,1);}
+    if(sinD){grafSeries.splice(0,1);grafColors.splice(0,1);grafTitles.splice(0,1);}
+    if(sinD&&sinP){grafSeries.push([]);grafColors.push('#9ca3af');grafTitles.push('Sin evaluación inicial (Año 0) registrada');}
+  })();
   var COMP_PDF=['CBI-1','CBI-2','CBI-3','CBI-4','CTEI-1','CTEI-2','CTEI-3','CINV-1','CINV-2','CINV-3'];
   var cVals=COMP_PDF.map(function(ck){return Math.round((resGlobal.C[ck]||0)*100);});
 
@@ -2288,7 +2386,7 @@ function descargarPDF(){
     doc.text('SEDIETIC v3.0  |  Universidad de La Sabana  |  SNIES 109126  |  PROVENTUS A1 Minciencias',pageW/2,292,{align:'center'});
     doc.text('Pg. '+pg+' / '+totalPages,pageW-margin,292,{align:'right'});
   }
-  var nom=(resGlobal.nombre||'informe').replace(/[^a-zA-Z0-9]/g,'_');
+  var nom=(resGlobal.nombre||'informe').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_');
   doc.save('SEDIETIC_'+nom+'_'+(resGlobal.periodo||resGlobal.fecha)+'.pdf');
 }
 
@@ -2314,7 +2412,7 @@ function actualizarSelectorCohortes() {
 function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetData) {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  var azul=[0,51,102], dorado=[200,146,42], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
+  var azul=[20,55,98], dorado=[59,121,190], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
   var pageW=210, margin=14, colW=182, y=0;
   var esAno0 = String(ano) === '0';
   var RO=['RPA10','RPA11','RPA5','RPA4','RPA12','RPA6','RPA13','RPA1','RPA2','RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18','RPA9','RPA19','RPA20','RPA21','RPA22'];
@@ -2477,7 +2575,7 @@ function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetDa
     doc.text('SEDIETIC v3.0  |  Universidad de La Sabana  |  SNIES 109126',pageW/2,292,{align:'center'});
     doc.text('Pg. '+pg+' / '+totalPg,pageW-margin,292,{align:'right'});
   }
-  var nom=(nombre||'informe').replace(/[^a-zA-Z0-9]/g,'_');
+  var nom=(nombre||'informe').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_');
   doc.save('SEDIETIC_Resumen_'+nom+'_A'+ano+'.pdf');
 }
 
@@ -2511,7 +2609,7 @@ function renderCoevBlocks(){
         html+='<td style="text-align:center;padding:4px 6px;font-weight:700;color:'+semC(v)+';background:'+semBg(v)+';border:1px solid #e2e8f0;">'+v+'%</td>';
       });
       html+='</tr></tbody></table></div>';
-      if(obs){html+='<div style="padding:10px 14px;background:#fffbeb;border-top:1px solid #f59e0b;font-size:12px;color:#78350f;">💬 <strong>Observaciones:</strong> '+obs+'</div>';}
+      if(obs){html+='<div style="padding:10px 14px;background:#f3f7fc;border-top:1px solid #c3d3e6;font-size:12px;color:#204f88;">💬 <strong>Observaciones:</strong> '+obs+'</div>';}
       html+='</div>';
     });
     var el=document.getElementById('coev-recib-body');if(el)el.innerHTML=html;
@@ -2540,7 +2638,7 @@ function renderCoevBlocks(){
         html2+='<td style="text-align:center;padding:4px 6px;font-weight:700;color:'+semC(v)+';background:'+semBg(v)+';border:1px solid #e2e8f0;">'+v+'%</td>';
       });
       html2+='</tr></tbody></table></div>';
-      if(obs){html2+='<div style="padding:10px 14px;background:#fffbeb;border-top:1px solid #f59e0b;font-size:12px;color:#78350f;">💬 <strong>Observaciones:</strong> '+obs+'</div>';}
+      if(obs){html2+='<div style="padding:10px 14px;background:#f3f7fc;border-top:1px solid #c3d3e6;font-size:12px;color:#204f88;">💬 <strong>Observaciones:</strong> '+obs+'</div>';}
       html2+='</div>';
     });
     var el2=document.getElementById('coev-realiz-body');if(el2)el2.innerHTML=html2;
@@ -2564,10 +2662,10 @@ function renderConsolidado(rpasC, isAno1, coList, pA, pC, pH, ano) {
   if(!thead)return;
 
   var thHTML='<th style="text-align:left;padding-left:10px;min-width:260px;background:#f1f5f9;color:#334155;font-size:11px;">RPA</th>';
-  thHTML+='<th style="min-width:80px;background:#e8eef6;color:#003366;text-align:center;font-size:11px;">Auto (%)</th>';
-  if(tieneCo) thHTML+='<th style="min-width:80px;background:#fdf6e8;color:#92400e;text-align:center;font-size:11px;">Coevaluación (%)</th>';
-  thHTML+='<th style="min-width:80px;background:#e8eef6;color:#003366;text-align:center;font-size:11px;">Hetero (%)</th>';
-  thHTML+='<th style="min-width:90px;background:#003366;color:white;text-align:center;font-size:11px;font-weight:700;">Consolidado (%)</th>';
+  thHTML+='<th style="min-width:80px;background:#e8eef6;color:#143762;text-align:center;font-size:11px;">Auto (%)</th>';
+  if(tieneCo) thHTML+='<th style="min-width:80px;background:#e8eff7;color:#204f88;text-align:center;font-size:11px;">Coevaluación (%)</th>';
+  thHTML+='<th style="min-width:80px;background:#e8eef6;color:#143762;text-align:center;font-size:11px;">Hetero (%)</th>';
+  thHTML+='<th style="min-width:90px;background:#143762;color:white;text-align:center;font-size:11px;font-weight:700;">Consolidado (%)</th>';
   thead.innerHTML=thHTML;
 
   // Filas
@@ -2591,7 +2689,7 @@ function renderConsolidado(rpasC, isAno1, coList, pA, pC, pH, ano) {
     var cons=Math.round(rpasC[rid]||0);
     var bg=i%2===0?'background:#ffffff;':'background:#f8fafc;';
     rows+='<tr style="'+bg+'border-bottom:1px solid #f1f5f9;">'
-      +'<td style="padding:6px 10px;font-size:11px;"><span style="font-family:monospace;font-size:10px;font-weight:700;color:#003366;background:#e8eef6;padding:2px 6px;border-radius:4px;margin-right:6px;">'+rid+'</span>'+RPAS_DESC[rid]+'</td>'
+      +'<td style="padding:6px 10px;font-size:11px;"><span style="font-family:monospace;font-size:10px;font-weight:700;color:#143762;background:#e8eef6;padding:2px 6px;border-radius:4px;margin-right:6px;">'+rid+'</span>'+RPAS_DESC[rid]+'</td>'
       +'<td style="text-align:center;font-weight:600;font-size:12px;color:'+semCol(autoV)+';background:'+semBg(autoV)+';padding:6px;">'+autoV+'%</td>';
     if(tieneCo) rows+='<td style="text-align:center;font-weight:600;font-size:12px;color:'+semCol(coAvg)+';background:'+semBg(coAvg)+';padding:6px;">'+(coAvg?coAvg.toFixed(1):'—')+'%</td>';
     rows+='<td style="text-align:center;font-weight:600;font-size:12px;color:'+semCol(hetV)+';background:'+semBg(hetV)+';padding:6px;">'+hetV+'%</td>'
@@ -2921,7 +3019,7 @@ function descargarPDFPercepcionDir(p) {
   var jsPDF = window.jspdf ? window.jspdf.jsPDF : null;
   if (!jsPDF) { alert('jsPDF no disponible.'); return; }
   var doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  var azul=[0,51,102], dorado=[200,146,42], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
+  var azul=[20,55,98], dorado=[59,121,190], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
   var pageW=210, margin=14, colW=182, y=0;
   var RD={RPA10:'Identifica necesidades u oportunidades para la innovación.',RPA11:'Participa del diseño de soluciones innovadoras.',RPA5:'Argumenta la escogencia de perspectiva de análisis.',RPA4:'Describe las fases para revisión sistemática de literatura.',RPA12:'Planea y concreta procesos de innovación.',RPA6:'Interactúa activamente con sus pares académicos.',RPA13:'Realiza difusión efectiva en eventos académicos.',RPA1:'Describe claramente el problema de investigación.',RPA2:'Formula una pregunta de investigación.',RPA14:'Plantea objetivos coherentes con la pregunta.',RPA3:'Argumenta la elección del diseño metodológico.',RPA15:'Apoya procesos de innovación del proyecto.',RPA7:'Identifica diferencias entre tipos de artículos.',RPA8:'Participa en escritura y publicación científica.',RPA16:'Escucha activamente a personas involucradas.',RPA17:'Genera propuestas innovadoras colaborativas.',RPA18:'Participa de la implementación de modelos educativos.',RPA9:'Consulta efectivamente bases de datos especializadas.',RPA19:'Documenta observaciones del contexto del problema.',RPA20:'Participa del testeo de modelos o prototipos.',RPA21:'Participa del diseño y construcción de prototipos.',RPA22:'Escoge y aplica instrumentos de investigación.'};
   var RO=['RPA10','RPA11','RPA5','RPA4','RPA12','RPA6','RPA13','RPA1','RPA2','RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18','RPA9','RPA19','RPA20','RPA21','RPA22'];
@@ -3103,7 +3201,7 @@ function renderListaPercDir(lista) {
   }
   var html = '';
   lista.forEach(function(p) {
-    html += '<div onclick="seleccionarEstudiantePercDir(\''+p.id+'\')" style="cursor:pointer;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;min-width:180px;max-width:220px;flex:1;background:#fff;transition:border-color .2s,box-shadow .2s;" onmouseover="this.style.borderColor=\'var(--azul)\';this.style.boxShadow=\'0 2px 8px rgba(0,51,102,.1)\'" onmouseout="this.style.borderColor=\'#e2e8f0\';this.style.boxShadow=\'none\'">';
+    html += '<div onclick="seleccionarEstudiantePercDir(\''+p.id+'\')" style="cursor:pointer;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;min-width:180px;max-width:220px;flex:1;background:#fff;transition:border-color .2s,box-shadow .2s;" onmouseover="this.style.borderColor=\'var(--azul)\';this.style.boxShadow=\'0 2px 8px rgba(20,55,98,.1)\'" onmouseout="this.style.borderColor=\'#e2e8f0\';this.style.boxShadow=\'none\'">';
     html += '<div style="font-weight:700;font-size:12px;color:var(--azul);margin-bottom:2px;">'+(p.nombre||p.id)+'</div>';
     html += '<div style="font-size:10px;color:var(--g400);">ID: '+p.id+(p.cohorte?' · '+p.cohorte:'')+'</div>';
     html += '</div>';
@@ -3155,7 +3253,7 @@ function renderPercepcionesDir(lista) {
     html += '<th style="padding:9px 12px;text-align:left;font-size:11px;color:var(--azul);min-width:60px;">RPA</th>';
     html += '<th style="padding:9px 12px;text-align:left;font-size:11px;color:var(--azul);">Resultado Previsto de Aprendizaje</th>';
     html += '<th style="padding:9px 12px;text-align:center;font-size:11px;color:var(--azul);min-width:90px;">Año 0 (' + cohInicio + ')<br><small style="font-weight:400;">inicio</small></th>';
-    html += '<th style="padding:9px 12px;text-align:center;font-size:11px;color:#92400e;background:#fef3c7;min-width:100px;">Percepción actual<br><small style="font-weight:400;">Año 3 (' + cohEgreso + ')</small></th>';
+    html += '<th style="padding:9px 12px;text-align:center;font-size:11px;color:#92400e;background:#e8eff7;min-width:100px;">Percepción actual<br><small style="font-weight:400;">Año 3 (' + cohEgreso + ')</small></th>';
     html += '<th style="padding:9px 12px;text-align:center;font-size:11px;color:var(--azul);min-width:80px;">Variación</th>';
     html += '</tr></thead><tbody>';
     RO.forEach(function(rid, i) {
@@ -3275,7 +3373,7 @@ function exportarNotasPDF(){
   if(!lista.length){alert('No hay registros para exportar.');return;}
   var jsPDF=window.jspdf.jsPDF;
   var doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-  var azul=[0,51,102],dorado=[200,146,42],pageW=297,margin=12;
+  var azul=[20,55,98],dorado=[59,121,190],pageW=297,margin=12;
   function header(){
     doc.setFillColor(azul[0],azul[1],azul[2]);doc.rect(0,0,pageW,28,'F');
     doc.setFillColor(dorado[0],dorado[1],dorado[2]);doc.rect(0,28,pageW,1.5,'F');
@@ -3355,7 +3453,7 @@ function exportarNotasPDF(){
     <div id="gn-info" style="font-size:11px;color:#8f97b0;margin-bottom:8px;"></div>
     <div style="overflow-x:auto;max-height:520px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;">
       <table style="width:100%;border-collapse:collapse;font-size:12px;">
-        <thead><tr style="background:#003366;position:sticky;top:0;">
+        <thead><tr style="background:#143762;position:sticky;top:0;">
           <th onclick="ordenarNotas('cohorte')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">Cohorte ⇅</th>
           <th onclick="ordenarNotas('id')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">ID ⇅</th>
           <th onclick="ordenarNotas('nombre')" style="padding:8px 10px;color:#fff;text-align:left;cursor:pointer;">Estudiante ⇅</th>

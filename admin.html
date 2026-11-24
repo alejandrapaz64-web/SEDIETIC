@@ -10,9 +10,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{
-  --azul:#003366;--azul-m:#002952;--azul-c:#1a4a7a;
+  --azul:#143762;--azul-m:#0f2c4f;--azul-c:#2b5d97;
   --azul-bg:#f0f4f9;--azul-p:#e8eef6;--azul-b:#b8cce0;
-  --dorado:#c8922a;--blanco:#ffffff;
+  --dorado:#3b79be;--blanco:#ffffff;
   --gris-1:#f5f7fa;--gris-2:#eaecf0;--gris-3:#c8cdd6;--gris-t:#6b7280;
   --texto:#1a2033;
   --verde:#166534;--verde-c:#dcfce7;--verde-b:#86efac;
@@ -38,7 +38,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:14px;li
 .lf{margin-bottom:16px;}
 .lf label{display:block;font-size:11px;font-weight:600;color:var(--azul);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
 .lf input{width:100%;padding:11px 14px;border:1.5px solid var(--gris-2);border-radius:8px;font-size:14px;font-family:inherit;outline:none;background:var(--gris-1);color:var(--texto);transition:border-color .2s;}
-.lf input:focus{border-color:var(--azul);background:white;box-shadow:0 0 0 3px rgba(0,51,102,.1);}
+.lf input:focus{border-color:var(--azul);background:white;box-shadow:0 0 0 3px rgba(20,55,98,.1);}
 .btn-login{width:100%;padding:12px;background:var(--azul);color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s;}
 .btn-login:hover{background:var(--azul-m);}
 .login-err{background:var(--rojo-c);border:1px solid var(--rojo-b);border-radius:8px;color:var(--rojo);font-size:12px;font-weight:600;padding:9px 14px;margin-top:10px;display:none;text-align:center;}
@@ -57,7 +57,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:14px;li
 .hdr-logo-row{display:flex;align-items:center;gap:12px;}
 .hdr-uni{font-size:10px;color:rgba(255,255,255,.55);}
 .hdr-prog{font-size:13px;font-weight:700;color:white;}
-.hdr-badge{font-size:10px;color:rgba(255,255,255,.9);background:rgba(200,146,42,.2);border:1px solid rgba(200,146,42,.4);padding:3px 10px;border-radius:20px;font-weight:600;}
+.hdr-badge{font-size:10px;color:rgba(255,255,255,.9);background:rgba(59,121,190,.2);border:1px solid rgba(59,121,190,.4);padding:3px 10px;border-radius:20px;font-weight:600;}
 .hdr-bot{padding:10px 0 14px;}
 .hdr-title{font-size:18px;font-weight:800;color:white;}
 .hdr-title em{color:rgba(255,255,255,.9);font-style:italic;}
@@ -124,7 +124,7 @@ table.prev tr:hover td{background:var(--azul-p);}
 .btn-r{background:var(--rojo);color:white;padding:4px 10px;font-size:11px;border-radius:6px;}
 .btn-r:hover{background:#7f1d1d;}
 .btn-e{background:var(--dorado);color:white;padding:4px 10px;font-size:11px;border-radius:6px;}
-.btn-e:hover{background:#a37822;}
+.btn-e:hover{background:#2b5d97;}
 .btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
 
 /* ALERTS */
@@ -233,6 +233,94 @@ table.prev tr:hover td{background:var(--azul-p);}
   .ri   { width: 46px !important; }
 }
 </style>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style id="nexo-theme">
+/* ══ NEXO DOCTORAL — capa visual unificada para SEDIETIC (solo estilos; no altera lógica) ══ */
+:root{
+  --nx-navy:#143762;--nx-navy-2:#0f2c4f;--nx-accent:#3b79be;--nx-accent-2:#2b5d97;
+  --nx-bg:#f0f2f5;--nx-line:#e3e6ea;--nx-text:#414f64;--nx-ink:#1e2a3d;--nx-muted:#9fb0c4;
+  --azul:#143762;--azul-m:#0f2c4f;--azul-c:#2b5d97;--dorado:#3b79be;--dorado-c:#6a9bd1;
+  --azul-bg:#f0f2f5;--azul-p:#e8eff7;--azul-b:#c3d3e6;--azul-l:#b6c7db;
+  --gris-f:#f0f2f5;--gris-l:#e3e6ea;--gris-1:#f5f6f8;--gris-2:#e3e6ea;--gris-3:#c3cad4;--gris-t:#5b6677;--texto:#1e2a3d;
+  --g50:#f5f6f8;--g100:#eef0f3;--g200:#e3e6ea;--g400:#8792a2;--g600:#414f64;--g800:#1e2a3d;
+}
+body{font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--nx-bg);color:var(--nx-ink);}
+
+/* ── Cabecera ── */
+.hdr{background:var(--nx-navy)!important;border-bottom:none!important;box-shadow:none!important;position:relative;overflow:hidden;padding-bottom:34px;}
+.hdr::before{content:'';position:absolute;right:-140px;top:-180px;width:560px;height:560px;border-radius:50%;background:rgba(255,255,255,.035);pointer-events:none;}
+.hdr::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:34px;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C420,62 980,10 1440,6 L1440,60 L0,60 Z' fill='%23f0f2f5'/%3E%3C/svg%3E") bottom/100% 100% no-repeat;}
+.hdr>*{position:relative;z-index:1;}
+.hdr-top{border-bottom:1px solid rgba(255,255,255,.12)!important;padding-top:16px!important;padding-bottom:16px!important;gap:14px;flex-wrap:wrap;}
+.hdr-esc,.hdr-logo-box{height:56px!important;background:#fff!important;border-radius:10px!important;padding:8px 14px!important;box-shadow:0 4px 14px rgba(0,0,0,.18)!important;}
+.hdr-logo,.hdr-logo-row{gap:16px!important;}
+.hdr-logo>div:last-child,.hdr-logo-row>div:last-child{padding-left:16px;border-left:1px solid rgba(255,255,255,.2);}
+.hdr .hdr-uni{font-size:11px!important;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.62)!important;margin-bottom:3px;}
+.hdr .hdr-prog{font-size:15px!important;font-weight:500!important;color:#fff!important;}
+.hdr .hdr-badge{background:transparent!important;border:1px solid rgba(255,255,255,.28)!important;color:rgba(255,255,255,.85)!important;font-size:10px!important;font-weight:700!important;letter-spacing:1.4px;text-transform:uppercase;padding:7px 14px!important;border-radius:999px!important;}
+.hdr .hdr-badge *{color:inherit!important;}
+.hdr-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.nexo-pill{display:inline-flex;align-items:center;gap:6px;color:#fff!important;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.06);transition:background .2s,border-color .2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.nexo-pill:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.7);}
+.hdr-bot{padding-top:22px!important;padding-bottom:6px!important;background:transparent!important;}
+.hdr .hdr-title{font-family:'Playfair Display',Georgia,serif!important;font-size:32px!important;font-weight:700!important;line-height:1.15;letter-spacing:-.3px;color:#fff!important;}
+.hdr .hdr-title::before{content:'NEXO Evalúa · SEDIETIC';display:block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:10px;}
+.hdr .hdr-title em,.hdr .hdr-title span{color:var(--nx-muted)!important;font-style:normal!important;}
+.hdr .hdr-title>span[style]{color:#fff!important;}
+.hdr .hdr-sub{font-size:13.5px!important;color:rgba(255,255,255,.72)!important;margin-top:8px!important;line-height:1.6;}
+
+/* ── Acceso (login) ── */
+.login-page{background:var(--nx-navy)!important;}
+.login-left{background:var(--nx-navy)!important;border-right:none!important;position:relative;overflow:hidden;}
+.login-left::before{content:'';position:absolute;left:-160px;bottom:-200px;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.035);}
+.login-left::after{content:'';position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;border:1px solid rgba(255,255,255,.07);}
+.login-left>*{position:relative;z-index:1;}
+.login-logo-wrap{border-radius:14px!important;box-shadow:0 8px 28px rgba(0,0,0,.25)!important;}
+.login-uni{font-weight:700;letter-spacing:2.4px!important;color:rgba(255,255,255,.6)!important;}
+.login-prog{font-family:'Playfair Display',Georgia,serif;font-size:30px!important;font-weight:700!important;line-height:1.2!important;}
+.login-prog span{color:var(--nx-muted)!important;}
+.login-admin-badge,.login-dir-badge{background:transparent!important;border:1px solid rgba(255,255,255,.35)!important;color:#fff!important;letter-spacing:1.6px!important;border-radius:999px!important;padding:7px 16px!important;}
+.login-desc{border-left:2px solid rgba(255,255,255,.25)!important;color:rgba(255,255,255,.72)!important;}
+.login-right{background:#fff!important;}
+.login-right h2{font-family:'Playfair Display',Georgia,serif;font-size:28px!important;color:var(--nx-navy)!important;}
+.login-right h2::before{content:'NEXO Evalúa · SEDIETIC';display:block;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--nx-accent);margin-bottom:10px;}
+.lf input{border-radius:10px!important;border-color:var(--nx-line)!important;background:#f5f6f8!important;}
+.lf input:focus{border-color:var(--nx-navy)!important;background:#fff!important;box-shadow:0 0 0 3px rgba(20,55,98,.1)!important;}
+.btn-login{border-radius:10px!important;background:var(--nx-navy)!important;letter-spacing:.3px;}
+.btn-login:hover{background:var(--nx-navy-2)!important;}
+
+.lf>span[onclick]{top:auto!important;bottom:10px;transform:none!important;}
+/* ── Tarjetas y paneles ── */
+.card,.sel-panel,.rcard{position:relative;border:1px solid var(--nx-line)!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(20,55,98,.04),0 8px 24px rgba(20,55,98,.05)!important;}
+.card::before,.sel-panel::before,.rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--nx-navy),var(--nx-accent));z-index:2;pointer-events:none;}
+.card-hdr,.rcard-hdr{background:#fff!important;border-bottom:1px solid #eef0f3!important;padding-top:14px!important;padding-bottom:12px!important;}
+.card-title,.rcard-title{font-family:'Playfair Display',Georgia,serif!important;font-size:16px!important;color:var(--nx-navy)!important;}
+.step-num,.card-num,.rcard-num{border-radius:8px!important;background:var(--nx-navy)!important;}
+.panel-title{color:var(--nx-navy)!important;font-size:18px!important;}
+.btn,.btn-dl,.btn-asistente,.btn-copy{border-radius:8px;}
+.btn-p{background:var(--nx-navy)!important;}
+.btn-p:hover{background:var(--nx-navy-2)!important;}
+.stat-card{border-radius:14px!important;border-color:var(--nx-line)!important;}
+.stat-num{font-family:'Playfair Display',Georgia,serif;color:var(--nx-navy)!important;}
+
+/* ── Pestañas ── */
+.tabs{border-bottom:1px solid var(--nx-line)!important;box-shadow:none!important;}
+.tab-btn.on,.dir-tab-btn.dir-tab-on{color:var(--nx-navy)!important;border-bottom-color:var(--nx-navy)!important;}
+
+@media (max-width:768px){
+  .hdr .hdr-title{font-size:24px!important;}
+  .hdr-esc,.hdr-logo-box{height:44px!important;}
+  .hdr-logo>div:last-child,.hdr-logo-row>div:last-child{padding-left:10px;}
+  .login-prog{font-size:24px!important;}
+}
+@media (max-width:480px){
+  .hdr .hdr-title{font-size:20px!important;}
+  .hdr .hdr-uni{letter-spacing:1.2px;}
+  .nexo-pill{padding:6px 12px;font-size:10px;}
+}
+</style>
 </head>
 <body>
 
@@ -253,9 +341,8 @@ table.prev tr:hover td{background:var(--azul-p);}
   <div class="login-right">
     <h2>Acceso Administración</h2>
     <p>Ingrese sus credenciales institucionales</p>
-    <div class="lf" style="position:relative;"><label>Usuario</label><input type="text" id="lu" placeholder="Ingrese su usuario" autocomplete="off"></div>
-    <div class="lf"><label>Contraseña</label><input type="password" id="lp" placeholder="Ingrese su contraseña" onkeydown="if(event.key==='Enter')doLogin()"></div>
-<span onclick="var i=document.getElementById('lp');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':' 🙈'" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;user-select:none;">👁</span>
+    <div class="lf"><label>Usuario</label><input type="text" id="lu" placeholder="Ingrese su usuario" autocomplete="off"></div>
+    <div class="lf" style="position:relative;"><label>Contraseña</label><input type="password" id="lp" placeholder="Ingrese su contraseña" onkeydown="if(event.key==='Enter')doLogin()"><span onclick="var i=document.getElementById('lp');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':' 🙈'" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;user-select:none;">👁</span></div>
     <button class="btn-login" onclick="doLogin()">Ingresar al sistema</button>
     <div class="login-err" id="login-err">Usuario o contraseña incorrectos.</div>
     <div class="login-foot">
@@ -280,7 +367,7 @@ table.prev tr:hover td{background:var(--azul-p);}
           <div class="hdr-prog">Doctorado en Innovación Educativa con uso de TIC</div>
         </div>
       </div>
-      <span class="hdr-badge">SEDIETIC v3.0 · Administración · SNIES 109126</span>
+      <div class="hdr-actions"><a class="nexo-pill" href="https://alejandrapaz64-web.github.io/portal-doctoral-/" target="_blank" rel="noopener noreferrer" title="Volver al ecosistema NEXO Doctoral">&#8592; NEXO Doctoral</a><span class="hdr-badge">SEDIETIC · Administración</span></div>
     </div>
     <div class="hdr-inner hdr-bot">
       <div>
@@ -876,6 +963,7 @@ async function doLogin(){
     (CRED._hash && hex===CRED._hash)       // O clave nueva de Sheets
   );
   if(ok){
+    window._ADMIN_PW = p; // solo en memoria: permite ver claves guardadas (validado en el servidor)
     document.getElementById('login-page').style.display='none';
     document.getElementById('app').classList.add('show');
     inicializar();
@@ -918,10 +1006,10 @@ function cargarCohortes(){
 
 // ══ CARGAR LISTA ══
 function cargarLista(){
-  document.getElementById('tbody-lista').innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--gris-t);"><span class="spin" style="border-color:rgba(0,51,102,.3);border-top-color:var(--azul);"></span>Cargando...</td></tr>';
+  document.getElementById('tbody-lista').innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--gris-t);"><span class="spin" style="border-color:rgba(20,55,98,.3);border-top-color:var(--azul);"></span>Cargando...</td></tr>';
   Promise.all([
     fetch(APPS_URL+'?tipo=ESTUDIANTES').then(function(r){return r.json();}).catch(function(){return{estudiantes:[]};}),
-    fetch(APPS_URL+'?tipo=LISTA_DOCENTES').then(function(r){return r.json();}).catch(function(){return{docentes:[]};})
+    fetch(APPS_URL+'?tipo=LISTA_DOCENTES&auth='+encodeURIComponent(window._ADMIN_PW||'')).then(function(r){return r.json();}).catch(function(){return{docentes:[]};})
   ]).then(function(res){
     estudiantesDB=res[0].estudiantes||[];
     if(res[1].docentes&&res[1].docentes.length>0){docentesDB=res[1].docentes;docentesCargados=true;}
@@ -962,7 +1050,7 @@ function renderLista(lista){
       var asig=String(dc.estudiantesAsignados||'');
       return asig.split(',').map(function(x){return x.trim();}).indexOf(_idEst)>=0;
     });
-    var _docCelda=_docEst?('<span style="display:inline-flex;align-items:center;gap:4px;background:#fff3cd;border:1px solid #c8922a;color:#92400e;font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;">&#128100; '+_docEst.nombre+'</span>'):'<span style="color:var(--gris-t);font-size:11px;">\u2014</span>';
+    var _docCelda=_docEst?('<span style="display:inline-flex;align-items:center;gap:4px;background:#e8eff7;border:1px solid #3b79be;color:#204f88;font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;">&#128100; '+_docEst.nombre+'</span>'):'<span style="color:var(--gris-t);font-size:11px;">\u2014</span>';
     return'<tr>'
       +'<td><code style="font-size:12px;font-weight:700;color:var(--azul);">'+e.id+'</code></td>'
       +'<td style="font-weight:600;">'+e.nombre+'</td>'
@@ -1251,7 +1339,7 @@ var percepcionesDB = {}; // id → true si tiene F4
 function cargarProceso(forzar) {
   if (!forzar && procesoLoaded) { renderProceso(); return; }
   document.getElementById('tbody-proceso').innerHTML =
-    '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--gris-t);"><span class="spin" style="border-color:rgba(0,51,102,.3);border-top-color:var(--azul);"></span> Cargando seguimiento...</td></tr>';
+    '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--gris-t);"><span class="spin" style="border-color:rgba(20,55,98,.3);border-top-color:var(--azul);"></span> Cargando seguimiento...</td></tr>';
   // Cargar proceso y percepciones en paralelo
   Promise.all([
     fetch(APPS_URL + '?tipo=PROCESO_EVALUACION').then(function(r){ return r.json(); }),
@@ -1361,7 +1449,7 @@ function renderProceso() {
           + '</td>'
           + '<td style="text-align:center;">' + promHtml + '</td>'
           + '<td style="text-align:center;"><span style="background:' + semBg + ';border:1px solid ' + dotColor + ';color:' + semColor + ';border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;white-space:nowrap;display:inline-block;">' + semLabel + '</span></td>'
-          + '<td style="text-align:center;">' + (ano === '3' ? (percepcionesDB[String(est.id)] ? '<span style="display:inline-flex;align-items:center;gap:4px;background:#fef3c7;border:1px solid #c8922a;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;color:#92400e;">★ Registrada</span>' : '<span style="font-size:11px;color:var(--gris-t);">Pendiente</span>') : '<span style="font-size:11px;color:var(--gris-t);">—</span>') + '</td>'
+          + '<td style="text-align:center;">' + (ano === '3' ? (percepcionesDB[String(est.id)] ? '<span style="display:inline-flex;align-items:center;gap:4px;background:#e8eff7;border:1px solid #3b79be;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;color:#92400e;">★ Registrada</span>' : '<span style="font-size:11px;color:var(--gris-t);">Pendiente</span>') : '<span style="font-size:11px;color:var(--gris-t);">—</span>') + '</td>'
           + '</tr>';
       });
       // Separador
@@ -1427,7 +1515,7 @@ function renderProceso() {
       + '</td>'
       + '<td style="text-align:center;">' + promDispHtml + '</td>'
       + '<td style="text-align:center;"><span style="background:' + semBg + ';border:1px solid ' + dotColor + ';color:' + semColor + ';border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;white-space:nowrap;display:inline-block;">' + semLabel + '</span></td>'
-      + '<td style="text-align:center;">' + (String(e.ano) === '3' ? (percepcionesDB[String(e.id)] ? '<span style="display:inline-flex;align-items:center;gap:4px;background:#fef3c7;border:1px solid #c8922a;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;color:#92400e;">★ Registrada</span>' : '<span style="display:inline-flex;align-items:center;gap:4px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:4px 10px;font-size:11px;color:#64748b;">Pendiente</span>') : '<span style="font-size:11px;color:var(--gris-t);">—</span>') + '</td>'
+      + '<td style="text-align:center;">' + (String(e.ano) === '3' ? (percepcionesDB[String(e.id)] ? '<span style="display:inline-flex;align-items:center;gap:4px;background:#e8eff7;border:1px solid #3b79be;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;color:#92400e;">★ Registrada</span>' : '<span style="display:inline-flex;align-items:center;gap:4px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:4px 10px;font-size:11px;color:#64748b;">Pendiente</span>') : '<span style="font-size:11px;color:var(--gris-t);">—</span>') + '</td>'
       + '</tr>';
   });
 
@@ -1486,10 +1574,10 @@ function renderHistorial() {
   var html = '';
   lista.forEach(function(e) {
     var tienePerc = !!percepcionesDB[e.id];
-    html += '<div onclick="seleccionarEstudianteHist(\''+e.id+'\')" style="cursor:pointer;border:1.5px solid var(--gris-2);border-radius:10px;padding:10px 14px;min-width:200px;max-width:240px;flex:1;background:#fff;transition:border-color .2s,box-shadow .2s;" onmouseover="this.style.borderColor=\'var(--azul)\';this.style.boxShadow=\'0 2px 8px rgba(0,51,102,.1)\'" onmouseout="this.style.borderColor=\'var(--gris-2)\';this.style.boxShadow=\'none\'">';
+    html += '<div onclick="seleccionarEstudianteHist(\''+e.id+'\')" style="cursor:pointer;border:1.5px solid var(--gris-2);border-radius:10px;padding:10px 14px;min-width:200px;max-width:240px;flex:1;background:#fff;transition:border-color .2s,box-shadow .2s;" onmouseover="this.style.borderColor=\'var(--azul)\';this.style.boxShadow=\'0 2px 8px rgba(20,55,98,.1)\'" onmouseout="this.style.borderColor=\'var(--gris-2)\';this.style.boxShadow=\'none\'">';
     html += '<div style="font-weight:700;font-size:12px;color:var(--azul);margin-bottom:2px;">'+e.nombre+'</div>';
     html += '<div style="font-size:10px;color:var(--gris-t);">ID: '+e.id+(e.cohorte?' · '+e.cohorte:'')+'</div>';
-    if (tienePerc) html += '<div style="margin-top:4px;font-size:10px;color:#92400e;background:#fef3c7;border-radius:4px;padding:2px 6px;display:inline-block;">★ Percepción</div>';
+    if (tienePerc) html += '<div style="margin-top:4px;font-size:10px;color:#92400e;background:#e8eff7;border-radius:4px;padding:2px 6px;display:inline-block;">★ Percepción</div>';
     html += '</div>';
   });
   listaEl.innerHTML = html;
@@ -1498,7 +1586,7 @@ function renderHistorial() {
 function seleccionarEstudianteHist(id) {
   var tarjeta = document.getElementById('hist-tarjeta');
   if (!id) { tarjeta.innerHTML = ''; return; }
-  tarjeta.innerHTML = '<div style="text-align:center;padding:24px;color:var(--gris-t);font-size:12px;"><span class="spin" style="border-color:rgba(0,51,102,.3);border-top-color:var(--azul);"></span> Cargando historial...</div>';
+  tarjeta.innerHTML = '<div style="text-align:center;padding:24px;color:var(--gris-t);font-size:12px;"><span class="spin" style="border-color:rgba(20,55,98,.3);border-top-color:var(--azul);"></span> Cargando historial...</div>';
   tarjeta.scrollIntoView({behavior:'smooth', block:'nearest'});
 
   // Cargar HISTORICO_F1 + HISTORICO_F2 + Percepción en paralelo
@@ -1583,7 +1671,7 @@ function seleccionarEstudianteHist(id) {
     // Fila percepción
     var percBtns = tienePerc ? '<span onclick="histPercPDF(\''+id+'\',this)" style="background:var(--azul);color:#fff;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:inline-block;">PDF</span>' : '';
     html += '<tr style="background:#f8f4ff;">';
-    html += '<td style="padding:8px 12px;font-size:12px;font-weight:600;color:#6d28d9;"><span style="width:8px;height:8px;background:'+(tienePerc?'#c8922a':'#d1d5db')+';border-radius:50%;display:inline-block;margin-right:8px;"></span>★ Año 0 vs Año 3 — Percepción</td>';
+    html += '<td style="padding:8px 12px;font-size:12px;font-weight:600;color:#6d28d9;"><span style="width:8px;height:8px;background:'+(tienePerc?'#3b79be':'#d1d5db')+';border-radius:50%;display:inline-block;margin-right:8px;"></span>★ Año 0 vs Año 3 — Percepción</td>';
     html += '<td colspan="4" style="text-align:center;padding:8px 12px;font-size:11px;color:'+(tienePerc?'#92400e':'#9ca3af')+'">'+(tienePerc?'★ Registrada':'Pendiente')+'</td>';
     html += '<td style="text-align:center;padding:8px 12px;">'+percBtns+'</td>';
     html += '</tr>';
@@ -1676,7 +1764,11 @@ function histPercPDF(id, btn) {
     .then(function(r){ return r.json(); })
     .then(function(d){
       btn.textContent = origTxt; btn.style.pointerEvents = '';
-      if (d.percepcion) descargarPDFPercepcionDir(d.percepcion);
+      if (d.percepcion) {
+        var p = d.percepcion, e = (estudiantesDB||[]).find(function(x){ return String(x.id) === String(id); }) || {};
+        p.id = p.id || id; p.nombre = p.nombre || e.nombre || ''; p.cohorte = p.cohorte || e.cohorte || '';
+        descargarPDFPercepcionDir(p);
+      }
       else alert('No se encontró la percepción de este estudiante.');
     }).catch(function(){ btn.textContent=origTxt; btn.style.pointerEvents=''; alert('Error al cargar.'); });
 }
@@ -1746,7 +1838,7 @@ async function descargarExcel(){
   var n_co=coList.length;
   var anoNum=parseInt(resGlobal.ano||'1');
 
-  var AZUL='003366',DORADO='C8922A',VERDE_H='166534',ROJO_H='991B1B',AMAR_H='854D0E';
+  var AZUL='143762',DORADO='3B79BE',VERDE_H='166534',ROJO_H='991B1B',AMAR_H='854D0E';
   var AZUL_C='E6EEF5',VERDE_C='DCFCE7',ROJO_C='FEE2E2',AMAR_C='FEF9C3',GRIS='F7F9FC',GRIS2='EEF1F7';
 
   function hdrS(bg,fg){return{font:{bold:true,color:{rgb:fg||'FFFFFF'},name:'Arial',sz:9},fill:{patternType:'solid',fgColor:{rgb:bg||AZUL}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{top:{style:'thin',color:{rgb:'DDE2ED'}},bottom:{style:'thin',color:{rgb:'DDE2ED'}},left:{style:'thin',color:{rgb:'DDE2ED'}},right:{style:'thin',color:{rgb:'DDE2ED'}}}};}
@@ -2049,7 +2141,7 @@ async function descargarExcel(){
 
   XLSX.utils.book_append_sheet(wb,ws5,'Histórico');
 
-  var nom=(resGlobal.nombre||'informe').replace(/[^a-zA-Z0-9]/g,'_');
+  var nom=(resGlobal.nombre||'informe').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_');
 
   // ── Serializar con SheetJS a ArrayBuffer para post-procesar con JSZip ──
   var wbBin = XLSX.write(wb, {bookSST:false, type:'array', cellStyles:true});
@@ -2061,9 +2153,9 @@ async function descargarExcel(){
                 'RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18',
                 'RPA9','RPA19','RPA20','RPA21','RPA22'];
   var _cohG = limpiarCohorte(estSel&&estSel.cohorte?estSel.cohorte:'');
-  var _coh1G = calcPD(_cohG,2)||'';
-  var _coh2G = calcPD(_cohG,4)||'';
-  var _coh3G = calcPD(_cohG,6)||'';
+  var _coh1G = calcPD(_cohG,1)||'';
+  var _coh2G = calcPD(_cohG,2)||'';
+  var _coh3G = calcPD(_cohG,3)||'';
   var rpaLbls=[], rpaDiag=[], rpaProy=[], rpaHoy=[], rpaH1=[], rpaH2=[];
   RPAS_G.forEach(function(rid){
     rpaLbls.push(rid);
@@ -2082,7 +2174,7 @@ async function descargarExcel(){
   // Series dinámicas por año — igual que PDF
   var _anoGrafX=String(resGlobal.ano||anoEstudiante||'1');
   var _grafSeriesX=[rpaDiag,rpaProy];
-  var _grafColsX=['991B1B','CA8A04'];
+  var _grafColsX=['991B1B','3E8484'];
   var _grafTitlesX=[
     'Diagnóstico entrada ('+_cohG+')',
     'Proyección egreso ('+_coh3G+')'
@@ -2172,8 +2264,13 @@ async function descargarExcel(){
 
   // CHART 1 — Líneas de RPAs: series dinámicas por año (igual que PDF)
   var _seriesXml='';
+  // Sin evaluación inicial (Año 0): no graficar series en 0%
+  (function(){var sinD=!rpaDiag.some(function(v){return v>0;}),sinP=!rpaProy.some(function(v){return v>0;});
+    if(sinP){_grafSeriesX.splice(1,1);_grafColsX.splice(1,1);_grafTitlesX.splice(1,1);}
+    if(sinD){_grafSeriesX.splice(0,1);_grafColsX.splice(0,1);_grafTitlesX.splice(0,1);}
+  })();
   _grafSeriesX.forEach(function(vals,si){
-    _seriesXml+=_ser(si,_grafTitlesX[si]||('Serie '+(si+1)),_grafColsX[si]||'003366',rpaLbls,vals);
+    _seriesXml+=_ser(si,_grafTitlesX[si]||('Serie '+(si+1)),_grafColsX[si]||'143762',rpaLbls,vals);
   });
   var chart1 = _chartSpace(_lineChart(_seriesXml, 3, 4, 0, 100, 10));
 
@@ -2289,7 +2386,7 @@ function descargarPDF(){
   if(!resGlobal){alert('Calcule el informe primero.');return;}
   var jsPDF=window.jspdf.jsPDF;
   var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  var azul=[0,51,102],dorado=[200,146,42],verde=[22,101,52],amar=[133,77,14],rojo=[153,27,27];
+  var azul=[20,55,98],dorado=[59,121,190],verde=[22,101,52],amar=[133,77,14],rojo=[153,27,27];
   var pageW=210,margin=14,colW=182,y=0;
   function semColor(n){return n>=4?verde:n>=3?amar:rojo;}
   function semText(n){return n>=4?'VERDE':n>=3?'AMARILLO':'ROJO';}
@@ -2417,9 +2514,9 @@ function descargarPDF(){
   var _h2PDF=HIST_DIR.find(function(h){return String(h.ano)==='2';});
   // Cohorte para leyenda proyección
   var _cohPDF=limpiarCohorte(estSel&&estSel.cohorte?estSel.cohorte:'');
-  var _coh3PDF=calcPD(_cohPDF,6)||''; // proyección a 3 años = cohorte + 6 semestres
-  var _coh1PDF=calcPD(_cohPDF,2)||'';
-  var _coh2PDF=calcPD(_cohPDF,4)||'';
+  var _coh3PDF=calcPD(_cohPDF,3)||''; // proyección al egreso = cohorte + 3 años (ej. 2024-1 → 2027-1)
+  var _coh1PDF=calcPD(_cohPDF,1)||'';
+  var _coh2PDF=calcPD(_cohPDF,2)||'';
   var rD=[],rP=[],rH=[],rH1=[],rH2=[];
   RPAS_PDF.forEach(function(rid){
     rD.push(Math.round(parseFloat(_h0PDF[rid+'_inicio'])||0));
@@ -2439,7 +2536,7 @@ function descargarPDF(){
   // Construir series según año evaluado
   var _anoGraf=String(resGlobal.ano||anoEstudiante||'1');
   var grafSeries=[rD,rP];
-  var grafColors=['#991B1B','#CA8A04'];
+  var grafColors=['#991B1B','#3e8484'];
   var grafTitles=['Diagnóstico de entrada ('+_cohPDF+')','Proyección al egreso ('+_coh3PDF+')'];
   if(_anoGraf==='1'){
     grafSeries.push(rH);grafColors.push('#1e40af');grafTitles.push('Final Año 1 ('+_coh1PDF+')');
@@ -2451,6 +2548,12 @@ function descargarPDF(){
     if(rH2.some(function(v){return v>0;})){grafSeries.push(rH2);grafColors.push('#3b82f6');grafTitles.push('Final Año 2 ('+_coh2PDF+')');}
     grafSeries.push(rH);grafColors.push('#1e3a8a');grafTitles.push('Final Año 3 ('+_coh3PDF+')');
   }
+  // Sin evaluación inicial (Año 0): no dibujar líneas en 0%; se deja nota en la leyenda
+  (function(){var sinD=!rD.some(function(v){return v>0;}),sinP=!rP.some(function(v){return v>0;});
+    if(sinP){grafSeries.splice(1,1);grafColors.splice(1,1);grafTitles.splice(1,1);}
+    if(sinD){grafSeries.splice(0,1);grafColors.splice(0,1);grafTitles.splice(0,1);}
+    if(sinD&&sinP){grafSeries.push([]);grafColors.push('#9ca3af');grafTitles.push('Sin evaluación inicial (Año 0) registrada');}
+  })();
   var COMP_PDF=['CBI-1','CBI-2','CBI-3','CBI-4','CTEI-1','CTEI-2','CTEI-3','CINV-1','CINV-2','CINV-3'];
   var cVals=COMP_PDF.map(function(ck){return Math.round((resGlobal.C[ck]||0)*100);});
 
@@ -2548,7 +2651,7 @@ function descargarPDF(){
     doc.text('SEDIETIC v3.0  |  Universidad de La Sabana  |  SNIES 109126  |  PROVENTUS A1 Minciencias',pageW/2,292,{align:'center'});
     doc.text('Pg. '+pg+' / '+totalPages,pageW-margin,292,{align:'right'});
   }
-  var nom=(resGlobal.nombre||'informe').replace(/[^a-zA-Z0-9]/g,'_');
+  var nom=(resGlobal.nombre||'informe').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_');
   doc.save('SEDIETIC_'+nom+'_'+(resGlobal.periodo||resGlobal.fecha)+'.pdf');
 }
 
@@ -2574,7 +2677,7 @@ function actualizarSelectorCohortes() {
 function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetData) {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  var azul=[0,51,102], dorado=[200,146,42], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
+  var azul=[20,55,98], dorado=[59,121,190], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
   var pageW=210, margin=14, colW=182, y=0;
   var esAno0 = String(ano) === '0';
   var RO=['RPA10','RPA11','RPA5','RPA4','RPA12','RPA6','RPA13','RPA1','RPA2','RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18','RPA9','RPA19','RPA20','RPA21','RPA22'];
@@ -2737,7 +2840,7 @@ function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetDa
     doc.text('SEDIETIC v3.0  |  Universidad de La Sabana  |  SNIES 109126',pageW/2,292,{align:'center'});
     doc.text('Pg. '+pg+' / '+totalPg,pageW-margin,292,{align:'right'});
   }
-  var nom=(nombre||'informe').replace(/[^a-zA-Z0-9]/g,'_');
+  var nom=(nombre||'informe').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_');
   doc.save('SEDIETIC_Resumen_'+nom+'_A'+ano+'.pdf');
 }
 
@@ -2771,7 +2874,7 @@ function renderCoevBlocks(){
         html+='<td style="text-align:center;padding:4px 6px;font-weight:700;color:'+semC(v)+';background:'+semBg(v)+';border:1px solid #e2e8f0;">'+v+'%</td>';
       });
       html+='</tr></tbody></table></div>';
-      if(obs){html+='<div style="padding:10px 14px;background:#fffbeb;border-top:1px solid #f59e0b;font-size:12px;color:#78350f;">💬 <strong>Observaciones:</strong> '+obs+'</div>';}
+      if(obs){html+='<div style="padding:10px 14px;background:#f3f7fc;border-top:1px solid #c3d3e6;font-size:12px;color:#204f88;">💬 <strong>Observaciones:</strong> '+obs+'</div>';}
       html+='</div>';
     });
     var el=document.getElementById('coev-recib-body');if(el)el.innerHTML=html;
@@ -2800,7 +2903,7 @@ function renderCoevBlocks(){
         html2+='<td style="text-align:center;padding:4px 6px;font-weight:700;color:'+semC(v)+';background:'+semBg(v)+';border:1px solid #e2e8f0;">'+v+'%</td>';
       });
       html2+='</tr></tbody></table></div>';
-      if(obs){html2+='<div style="padding:10px 14px;background:#fffbeb;border-top:1px solid #f59e0b;font-size:12px;color:#78350f;">💬 <strong>Observaciones:</strong> '+obs+'</div>';}
+      if(obs){html2+='<div style="padding:10px 14px;background:#f3f7fc;border-top:1px solid #c3d3e6;font-size:12px;color:#204f88;">💬 <strong>Observaciones:</strong> '+obs+'</div>';}
       html2+='</div>';
     });
     var el2=document.getElementById('coev-realiz-body');if(el2)el2.innerHTML=html2;
@@ -2824,10 +2927,10 @@ function renderConsolidado(rpasC, isAno1, coList, pA, pC, pH, ano) {
   if(!thead)return;
 
   var thHTML='<th style="text-align:left;padding-left:10px;min-width:260px;background:#f1f5f9;color:#334155;font-size:11px;">RPA</th>';
-  thHTML+='<th style="min-width:80px;background:#e8eef6;color:#003366;text-align:center;font-size:11px;">Auto (%)</th>';
-  if(tieneCo) thHTML+='<th style="min-width:80px;background:#fdf6e8;color:#92400e;text-align:center;font-size:11px;">Coevaluación (%)</th>';
-  thHTML+='<th style="min-width:80px;background:#e8eef6;color:#003366;text-align:center;font-size:11px;">Hetero (%)</th>';
-  thHTML+='<th style="min-width:90px;background:#003366;color:white;text-align:center;font-size:11px;font-weight:700;">Consolidado (%)</th>';
+  thHTML+='<th style="min-width:80px;background:#e8eef6;color:#143762;text-align:center;font-size:11px;">Auto (%)</th>';
+  if(tieneCo) thHTML+='<th style="min-width:80px;background:#e8eff7;color:#204f88;text-align:center;font-size:11px;">Coevaluación (%)</th>';
+  thHTML+='<th style="min-width:80px;background:#e8eef6;color:#143762;text-align:center;font-size:11px;">Hetero (%)</th>';
+  thHTML+='<th style="min-width:90px;background:#143762;color:white;text-align:center;font-size:11px;font-weight:700;">Consolidado (%)</th>';
   thead.innerHTML=thHTML;
 
   // Filas
@@ -2851,7 +2954,7 @@ function renderConsolidado(rpasC, isAno1, coList, pA, pC, pH, ano) {
     var cons=Math.round(rpasC[rid]||0);
     var bg=i%2===0?'background:#ffffff;':'background:#f8fafc;';
     rows+='<tr style="'+bg+'border-bottom:1px solid #f1f5f9;">'
-      +'<td style="padding:6px 10px;font-size:11px;"><span style="font-family:monospace;font-size:10px;font-weight:700;color:#003366;background:#e8eef6;padding:2px 6px;border-radius:4px;margin-right:6px;">'+rid+'</span>'+RPAS_DESC[rid]+'</td>'
+      +'<td style="padding:6px 10px;font-size:11px;"><span style="font-family:monospace;font-size:10px;font-weight:700;color:#143762;background:#e8eef6;padding:2px 6px;border-radius:4px;margin-right:6px;">'+rid+'</span>'+RPAS_DESC[rid]+'</td>'
       +'<td style="text-align:center;font-weight:600;font-size:12px;color:'+semCol(autoV)+';background:'+semBg(autoV)+';padding:6px;">'+autoV+'%</td>';
     if(tieneCo) rows+='<td style="text-align:center;font-weight:600;font-size:12px;color:'+semCol(coAvg)+';background:'+semBg(coAvg)+';padding:6px;">'+(coAvg?coAvg.toFixed(1):'—')+'%</td>';
     rows+='<td style="text-align:center;font-weight:600;font-size:12px;color:'+semCol(hetV)+';background:'+semBg(hetV)+';padding:6px;">'+hetV+'%</td>'
@@ -3181,7 +3284,7 @@ function descargarPDFPercepcionDir(p) {
   var jsPDF = window.jspdf ? window.jspdf.jsPDF : null;
   if (!jsPDF) { alert('jsPDF no disponible.'); return; }
   var doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  var azul=[0,51,102], dorado=[200,146,42], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
+  var azul=[20,55,98], dorado=[59,121,190], verde=[22,101,52], amar=[133,77,14], rojo=[153,27,27];
   var pageW=210, margin=14, colW=182, y=0;
   var RD={RPA10:'Identifica necesidades u oportunidades para la innovación.',RPA11:'Participa del diseño de soluciones innovadoras.',RPA5:'Argumenta la escogencia de perspectiva de análisis.',RPA4:'Describe las fases para revisión sistemática de literatura.',RPA12:'Planea y concreta procesos de innovación.',RPA6:'Interactúa activamente con sus pares académicos.',RPA13:'Realiza difusión efectiva en eventos académicos.',RPA1:'Describe claramente el problema de investigación.',RPA2:'Formula una pregunta de investigación.',RPA14:'Plantea objetivos coherentes con la pregunta.',RPA3:'Argumenta la elección del diseño metodológico.',RPA15:'Apoya procesos de innovación del proyecto.',RPA7:'Identifica diferencias entre tipos de artículos.',RPA8:'Participa en escritura y publicación científica.',RPA16:'Escucha activamente a personas involucradas.',RPA17:'Genera propuestas innovadoras colaborativas.',RPA18:'Participa de la implementación de modelos educativos.',RPA9:'Consulta efectivamente bases de datos especializadas.',RPA19:'Documenta observaciones del contexto del problema.',RPA20:'Participa del testeo de modelos o prototipos.',RPA21:'Participa del diseño y construcción de prototipos.',RPA22:'Escoge y aplica instrumentos de investigación.'};
   var RO=['RPA10','RPA11','RPA5','RPA4','RPA12','RPA6','RPA13','RPA1','RPA2','RPA14','RPA3','RPA15','RPA7','RPA8','RPA16','RPA17','RPA18','RPA9','RPA19','RPA20','RPA21','RPA22'];
@@ -3300,6 +3403,11 @@ function cerrarPanelPercepcionDir() {
 }
 
 // Limpia cohorte: si viene como Date serializada la convierte a "YYYY-S"
+function calcCohEgreso(cohInicio) {
+  if (!cohInicio || cohInicio === '—' || !/^\d{4}-\d$/.test(cohInicio)) return '—';
+  var p = cohInicio.match(/^(\d{4})-(\d)$/);
+  return (parseInt(p[1])+3) + '-' + p[2];
+}
 function limpiarCohortePerc(val) {
   if (!val || val === '—') return '—';
   var s = String(val).trim();
@@ -3332,7 +3440,7 @@ function descargarPDFProceso() {
 
   var jsPDF  = window.jspdf.jsPDF;
   var doc    = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-  var azul   = [0,51,102], dorado = [200,146,42];
+  var azul   = [20,55,98], dorado = [59,121,190];
   var pageW  = 297, margin = 14, y = 0;
 
   // ── HEADER ──
@@ -3445,7 +3553,7 @@ function descargarPDFProceso() {
 
     // Encabezado del estudiante
     pdfPageCheck(40);
-    doc.setFillColor(0,51,102); doc.roundedRect(margin, y, pageW-margin*2, 8, 2, 2, 'F');
+    doc.setFillColor(20,55,98); doc.roundedRect(margin, y, pageW-margin*2, 8, 2, 2, 'F');
     doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
     doc.text((est.nombre||'').toUpperCase(), margin+4, y+5.5);
     doc.setFont('helvetica','normal'); doc.setFontSize(7);
@@ -3587,7 +3695,7 @@ function descargarPDFAdmin(){
   if(!window.jspdf||!window.jspdf.jsPDF){alert('La librería de PDF está cargando. Espere un momento e intente de nuevo.');return;}
   var jsPDF=window.jspdf.jsPDF;
   var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  var azul=[0,51,102],dorado=[200,146,42];
+  var azul=[20,55,98],dorado=[59,121,190];
   var pageW=210,margin=14,y=0;
   // Header
   doc.setFillColor(azul[0],azul[1],azul[2]);doc.rect(0,0,pageW,28,'F');
@@ -3663,8 +3771,8 @@ async function sha256(str){
 
 function cargarDocentes(forzar){
   if(!forzar&&docentesCargados){renderDocentes(docentesDB);return;}
-  document.getElementById('tbody-docentes').innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--gris-t);"><span class="spin" style="border-color:rgba(0,51,102,.3);border-top-color:var(--azul);"></span>Cargando...</td></tr>';
-  fetch(APPS_URL+'?tipo=LISTA_DOCENTES')
+  document.getElementById('tbody-docentes').innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--gris-t);"><span class="spin" style="border-color:rgba(20,55,98,.3);border-top-color:var(--azul);"></span>Cargando...</td></tr>';
+  fetch(APPS_URL+'?tipo=LISTA_DOCENTES&auth='+encodeURIComponent(window._ADMIN_PW||''))
     .then(function(r){return r.json();})
     .then(function(d){
       docentesDB=d.docentes||[];
@@ -3838,61 +3946,35 @@ function toggleActivo(idx){
 
 function exportarPDFDocentes(){
   if(!docentesDB.length){showAlert('msg-err-docentes','No hay docentes para exportar.',true);return;}
+  var jsPDF=window.jspdf.jsPDF;
+  var docD=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  var azul=[20,55,98],dorado=[59,121,190],pageW=297,margin=12;
   var fecha=new Date().toLocaleDateString('es-CO',{year:'numeric',month:'long',day:'numeric'});
   var activos=docentesDB.filter(function(d){return d.activo==='SI';}).length;
-  var inactivos=docentesDB.length-activos;
-
-  var filas=docentesDB.map(function(d,i){
-    var estadoBg=d.activo==='SI'?'#dcfce7':'#fee2e2';
-    var estadoColor=d.activo==='SI'?'#166534':'#991b1b';
-    var asig=d.estudiantesAsignados&&d.estudiantesAsignados.trim()?d.estudiantesAsignados:'Todos';
-    return '<tr style="background:'+(i%2===0?'#ffffff':'#f7f9fc')+';">'
-      +'<td style="padding:8px 10px;border-bottom:1px solid #e5e7eb;font-size:11px;font-family:monospace;color:#003366;">'+d.id+'</td>'
-      +'<td style="padding:8px 10px;border-bottom:1px solid #e5e7eb;font-size:12px;font-weight:600;">'+d.nombre+'</td>'
-      +'<td style="padding:8px 10px;border-bottom:1px solid #e5e7eb;font-size:11px;font-family:monospace;">'+d.usuario+'</td>'
-      +'<td style="padding:8px 10px;border-bottom:1px solid #e5e7eb;font-size:11px;color:#4a5168;">'+d.correo+'</td>'
-      +'<td style="padding:8px 10px;border-bottom:1px solid #e5e7eb;text-align:center;"><span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:12px;background:'+estadoBg+';color:'+estadoColor+';">'+d.activo+'</span></td>'
-      +'<td style="padding:8px 10px;border-bottom:1px solid #e5e7eb;font-size:11px;color:#4a5168;">'+asig+'</td>'
-      +'</tr>';
-  }).join('');
-
-  var html='<!DOCTYPE html><html><head><meta charset="UTF-8">'
-    +'<title>Docentes SEDIETIC</title>'
-    +'<style>body{font-family:Arial,sans-serif;margin:0;padding:20px;} @media print{body{margin:0;padding:10px;}}</style>'
-    +'</head><body>'
-    +'<div style="background:#003366;padding:18px 24px;border-bottom:4px solid #c8922a;margin-bottom:20px;">'
-    +'<div style="color:white;font-size:10px;opacity:.7;margin-bottom:4px;">Universidad de La Sabana · Facultad de Educación</div>'
-    +'<div style="color:white;font-size:16px;font-weight:700;">Doctorado en Innovación Educativa con uso de TIC</div>'
-    +'<div style="color:rgba(255,255,255,.8);font-size:11px;margin-top:4px;">SEDIETIC v3.0 · SNIES 109126</div>'
-    +'</div>'
-    +'<div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;">'
-    +'<div><h2 style="margin:0;font-size:18px;color:#003366;">Docentes Evaluadores del Programa</h2>'
-    +'<p style="margin:4px 0 0;font-size:12px;color:#6b7280;">Generado el '+fecha+'</p></div>'
-    +'<div style="text-align:right;font-size:12px;color:#6b7280;">'
-    +'<span style="font-weight:700;color:#003366;">'+docentesDB.length+'</span> docentes &nbsp;|&nbsp; '
-    +'<span style="color:#166534;font-weight:700;">'+activos+'</span> activos &nbsp;|&nbsp; '
-    +'<span style="color:#991b1b;font-weight:700;">'+inactivos+'</span> inactivos</div>'
-    +'</div>'
-    +'<table style="width:100%;border-collapse:collapse;font-size:12px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">'
-    +'<thead><tr style="background:#003366;">'
-    +'<th style="color:white;padding:10px;text-align:left;font-size:11px;">ID</th>'
-    +'<th style="color:white;padding:10px;text-align:left;font-size:11px;">Nombre</th>'
-    +'<th style="color:white;padding:10px;text-align:left;font-size:11px;">Usuario</th>'
-    +'<th style="color:white;padding:10px;text-align:left;font-size:11px;">Correo</th>'
-    +'<th style="color:white;padding:10px;text-align:center;font-size:11px;">Estado</th>'
-    +'<th style="color:white;padding:10px;text-align:left;font-size:11px;">Estudiantes asignados</th>'
-    +'</tr></thead>'
-    +'<tbody>'+filas+'</tbody>'
-    +'</table>'
-    +'<div style="margin-top:20px;padding-top:12px;border-top:1px solid #e5e7eb;font-size:10px;color:#9ca3af;text-align:center;">'
-    +'SEDIETIC v3.0 · Sistema de Evaluación Doctoral · Universidad de La Sabana'
-    +'</div>'
-    +'</body></html>';
-
-  var win=window.open('','_blank');
-  win.document.write(html);
-  win.document.close();
-  win.onload=function(){win.print();};
+  function header(){
+    docD.setFillColor(azul[0],azul[1],azul[2]);docD.rect(0,0,pageW,28,'F');
+    docD.setFillColor(dorado[0],dorado[1],dorado[2]);docD.rect(0,28,pageW,1.5,'F');
+    docD.setFillColor(255,255,255);docD.roundedRect(margin,6,42,16,3,3,'F');
+    try{docD.addImage(LOGO_B64,'PNG',margin+1,7,40,14);}catch(e){}
+    docD.setTextColor(255,255,255);docD.setFont('helvetica','bold');docD.setFontSize(10);
+    docD.text('Docentes Evaluadores del Programa',margin+48,12);
+    docD.setFont('helvetica','normal');docD.setFontSize(7);
+    docD.text('Doctorado en Innovacion Educativa con uso de TIC  |  SEDIETIC  |  Generado el '+fecha,margin+48,18);
+  }
+  header();
+  docD.setTextColor(azul[0],azul[1],azul[2]);docD.setFont('helvetica','bold');docD.setFontSize(9);
+  docD.text(docentesDB.length+' docentes  |  '+activos+' activos  |  '+(docentesDB.length-activos)+' inactivos',margin,37);
+  var rows=docentesDB.map(function(d){
+    var asig=d.estudiantesAsignados&&String(d.estudiantesAsignados).trim()?d.estudiantesAsignados:'Todos';
+    return [d.id||'-',d.nombre||'-',d.usuario||'-',d.correo||'-',d.activo==='SI'?'Activo':'Inactivo',asig];
+  });
+  docD.autoTable({startY:41,margin:{left:margin,right:margin},
+    head:[['ID','Nombre','Usuario','Correo','Estado','Estudiantes asignados']],
+    body:rows,headStyles:{fillColor:azul,textColor:255,fontSize:8},bodyStyles:{fontSize:7.5},
+    didParseCell:function(c){if(c.section==='body'&&c.column.index===4){c.cell.styles.textColor=c.cell.raw==='Activo'?[22,101,52]:[153,27,27];c.cell.styles.fontStyle='bold';}},
+    didDrawPage:function(){if(docD.internal.getCurrentPageInfo().pageNumber>1)header();}});
+  var h=new Date(),ymd=h.getFullYear()+String(h.getMonth()+1).padStart(2,'0')+String(h.getDate()).padStart(2,'0');
+  docD.save('SEDIETIC_Docentes_'+ymd+'.pdf');
 }
 
 function eliminarDocente(idx){
@@ -4010,7 +4092,7 @@ function cargarConfig(){
     .then(function(d){ if(ta) ta.value=d.correos||''; })
     .catch(function(){if(ta) ta.value='Error al cargar. Escribe los correos manualmente.';});
   // Cargar claves actuales de Sheets y mostrarlas
-  fetch(APPS_URL+'?tipo=GET_CONFIG_CLAVES')
+  fetch(APPS_URL+'?tipo=GET_CONFIG_CLAVES&auth='+encodeURIComponent(window._ADMIN_PW||''))
     .then(function(r){return r.json();})
     .then(function(d){
       var mapa = {
@@ -4122,7 +4204,7 @@ function exportarNotasPDF(){
   if(!lista.length){alert('No hay registros para exportar.');return;}
   var jsPDF=window.jspdf.jsPDF;
   var docNF=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-  var azul=[0,51,102],dorado=[200,146,42],pageW=297,margin=12;
+  var azul=[20,55,98],dorado=[59,121,190],pageW=297,margin=12;
   function header(){
     docNF.setFillColor(azul[0],azul[1],azul[2]);docNF.rect(0,0,pageW,28,'F');
     docNF.setFillColor(dorado[0],dorado[1],dorado[2]);docNF.rect(0,28,pageW,1.5,'F');
