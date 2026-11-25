@@ -1716,7 +1716,7 @@ function descargarExcelListaBtn(btn) {
     var _rpasC={};
     RK.forEach(function(rid){
       var autoV=parseFloat(f1Ano[rid+'_actual'])||0;
-      var hetV=0;
+      var _f2x=hist2.find(function(h){return String(h.ano)===String(ano);})||{};var _svx=parseFloat(_f2x[rid])||0;if(_svx>0){_rpasC[rid]=_svx;return;}var hetV=parseFloat(_f2x['hetero_'+rid])||0;
       var coVals=[];coevRec.forEach(function(co){var cv=parseFloat(co[rid])||0;if(cv>0)coVals.push(cv);});
       var coAvg=coVals.length>0?coVals.reduce(function(a,b){return a+b;})/coVals.length:0;
       var sv=autoV*(_pA/100)+coAvg*(_pC/100)+hetV*(_pH/100);
@@ -1732,8 +1732,8 @@ function descargarExcelListaBtn(btn) {
     var _pct=Math.round(_prom/5*1000)/10;
     var _sem=_prom>=4?'VERDE':_prom>=3?'AMARILLO':'ROJO';
     resGlobal={nombre:nombre,id:id,cohorte:cohorte,ano:String(ano),periodo:periodo,
-      fecha:new Date().toISOString().slice(0,10),rpasC:_rpasC,C:_C,asigNotas:_asigNotas,
-      prom:_prom,pct:_pct,sem:_sem,pasantia:0,analisis:'(pendiente de generación)'};
+      fecha:((hist2.find(function(h){return String(h.ano)===String(ano);})||{}).fecha)||new Date().toISOString().slice(0,10),rpasC:_rpasC,C:_C,asigNotas:_asigNotas,
+      prom:_prom,pct:_pct,sem:_sem,pasantia:parseFloat((hist2.find(function(h){return String(h.ano)===String(ano);})||{}).pasantia)||0,analisis:((hist2.find(function(h){return String(h.ano)===String(ano);})||{}).analisis)||'(pendiente de generación)'};
     descargarExcel();
     btn.textContent=origTxt;btn.style.pointerEvents='';
     anoFiltro=_anoOld;
