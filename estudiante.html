@@ -1041,7 +1041,17 @@ function cargarCohortes() {
 
 // ══ IDENTIFICACIÓN POR ID (nuevo flujo) ══════════════════════════
 
+function mostrarAvisoGraduado(d) {
+  var e = document.getElementById('id-err');
+  e.innerHTML = '<div style="display:flex;gap:12px;align-items:flex-start;">'
+    + '<span style="font-size:22px;line-height:1;">&#127891;</span>'
+    + '<div><div style="font-weight:700;font-size:13.5px;margin-bottom:4px;">' + (d.nombre ? d.nombre + ', ' : '') + 'ya eres graduado(a) del doctorado</div>'
+    + '<div style="font-weight:500;line-height:1.55;">Tu proceso de evaluación en SEDIETIC finalizó. Si necesitas información, comunícate con la <strong>coordinación académica</strong> del Doctorado en Innovación Educativa con uso de TIC.</div></div></div>';
+  e.style.background = '#e8eff7'; e.style.borderColor = '#c3d3e6'; e.style.color = '#143762';
+  e.style.display = 'block';
+}
 function buscarPorID() {
+  var _ie = document.getElementById('id-err'); _ie.style.background = ''; _ie.style.borderColor = ''; _ie.style.color = '';
   var idVal = (document.getElementById('inp-id').value || '').trim();
   if (!idVal) { mostrarIdErr('Ingrese su número de ID institucional.'); return; }
   document.getElementById('id-err').style.display = 'none';
@@ -1053,6 +1063,10 @@ function buscarPorID() {
     .then(function(r){ return r.json(); })
     .then(function(d) {
       document.getElementById('id-buscando').style.display = 'none';
+      if (!d.ok && d.graduado) {
+        mostrarAvisoGraduado(d);
+        return;
+      }
       if (!d.ok) {
         mostrarIdErr(d.error || 'ID no encontrado en el programa. Verifique e intente nuevamente.');
         return;

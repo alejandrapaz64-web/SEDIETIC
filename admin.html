@@ -483,13 +483,15 @@ table.tbl tbody tr:hover td{background:#f3f6fb;}
 
     <!-- TAB 1: LISTA -->
     <div class="tab-panel show" id="tab-lista">
-      <div class="stats-row" id="stats-row" style="grid-template-columns:1fr;">
-        <div class="stat-card"><div class="stat-num" id="st-total">—</div><div class="stat-lbl">Total estudiantes activos del programa</div></div>
+      <div class="stats-row" id="stats-row" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card"><div class="stat-num" id="st-total">—</div><div class="stat-lbl">Estudiantes activos del programa</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-aptos" style="color:#3b79be;">—</div><div class="stat-lbl">Aptos para grado (3 años cumplidos)</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-grad" style="color:#316c51;">—</div><div class="stat-lbl">Graduados del doctorado</div></div>
       </div>
 
       <div class="card">
         <div class="card-hdr">
-          <div class="card-title">Estudiantes activos del programa</div>
+          <div class="card-title" id="titulo-lista">Estudiantes activos del programa</div>
           <span class="cnt-tag" id="cnt-tag">Cargando...</span>
           <button class="btn btn-s" style="margin-left:12px;padding:6px 14px;font-size:11px;" onclick="cargarLista()">Actualizar</button>
           <button class="btn btn-p" style="margin-left:8px;padding:6px 14px;font-size:11px;" onclick="guardarTodo()">Guardar cambios</button>
@@ -506,7 +508,8 @@ table.tbl tbody tr:hover td{background:#f3f6fb;}
               <option value="3">Año 3</option>
             </select>
           </div>
-          <div class="pills-wrap" style="padding:12px 16px 0;"><span class="pills-lbl">Cohorte</span><div class="fpills" id="pills-cohorte-lista"></div></div>
+          <div class="pills-wrap" style="padding:12px 16px 0;"><span class="pills-lbl">Estado</span><div class="fpills" id="pills-estado-lista"></div></div>
+          <div class="pills-wrap" style="padding:10px 16px 0;"><span class="pills-lbl">Cohorte</span><div class="fpills" id="pills-cohorte-lista"></div></div>
           <div class="alert alert-ok" id="msg-ok-lista" style="margin:12px 16px 0;"></div>
           <div class="alert alert-err" id="msg-err-lista" style="margin:12px 16px 0;"></div>
           <div class="preview-wrap" style="padding:14px 16px;">
@@ -1097,9 +1100,98 @@ function cargarLista(){
 }
 
 function actualizarStats(lista){
-  document.getElementById('st-total').textContent=lista.length;
+  var g=0,ap=0; lista.forEach(function(e){ if(esGraduado(e)) g++; else if(elegibleGrado(e)) ap++; });
+  document.getElementById('st-total').textContent=lista.length-g;
+  var a=document.getElementById('st-aptos'); if(a) a.textContent=ap;
+  var b=document.getElementById('st-grad'); if(b) b.textContent=g;
   renderLista(estudiantesDB);
 }
+
+// ══ GRADUADOS (v5.4) — solo agrega estado; no modifica datos de evaluación ══
+var _estLista='activos';
+function esGraduado(e){ return !!e && String(e.graduado||'').trim().toUpperCase()==='SI'; }
+function esGraduadoId(id){
+  id=String(id||'').trim(); if(!id) return false;
+  for(var i=0;i<estudiantesDB.length;i++){ if(String(estudiantesDB[i].id).trim()===id) return esGraduado(estudiantesDB[i]); }
+  return false;
+}
+function semCursadosAdm(coh){
+  var c=String(coh||'').match(/^(\d{4})-(\d)$/), p=periodoActivoAdm().match(/^(\d{4})-(\d)$/);
+  if(!c||!p) return -1;
+  return (parseInt(p[1])*2+parseInt(p[2])-1)-(parseInt(c[1])*2+parseInt(c[2])-1);
+}
+function elegibleGrado(e){ return !esGraduado(e) && semCursadosAdm(e&&e.cohorte)>=6; }
+function filtroEstadoLista(e){
+  if(_estLista==='graduados') return esGraduado(e);
+  if(_estLista==='aptos') return elegibleGrado(e);
+  if(_estLista==='activos') return !esGraduado(e);
+  return true;
+}
+function renderPillsEstado(){
+  var cont=document.getElementById('pills-estado-lista'); if(!cont) return;
+  var g=0,ap=0; estudiantesDB.forEach(function(e){ if(esGraduado(e)) g++; else if(elegibleGrado(e)) ap++; });
+  var ops=[['activos','Activos',estudiantesDB.length-g],['aptos','Aptos para grado',ap],['graduados','Graduados',g],['todos','Todos',estudiantesDB.length]];
+  cont.innerHTML=ops.map(function(o){return '<button class="fpill'+(_estLista===o[0]?' on':'')+'" onclick="selEstLista(\''+o[0]+'\')">'+o[1]+' <b>'+o[2]+'</b></button>';}).join('');
+}
+function selEstLista(v){_estLista=v; var t=document.getElementById('titulo-lista'); if(t) t.textContent={activos:'Estudiantes activos del programa',aptos:'Estudiantes aptos para grado',graduados:'Graduados del doctorado',todos:'Todos los estudiantes del programa'}[v]; renderLista(estudiantesDB);}
+function opcionesPeriodoGrado(e){
+  var c=String(e.cohorte||'').match(/^(\d{4})-(\d)$/), p=periodoActivoAdm().match(/^(\d{4})-(\d)$/);
+  var out=[]; if(!p) return out;
+  var fin=parseInt(p[1])*2+parseInt(p[2])-1, ini=c?(parseInt(c[1])*2+parseInt(c[2])-1)+6:fin-4;
+  for(var k=fin;k>=ini&&out.length<12;k--) out.push(Math.floor(k/2)+'-'+(k%2+1));
+  return out;
+}
+function abrirGraduar(idx){
+  var e=estudiantesDB[idx]; if(!e) return;
+  var m=document.getElementById('modal-grado');
+  if(!m){
+    m=document.createElement('div'); m.id='modal-grado';
+    m.style.cssText='position:fixed;inset:0;background:rgba(15,44,79,.55);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
+    document.body.appendChild(m);
+  }
+  var ops=opcionesPeriodoGrado(e).map(function(p){return '<option value="'+p+'">'+p+'</option>';}).join('');
+  m.innerHTML='<div style="background:#fff;border-radius:14px;max-width:440px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.25);overflow:hidden;font-family:\'DM Sans\',sans-serif;">'
+    +'<div style="background:#143762;color:#fff;padding:16px 20px;"><div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">Marcar como graduado</div>'
+    +'<div style="font-size:12px;opacity:.8;margin-top:2px;">Doctorado en Innovación Educativa con uso de TIC</div></div>'
+    +'<div style="padding:18px 20px;color:#414f64;font-size:13px;line-height:1.55;">'
+    +'<div style="font-weight:700;color:#143762;font-size:14px;">'+e.nombre+'</div><div style="font-size:12px;margin-bottom:12px;">ID '+e.id+' · Cohorte '+(e.cohorte||'—')+'</div>'
+    +'<label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#204f88;">Periodo de grado (opcional)</label>'
+    +'<select id="sel-periodo-grado" class="nsel" style="width:100%;margin:6px 0 12px;"><option value="">Sin registrar</option>'+ops+'</select>'
+    +'<div style="background:#e8eff7;border-radius:8px;padding:10px 12px;font-size:12px;">El estudiante dejará de aparecer en <b>Proceso de evaluación</b> y no podrá ingresar al instrumento. Sus evaluaciones y notas se conservan intactas. Puede revertirse.</div>'
+    +'<div id="grado-err" style="display:none;color:#b42318;font-size:12px;margin-top:10px;"></div></div>'
+    +'<div style="display:flex;gap:8px;justify-content:flex-end;padding:0 20px 18px;">'
+    +'<button class="btn-e" onclick="cerrarGraduar()">Cancelar</button>'
+    +'<button id="btn-conf-grado" style="background:#316c51;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-weight:700;cursor:pointer;font-family:inherit;" onclick="confirmarGraduar('+idx+')">&#127891; Confirmar graduado</button></div></div>';
+  m.style.display='flex';
+}
+function cerrarGraduar(){ var m=document.getElementById('modal-grado'); if(m) m.style.display='none'; }
+function enviarGrado(e, grad, per, cb){
+  fetch(APPS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({tipo:'MARCAR_GRADUADO',id:e.id,graduado:grad,periodo_grado:per})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d.ok){ cb(d.error||'No fue posible actualizar'); return; }
+      e.graduado=d.graduado||''; e.periodo_grado=d.periodo_grado||'';
+      actualizarStats(estudiantesDB); if(typeof procesoLoaded!=='undefined'&&procesoLoaded&&typeof renderProceso==='function') renderProceso();
+      cb(null);
+    }).catch(function(){ cb('Error de conexión. Intente nuevamente.'); });
+}
+function confirmarGraduar(idx){
+  var e=estudiantesDB[idx]; var per=(document.getElementById('sel-periodo-grado')||{}).value||'';
+  var b=document.getElementById('btn-conf-grado'); b.disabled=true; b.textContent='Guardando...';
+  enviarGrado(e,'SI',per,function(err){
+    if(err){ b.disabled=false; b.innerHTML='&#127891; Confirmar graduado'; var x=document.getElementById('grado-err'); x.textContent='✗ '+err; x.style.display='block'; return; }
+    cerrarGraduar(); showAlert('msg-ok-lista','✓ '+e.nombre+' quedó registrado(a) como graduado(a)'+(per?' en el periodo '+per:'')+'.',false);
+  });
+}
+function revertirGraduado(idx){
+  var e=estudiantesDB[idx]; if(!e) return;
+  if(!confirm('¿Revertir el estado de graduado de '+e.nombre+'? Volverá a aparecer como estudiante activo.')) return;
+  enviarGrado(e,'','',function(err){
+    if(err){ showAlert('msg-err-lista','✗ '+err,true); return; }
+    showAlert('msg-ok-lista','✓ '+e.nombre+' volvió a estado activo.',false);
+  });
+}
+function procesoActivos(){ return procesoDB.filter(function(e){ return !esGraduadoId(e.id); }); }
 
 // ── Año calculado (solo para mostrar y filtrar; nunca se escribe en Sheets) ──
 var PERIODO_ACTIVO_ADM='';
@@ -1128,15 +1220,16 @@ function listaEstudiantesFiltrada(){
     var matchQ=!q||((e.nombre||'').toLowerCase().includes(q)||String(e.id).includes(q)||(e.cohorte||'').includes(q)||(e.correo||'').toLowerCase().includes(q));
     var matchAno=!ano||anoCalc(e)===ano;
     var matchCoh=!_cohLista||String(e.cohorte||'')===_cohLista;
-    return matchQ&&matchAno&&matchCoh;
+    return matchQ&&matchAno&&matchCoh&&filtroEstadoLista(e);
   });
 }
 function renderPillsCohorte(){
   var cont=document.getElementById('pills-cohorte-lista'); if(!cont) return;
-  var cnt={}; estudiantesDB.forEach(function(e){var c=String(e.cohorte||'').trim();if(c)cnt[c]=(cnt[c]||0)+1;});
+  var base=estudiantesDB.filter(filtroEstadoLista);
+  var cnt={}; base.forEach(function(e){var c=String(e.cohorte||'').trim();if(c)cnt[c]=(cnt[c]||0)+1;});
   var cohs=Object.keys(cnt).sort().reverse();
   if(_cohLista && !cnt[_cohLista]) _cohLista='';
-  var h='<button class="fpill'+(!_cohLista?' on':'')+'" onclick="selCohLista(\'\')">Todas <b>'+estudiantesDB.length+'</b></button>';
+  var h='<button class="fpill'+(!_cohLista?' on':'')+'" onclick="selCohLista(\'\')">Todas <b>'+base.length+'</b></button>';
   cohs.forEach(function(c){h+='<button class="fpill'+(_cohLista===c?' on':'')+'" onclick="selCohLista(\''+c+'\')">'+c+' <b>'+cnt[c]+'</b></button>';});
   cont.innerHTML=h;
 }
@@ -1149,6 +1242,7 @@ function filtrarLista(q){
 function renderLista(lista){
   if(lista===estudiantesDB){
     lista=listaEstudiantesFiltrada();
+    renderPillsEstado();
     renderPillsCohorte();
     var tag=document.getElementById('cnt-tag');
     if(tag) tag.textContent=lista.length===estudiantesDB.length?(lista.length+' estudiantes'):(lista.length+' de '+estudiantesDB.length+' estudiantes');
@@ -1161,6 +1255,7 @@ function renderLista(lista){
   tb.innerHTML=lista.map(function(e,i){
     var _anoV=anoCalc(e);
     var anoClass=_anoV==='1'?'ano-1':_anoV==='2'?'ano-2':'ano-3';
+    var _grad=esGraduado(e), _apto=elegibleGrado(e);
     var idx=estudiantesDB.indexOf(e);
     var _idEst=String(e.id).trim();
     var _docEst=docentesDB.find(function(dc){
@@ -1174,9 +1269,11 @@ function renderLista(lista){
       +'<td style="font-size:12px;color:var(--gris-t);">'+(e.correo||'\u2014')+'</td>'
       +'<td style="font-size:12px;color:var(--gris-t);">'+(e.tel||'\u2014')+'</td>'
       +'<td><span style="font-family:monospace;font-size:12px;">'+(e.cohorte||'\u2014')+'</span></td>'
-      +'<td>'+(_anoV?'<span class="badge-ano '+anoClass+'">Año '+_anoV+'</span>'+(String(e.ano||'').trim()?'<div style="font-size:9.5px;color:var(--gris-t);margin-top:3px;">habilitado</div>':''):'<span style="color:var(--gris-t);">—</span>')+'</td>'
+      +'<td>'+(_grad?'<span style="display:inline-block;background:#e3f1ec;color:#316c51;border:1px solid #9fcdb8;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:12px;">&#127891; Graduado</span>'+(e.periodo_grado?'<div style="font-size:9.5px;color:var(--gris-t);margin-top:3px;">'+e.periodo_grado+'</div>':''):_anoV?'<span class="badge-ano '+anoClass+'">Año '+_anoV+'</span>'+(String(e.ano||'').trim()?'<div style="font-size:9.5px;color:var(--gris-t);margin-top:3px;">habilitado</div>':'')+(_apto?'<div style="font-size:9.5px;color:#3b79be;font-weight:700;margin-top:3px;">apto para grado</div>':''):'<span style="color:var(--gris-t);">—</span>')+'</td>'
       +'<td>'+_docCelda+'</td>'
       +'<td style="white-space:nowrap;">'
+      +(_apto?'<button onclick="abrirGraduar('+idx+')" title="Cumplió 3 años según su cohorte" style="background:#e3f1ec;color:#316c51;border:1px solid #9fcdb8;border-radius:7px;padding:5px 10px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;">&#127891; Graduado</button> ':'')
+      +(_grad?'<button class="btn-e" onclick="revertirGraduado('+idx+')" title="Volver a estado activo">Revertir</button> ':'')
       +'<button class="btn-e" onclick="abrirEditar('+idx+')">Editar</button> '
       +'<button class="btn-r" onclick="eliminarEstudiante('+idx+')">Eliminar</button>'
       +'</td></tr>';
@@ -1492,7 +1589,7 @@ function estadoProceso(e) {
 function procesoBaseFiltrado() {
   var fa = document.getElementById('filtro-ano-proceso').value;
   var fc = (document.getElementById('filtro-cohorte-proceso') || {}).value || '';
-  return procesoDB.filter(function(e) {
+  return procesoActivos().filter(function(e) {
     return (!fa || String(e.ano) === String(fa)) && (!fc || String(e.cohorte || '') === fc);
   });
 }
@@ -1519,7 +1616,7 @@ function filtrarEstadoProceso(est) {
 function poblarCohortesProceso() {
   var sel = document.getElementById('filtro-cohorte-proceso'); if (!sel) return;
   var actual = sel.value, cohs = {};
-  procesoDB.forEach(function(e) { var c = String(e.cohorte || '').trim(); if (/^\d{4}-\d$/.test(c)) cohs[c] = 1; });
+  procesoActivos().forEach(function(e) { var c = String(e.cohorte || '').trim(); if (/^\d{4}-\d$/.test(c)) cohs[c] = 1; });
   sel.innerHTML = '<option value="">Todas las cohortes</option>' + Object.keys(cohs).sort().reverse().map(function(c) { return '<option value="' + c + '"' + (c === actual ? ' selected' : '') + '>Cohorte ' + c + '</option>'; }).join('');
 }
 
@@ -1534,7 +1631,7 @@ function renderProceso() {
   // ── MODO HISTORIAL POR ESTUDIANTE ──────────────────────────────
   if (busq.length >= 2) {
     // Buscar todos los registros que coincidan con el ID o nombre
-    var matches = procesoDB.filter(function(e) {
+    var matches = procesoActivos().filter(function(e) {
       return String(e.id||'').includes(busq) ||
              (e.nombre||'').toLowerCase().includes(busq);
     });
@@ -1942,7 +2039,7 @@ function descargarExcelProceso() {
   var busq = (document.getElementById('busq-estudiante-proceso').value || '').trim().toLowerCase();
   var lista;
   if (busq.length >= 2) {
-    lista = procesoDB.filter(function(e) {
+    lista = procesoActivos().filter(function(e) {
       return String(e.id||'').includes(busq) || (e.nombre||'').toLowerCase().includes(busq);
     });
   } else {
@@ -3586,7 +3683,7 @@ function descargarPDFProceso() {
   var lista;
   if (busq.length >= 2) {
     // Modo búsqueda: incluir todos los registros del estudiante encontrado
-    lista = procesoDB.filter(function(e) {
+    lista = procesoActivos().filter(function(e) {
       return String(e.id||'').includes(busq) || (e.nombre||'').toLowerCase().includes(busq);
     });
   } else {
@@ -3836,7 +3933,7 @@ function descargarExcelAdmin(){
   if(!lista.length){alert('No hay estudiantes con los filtros seleccionados.');return;}
   var wb=XLSX.utils.book_new();
   var data=[['ID','Nombre completo','Correo institucional','Telefono','Cohorte de ingreso','Año a evaluar']];
-  lista.forEach(function(e){var a=anoCalc(e);data.push([e.id,e.nombre,e.correo||'',e.tel||'',e.cohorte||'',a?'Año '+a:'']);});
+  lista.forEach(function(e){var a=anoCalc(e);data.push([e.id,e.nombre,e.correo||'',e.tel||'',e.cohorte||'',esGraduado(e)?('Graduado'+(e.periodo_grado?' '+e.periodo_grado:'')):(a?'Año '+a:'')]);});
   var ws=XLSX.utils.aoa_to_sheet(data);
   ws['!cols']=[{wch:12},{wch:40},{wch:35},{wch:14},{wch:12},{wch:14}];
   XLSX.utils.book_append_sheet(wb,ws,'Estudiantes');
@@ -3894,7 +3991,7 @@ function descargarPDFAdmin(){
     var correo=(e.correo||'').substring(0,30);
     doc.setTextColor(80,80,80);doc.text(correo,margin+90,y+4);
     doc.setTextColor(30,35,56);doc.text(e.cohorte||'',margin+140,y+4);
-    var _a=anoCalc(e); doc.text(_a?'Año '+_a:'',margin+162,y+4);
+    var _a=anoCalc(e); doc.text(esGraduado(e)?('Graduado'+(e.periodo_grado?' '+e.periodo_grado:'')):(_a?'Año '+_a:''),margin+162,y+4);
     y+=6;
   });
   // Footer
