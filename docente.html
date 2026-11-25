@@ -662,6 +662,7 @@ table.tbl tbody tr:hover td{background:#f3f6fb;}
         <div class="download-btns">
           <button class="btn-dl btn-excel" onclick="descargarExcel()">📊 Descargar Excel</button>
           <button class="btn-dl btn-pdf" onclick="descargarPDF()">📄 Descargar PDF</button>
+          <button class="btn-dl btn-pdf btn-pf" onclick="descargarPDFPortafolio()" title="Versión de presentación para el comité evaluador">🎓 PDF Portafolio</button>
           <button class="btn-dl btn-sedietic" onclick="abrirCalculadora()">Calculadora SEDIETIC →</button>
         </div>
       </div>
@@ -1129,12 +1130,13 @@ function renderLista(lista){
       +'onclick="event.stopPropagation();var t=this;eliminarEval(t.dataset.id,t.dataset.ano,t.dataset.nom)" '
       +'style="background:#dc2626;color:white;border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;margin-left:4px;display:inline-block;">&#128465;</span>'):'';
     var fnClick='selEst(this.dataset.eid)';
-    var pdfBtn='<span class="btn-pdf-lista" data-pid="'+e.id+'" data-pano="'+e.ano+'" data-peval="'+ev+'" onclick="event.stopPropagation();descargarPDFListaBtn(this)" title="Descargar PDF" style="background:var(--azul);color:white;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-left:4px;display:inline-block;letter-spacing:.3px;">PDF</span>';
+    var pdfBtn='<span class="btn-pdf-lista" data-pid="'+e.id+'" data-pano="'+e.ano+'" data-peval="'+ev+'" onclick="event.stopPropagation();window._modoPF=false;descargarPDFListaBtn(this)" title="Descargar PDF" style="background:var(--azul);color:white;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-left:4px;display:inline-block;letter-spacing:.3px;">PDF</span>';
     var xlsBtn=ev&&String(e.ano)!=='0'?('<span class="btn-xls-lista" data-xid="'+e.id+'" data-xano="'+e.ano+'" onclick="event.stopPropagation();descargarExcelListaBtn(this)" title="Descargar Excel" style="background:#166534;color:white;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-left:4px;display:inline-block;letter-spacing:.3px;">XLS</span>'):'';
+    var pfBtn=ev&&String(e.ano)!=='0'?('<span class="btn-pdf-lista" data-pid="'+e.id+'" data-pano="'+e.ano+'" data-peval="true" onclick="event.stopPropagation();window._modoPF=true;descargarPDFListaBtn(this)" title="PDF Portafolio para comité evaluador" style="background:#0f2c4f;color:white;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-left:4px;display:inline-block;letter-spacing:.3px;">PORTAFOLIO</span>'):'';
     return'<div class="est-item'+(ev?' ya-eval':'')+' " id="item-'+e.id+'" data-eid="'+e.id+'" data-ano="'+e.ano+'" onclick="'+fnClick+'">'
       +'<div><div class="est-nombre" style="font-size:12px;">'+e.nombre+' '+anoBadge(e.ano)+badge+'</div>'
       +'<div class="est-meta">ID: '+e.id+' &middot; '+cl+'</div>'
-      +'</div><div style="display:flex;align-items:center;gap:4px;"><span class="est-id-pill">'+e.id+'</span>'+icon+pdfBtn+xlsBtn+elimBtn+'</div></div>';
+      +'</div><div style="display:flex;align-items:center;gap:4px;"><span class="est-id-pill">'+e.id+'</span>'+icon+pdfBtn+xlsBtn+pfBtn+elimBtn+'</div></div>';
   }
   var h='<div class="listas-grid">';
   h+='<div><div class="lista-col-title pend">&#128203; Pendientes ('+pend.length+')</div>';
@@ -2320,7 +2322,224 @@ function construirTextoCompleto(){
 function abrirCalculadora(){window.open('https://alejandrapaz64-web.github.io/SEDIETIC/','_blank');}
 
 // ════ EXCEL con formato del ejemplo ════
+// ══ v5.4 — PDF PORTAFOLIO para comité evaluador (valores SEDIETIC) ══
+function recolectarDatosPF(){
+  var R=resGlobal, f1=(estSel&&estSel.f1)||{};
+  var H=(typeof HIST_DIR!=='undefined'&&HIST_DIR)||[], H2=(typeof HIST_DIR_F2!=='undefined'&&HIST_DIR_F2)||[], CO=(typeof COEV_DIR!=='undefined'&&COEV_DIR)||[];
+  var h0=H.find(function(h){return String(h.ano)==='0';})||f1||{};
+  var coevs=[];
+  CO.forEach(function(co){var o={};RPAS_ORD.forEach(function(r){o[r]=parseFloat(co[r])||0;});coevs.push({nombre:co.evaluador_nombre||'Compañero',rpas:o});});
+  if(!coevs.length){var n=parseInt(f1.num_coevaluadores)||0;for(var i=1;i<=n;i++){var o2={};RPAS_ORD.forEach(function(r){o2[r]=parseFloat(f1['co_'+i+'_'+r])||0;});coevs.push({nombre:f1['co_'+i+'_nombre']||('Compañero '+i),rpas:o2});}}
+  var f2a=H2.find(function(h){return String(h.ano)===String(R.ano);})||{};
+  function het(rid){var el=document.getElementById('h_'+rid);var v=el?parseFloat(el.value)||0:0;return v>0?v:(parseFloat(f2a['hetero_'+rid])||0);}
+  var h1=H2.find(function(h){return String(h.ano)==='1';})||null, h2=H2.find(function(h){return String(h.ano)==='2';})||null;
+  return {R:R,f1:f1,h0:h0,coevs:coevs,het:het,h1:h1,h2:h2};
+}
+function descargarPDFPortafolio(){
+  if(!resGlobal){alert('Calcule el informe primero.');return;}
+  var D=recolectarDatosPF(), R=D.R, ano=parseInt(R.ano||'1');
+  var jsPDF=window.jspdf.jsPDF, doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  var W=297,Hh=210,M=16;
+  var NAVY='#143762',NAVY2='#0f2c4f',ACC='#3b79be',INK='#1e2a3d',TXT='#414f64',MUT='#7d8ca3',LINE='#e3e6ea',BG='#f4f6f9';
+  var VER='#316c51',VERc='#e3f1ec',AMA='#8a5a00',AMAc='#fbf1dc',ROJ='#991b1b',ROJc='#fde8e8';
+  function semN(n){return n>=4?'VERDE':n>=3?'AMARILLO':'ROJO';}
+  function semC(n){return n>=4?[VER,VERc]:n>=3?[AMA,AMAc]:[ROJ,ROJc];}
+  function pct(v,d){return (Math.round(v*Math.pow(10,d===undefined?1:d))/Math.pow(10,d===undefined?1:d)).toFixed(d===undefined?1:d).replace('.',',')+' %';}
+  function n1(v){return (Math.round(v*10)/10).toFixed(1).replace('.',',');}
+  function hex(c){doc.setTextColor(c);} 
+  var coh=limpiarCohorte(R.cohorte||''), coh3=(typeof calcPD==='function'?calcPD(coh,3):'')||'', per=R.periodo||'';
+  var FAMS=[['Competencias blandas - innovación','CBI',['CBI-1','CBI-2','CBI-3','CBI-4']],['Competencias TE - innovación','CTEI',['CTEI-1','CTEI-2','CTEI-3']],['Competencias investigativas','CINV',['CINV-1','CINV-2','CINV-3']]];
+  var COMP_TXT={'CBI-1':'Convierte ideas creativas en soluciones educativas concretas de mejoramiento o transformación.','CBI-2':'Resuelve problemas educativos a partir de procesos de generación de ideas y procesos creativos.','CBI-3':'Desarrolla capacidad de aplicar procesos de pensamiento divergente y convergente al análisis de situaciones educativas complejas.','CBI-4':'Trabaja en equipo alrededor de procesos de ideación, diseño, prototipado e implementación de soluciones educativas transformadoras.','CTEI-1':'Usa de manera crítica mediaciones tecnológicas para explorar situaciones educativas complejas.','CTEI-2':'Participa de manera reflexiva en entornos de colaboración digital como soporte a procesos de conceptualización, planeación y generación de ideas educativas.','CTEI-3':'Diagnostica problemáticas educativas, sobre la base de procesos de indagación, evaluación y uso de información.','CINV-1':'Crea y gestiona nuevo conocimiento derivado de procesos articulados de innovación y tecnología educativa.','CINV-2':'Desarrolla habilidades de observación, cuestionamiento, problematización, argumentación e interpretación de información.','CINV-3':'Participa activamente de la difusión social del conocimiento generado a partir de procesos de innovación, tecnología educativa e investigación.'};
+  var famProm=FAMS.map(function(f){var s=0;f[2].forEach(function(c){s+=(R.C[c]||0);});return s/f[2].length;});
+  var LR=821/239;
+  function logo(x,y,h){try{doc.addImage(LOGO_B64,'PNG',x,y,h*LR,h);}catch(e){}}
+  function header(titulo,num){
+    doc.setFillColor(NAVY);doc.rect(0,0,W,17,'F');
+    doc.setFillColor(ACC);doc.rect(0,17,W,0.8,'F');
+    doc.setFillColor('#ffffff');doc.roundedRect(M,3.2,33,10.6,1.6,1.6,'F');logo(M+2.2,4.6,7.8);
+    doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor('#b9c6d6');
+    doc.text('PORTAFOLIO DE EVALUACIÓN DE COMPETENCIAS DOCTORALES',M+39,8);
+    doc.setFont('times','bold');doc.setFontSize(12.5);doc.setTextColor('#ffffff');
+    doc.text((num?num+'. ':'')+titulo,M+39,13.6);
+    doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor('#dbe4ef');
+    doc.text(R.nombre,W-M,8,{align:'right'});
+    doc.setFontSize(7);doc.setTextColor('#b9c6d6');
+    doc.text('ID '+R.id+'  ·  Cohorte '+(coh||'—')+'  ·  Año '+ano+'  ·  Periodo '+per,W-M,13,{align:'right'});
+  }
+  function nueva(t,n){doc.addPage();header(t,n);return 26;}
+  // ── PORTADA ──
+  doc.setFillColor(NAVY);doc.rect(0,0,104,Hh,'F');
+  doc.setFillColor(NAVY2);doc.circle(18,Hh+8,72,'F');
+  doc.setFillColor(ACC);doc.rect(104,0,1.2,Hh,'F');
+  doc.setFillColor('#ffffff');doc.roundedRect(M,18,58,19,2.4,2.4,'F');logo(M+4,21,13);
+  doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor('#9fb0c4');
+  doc.text('FACULTAD DE EDUCACIÓN',M,52);
+  doc.setFont('times','bold');doc.setFontSize(17);doc.setTextColor('#ffffff');
+  doc.text(doc.splitTextToSize('Doctorado en Innovación Educativa con uso de TIC',72),M,61);
+  doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor('#c9d5e3');
+  doc.text('SNIES 109126  ·  Universidad de La Sabana',M,84);
+  doc.setDrawColor('#3b79be');doc.setLineWidth(0.5);doc.line(M,92,M+22,92);
+  doc.setFontSize(8);doc.setTextColor('#c9d5e3');
+  doc.text(doc.splitTextToSize('Evaluación por competencias con lógica en cascada: resultados previstos de aprendizaje (RPA), competencias y asignaturas. Integra autoevaluación, coevaluación de pares y heteroevaluación.',72),M,100);
+  doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor('#9fb0c4');
+  doc.text('SEDIETIC · NEXO EVALÚA',M,Hh-14);
+  var X=120;
+  doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(ACC);
+  doc.text('PORTAFOLIO DE EVALUACIÓN DE COMPETENCIAS DOCTORALES',X,30);
+  doc.setFont('times','bold');doc.setFontSize(25);doc.setTextColor(NAVY);
+  var nomL=doc.splitTextToSize(String(R.nombre||''),W-X-M);doc.text(nomL,X,44);
+  var yy=44+nomL.length*10;
+  doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(TXT);
+  doc.text('Informe de logro de los Resultados Previstos de Aprendizaje y competencias del programa',X,yy);yy+=10;
+  var meta=[['ID',String(R.id)],['Cohorte',coh||'—'],['Año de formación','Año '+ano],['Periodo evaluado',per||'—'],['Proyección de egreso',coh3||'—'],['Fecha de emisión',R.fecha||new Date().toISOString().slice(0,10)]];
+  var mw=(W-X-M)/3;
+  meta.forEach(function(m,i){var cx=X+(i%3)*mw, cy=yy+Math.floor(i/3)*15;
+    doc.setFont('helvetica','bold');doc.setFontSize(6.8);doc.setTextColor(MUT);doc.text(m[0].toUpperCase(),cx,cy);
+    doc.setFont('helvetica','bold');doc.setFontSize(10.5);doc.setTextColor(INK);doc.text(m[1],cx,cy+5.5);});
+  yy+=36;
+  // KPI principal
+  var sc=semC(R.prom);
+  doc.setFillColor(BG);doc.roundedRect(X,yy,W-X-M,44,3,3,'F');
+  doc.setFillColor(sc[0]);doc.roundedRect(X,yy,52,44,3,3,'F');doc.rect(X+48,yy,4,44,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor('#ffffff');doc.text('PROMEDIO GENERAL',X+26,yy+9,{align:'center'});
+  doc.setFont('times','bold');doc.setFontSize(30);doc.text(n1(R.prom),X+26,yy+25,{align:'center'});
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('sobre 5,0  ·  '+pct(R.prom/5*100),X+26,yy+32,{align:'center'});
+  doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.text('SEMÁFORO '+semN(R.prom),X+26,yy+38.5,{align:'center'});
+  var fx=X+60, fw=(W-M-fx-6)/3;
+  FAMS.forEach(function(f,i){var cx=fx+i*(fw+3), v=famProm[i]*100;
+    doc.setFont('helvetica','bold');doc.setFontSize(6.8);doc.setTextColor(MUT);doc.text(doc.splitTextToSize(f[0].toUpperCase(),fw-4),cx,yy+9);
+    doc.setFont('times','bold');doc.setFontSize(20);doc.setTextColor(NAVY);doc.text(pct(v),cx,yy+25);
+    doc.setFillColor(LINE);doc.roundedRect(cx,yy+30,fw-6,2.4,1.2,1.2,'F');
+    doc.setFillColor(semC(v/20)[0]);doc.roundedRect(cx,yy+30,Math.max(2,(fw-6)*Math.min(v,100)/100),2.4,1.2,1.2,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(TXT);doc.text(f[2].length+' competencias',cx,yy+38);});
+  yy+=54;
+  doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(MUT);
+  doc.text(doc.splitTextToSize('Contenido: 1. Resultados previstos de aprendizaje  ·  2. Perfil de competencias  ·  3. Evolución de los RPA  ·  4. Resultados por asignatura  ·  5. Informe de competencias',W-X-M),X,yy);
+  // ── 1. RPAs ──
+  var y=nueva('Resultados previstos de aprendizaje (RPA)',1);
+  var hayCo=ano>=2, np=D.coevs.length, conPas=ano>=3;
+  var head=['#','Resultado previsto de aprendizaje','Inicio\n'+(coh||''),'Proyección\n'+(coh3||''),'Autoeval.\n'+per];
+  if(hayCo){if(np)D.coevs.forEach(function(c){head.push(String(c.nombre).trim().split(/\s+/).slice(0,2).map(function(w){return w.charAt(0)+w.slice(1).toLowerCase();}).join(' '));});else head.push('Coevaluación');}
+  head.push('Hetero.\n'+per);if(conPas)head.push('Pasantía');head.push('Consolidado\n'+per);
+  var body=[],sI=0,nI=0,sP=0,nP=0,sC=0;
+  RPAS_ORD.forEach(function(rid,i){
+    var ini=parseFloat(D.h0[rid+'_inicio'])||0,pro=parseFloat(D.h0[rid+'_proyeccion'])||0,act=parseFloat(D.f1[rid+'_actual'])||0;
+    if(ini){sI+=ini;nI++;}if(pro){sP+=pro;nP++;}
+    var row=[String(i+1),(RPAS_DESC[rid]||rid),ini?Math.round(ini)+'%':'—',pro?Math.round(pro)+'%':'—',act?Math.round(act)+'%':'—'];
+    if(hayCo){if(np)D.coevs.forEach(function(c){var v=c.rpas[rid]||0;row.push(v?Math.round(v)+'%':'—');});else row.push('—');}
+    var hv=D.het(rid);row.push(hv?Math.round(hv)+'%':'—');if(conPas)row.push(R.pasantia?Math.round(R.pasantia)+'%':'—');
+    var cv=R.rpasC[rid]||0;sC+=cv;row.push(cv?pct(cv):'—');body.push(row);
+  });
+  var foot=['','Promedio',nI?pct(sI/nI):'—',nP?pct(sP/nP):'—',''];
+  if(hayCo){for(var k=0;k<Math.max(np,1);k++)foot.push('');}
+  foot.push('');if(conPas)foot.push(R.pasantia?Math.round(R.pasantia)+'%':'No aplica');foot.push(pct(sC/RPAS_ORD.length));
+  var nCols=head.length, cIdxCons=nCols-1;
+  var colSt={0:{cellWidth:7,halign:'center',textColor:MUT},1:{cellWidth:'auto',halign:'left'}};
+  for(var cc=2;cc<nCols;cc++)colSt[cc]={cellWidth:cc===cIdxCons?22:(nCols>10?15:17),halign:'center'};
+  doc.autoTable({startY:y,head:[head],body:body,foot:[foot],margin:{left:M,right:M},theme:'plain',
+    styles:{font:'helvetica',fontSize:7,cellPadding:{top:1.25,bottom:1.25,left:1.6,right:1.6},textColor:INK,lineColor:LINE,lineWidth:0.15,valign:'middle'},
+    headStyles:{fillColor:NAVY,textColor:'#ffffff',fontStyle:'bold',fontSize:6.6,halign:'center'},
+    footStyles:{fillColor:BG,textColor:NAVY,fontStyle:'bold',halign:'center'},
+    alternateRowStyles:{fillColor:'#fafbfc'},columnStyles:colSt,
+    didParseCell:function(d){if(d.section==='head'&&d.column.index===1)d.cell.styles.halign='left';
+      if(d.section==='body'&&d.column.index===cIdxCons){var v=R.rpasC[RPAS_ORD[d.row.index]]||0;var s=semC(v/20);d.cell.styles.fillColor=s[1];d.cell.styles.textColor=s[0];d.cell.styles.fontStyle='bold';}
+      if(d.section==='foot'&&d.column.index===cIdxCons){var s2=semC(sC/RPAS_ORD.length/20);d.cell.styles.fillColor=s2[0];d.cell.styles.textColor='#ffffff';}}});
+  var yA=doc.lastAutoTable.finalY+5;
+  doc.setFont('helvetica','italic');doc.setFontSize(7);doc.setTextColor(MUT);
+  doc.text('Consolidado: combinación ponderada de autoevaluación, coevaluación de pares, heteroevaluación'+(conPas?' y pasantía':'')+', según los pesos definidos por el programa para el Año '+ano+'.',M,Math.min(yA,Hh-14));
+  // ── 2. COMPETENCIAS ──
+  y=nueva('Perfil de competencias',2);
+  var bodyC=[];FAMS.forEach(function(f,fi){f[2].forEach(function(c,ci){bodyC.push([ci===0?{content:f[0]+'\n\nPromedio '+pct(famProm[fi]*100),rowSpan:f[2].length}:null,'['+c+']',COMP_TXT[c],pct((R.C[c]||0)*100)].filter(function(x){return x!==null;}));});});
+  doc.autoTable({startY:y,head:[['Familia','Código','Competencia a evaluar','% desarrollo']],body:bodyC,margin:{left:M,right:W-M-168},theme:'plain',
+    styles:{font:'helvetica',fontSize:7.2,cellPadding:2,textColor:INK,lineColor:LINE,lineWidth:0.15,valign:'middle'},
+    headStyles:{fillColor:NAVY,textColor:'#ffffff',fontStyle:'bold',fontSize:7},
+    columnStyles:{0:{cellWidth:34,fillColor:'#e8eff7',textColor:NAVY,fontStyle:'bold'},1:{cellWidth:15,halign:'center',textColor:'#204f88',fontStyle:'bold'},2:{cellWidth:'auto'},3:{cellWidth:20,halign:'center',fontStyle:'bold'}},
+    didParseCell:function(d){if(d.section==='body'&&d.column.index===3){var v=parseFloat(String(d.cell.raw).replace(',','.'));var s=semC(v/20);d.cell.styles.fillColor=s[1];d.cell.styles.textColor=s[0];}}});
+  // gráfico competencias (vector)
+  function chart(x0,y0,w,h,labels,series,ymin,ymax,step,fmt){
+    doc.setDrawColor(LINE);doc.setLineWidth(0.2);doc.setFont('helvetica','normal');doc.setFontSize(6.2);doc.setTextColor(MUT);
+    for(var v=ymin;v<=ymax+0.001;v+=step){var yy2=y0+h-(v-ymin)/(ymax-ymin)*h;doc.line(x0,yy2,x0+w,yy2);doc.text(fmt(v),x0-1.5,yy2+1,{align:'right'});}
+    var n=labels.length, dx=w/(n-1||1);
+    labels.forEach(function(l,i){doc.text(l,x0+i*dx,y0+h+4.5,{align:'center'});});
+    series.forEach(function(s){doc.setDrawColor(s.c);doc.setLineWidth(s.w||0.7);var prev=null;
+      s.v.forEach(function(v,i){if(!(v>0)){prev=null;return;}var px=x0+i*dx,py=y0+h-(Math.max(ymin,Math.min(ymax,v))-ymin)/(ymax-ymin)*h;if(prev)doc.line(prev[0],prev[1],px,py);prev=[px,py];});
+      if(s.dot){doc.setFillColor(s.c);s.v.forEach(function(v,i){if(v>0)doc.circle(x0+i*dx,y0+h-(Math.max(ymin,Math.min(ymax,v))-ymin)/(ymax-ymin)*h,0.8,'F');});}});
+  }
+  var gx=M+176, gw=W-M-gx;
+  doc.setFillColor(BG);doc.roundedRect(gx-4,y,gw+4,96,3,3,'F');
+  doc.setFont('times','bold');doc.setFontSize(11);doc.setTextColor(NAVY);doc.text('% de desarrollo por competencia',gx+2,y+8);
+  var cv=['CBI-1','CBI-2','CBI-3','CBI-4','CTEI-1','CTEI-2','CTEI-3','CINV-1','CINV-2','CINV-3'].map(function(c){return (R.C[c]||0)*100;});
+  var mn=Math.max(0,Math.floor((Math.min.apply(null,cv)-4)/2)*2), mx=Math.min(100,Math.ceil((Math.max.apply(null,cv)+2)/2)*2); if(mx-mn<6)mn=Math.max(0,mx-6);
+  var stp=(mx-mn)>20?10:2;
+  chart(gx+10,y+15,gw-14,60,['CBI-1','CBI-2','CBI-3','CBI-4','CTEI-1','CTEI-2','CTEI-3','CINV-1','CINV-2','CINV-3'],[{v:cv,c:'#5f9e2f',w:0.9,dot:true}],mn,mx,stp,function(v){return Math.round(v)+'%';});
+  // escala
+  var ey=y+84; var esc=[['Bajo','0 - 30 %','#ffa597'],['Medio','40 - 60 %','#66ccff'],['Alto','70 - 100 %','#92d050']];
+  doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(MUT);doc.text('ESCALA DE EVALUACIÓN',gx+2,ey);
+  esc.forEach(function(e,i){var ex=gx+2+i*((gw-4)/3);doc.setFillColor(e[2]);doc.roundedRect(ex,ey+2,4,4,0.8,0.8,'F');doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(INK);doc.text(e[0],ex+5.5,ey+5);doc.setFont('helvetica','normal');doc.setTextColor(MUT);doc.text(e[1],ex+5.5+doc.getTextWidth(e[0])+1.5,ey+5);});
+  // ── 3. EVOLUCIÓN ──
+  y=nueva('Evolución de los resultados previstos de aprendizaje',3);
+  var ser=[], lb=RPAS_ORD.map(function(r){return r.replace('RPA','');});
+  var dI=RPAS_ORD.map(function(r){return parseFloat(D.h0[r+'_inicio'])||0;}), dP=RPAS_ORD.map(function(r){return parseFloat(D.h0[r+'_proyeccion'])||0;}), dA=RPAS_ORD.map(function(r){return R.rpasC[r]||0;});
+  if(dI.some(function(v){return v>0;}))ser.push({v:dI,c:'#e03131',n:'Diagnóstico de entrada'+(coh?' ('+coh+')':'')});
+  if(dP.some(function(v){return v>0;}))ser.push({v:dP,c:'#f2b705',n:'Proyección de competencias'+(coh3?' ('+coh3+')':'')});
+  if(ano>=2&&D.h1){var v1=RPAS_ORD.map(function(r){return parseFloat(D.h1[r])||0;});if(v1.some(function(v){return v>0;}))ser.push({v:v1,c:'#a9c7e8',n:'Consolidado Año 1'});}
+  if(ano>=3&&D.h2){var v2=RPAS_ORD.map(function(r){return parseFloat(D.h2[r])||0;});if(v2.some(function(v){return v>0;}))ser.push({v:v2,c:'#6f9fd6',n:'Consolidado Año 2'});}
+  ser.push({v:dA,c:'#1f5fa8',n:'Consolidado Año '+ano+' ('+per+')',w:1.1,dot:true});
+  doc.setFillColor(BG);doc.roundedRect(M,y,W-2*M-72,148,3,3,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(MUT);doc.text('PORCENTAJE DE LOGRO POR RPA (eje horizontal: número de RPA según el instrumento)',M+6,y+7);
+  chart(M+14,y+14,W-2*M-72-22,112,lb,ser,0,100,10,function(v){return v+'%';});
+  var lx=M+6,ly=y+140;ser.forEach(function(s){doc.setDrawColor(s.c);doc.setLineWidth(1.1);doc.line(lx,ly-1,lx+6,ly-1);doc.setFont('helvetica','normal');doc.setFontSize(6.8);doc.setTextColor(INK);doc.text(s.n,lx+8,ly);lx+=10+doc.getTextWidth(s.n)+6;});
+  // indicadores
+  var kx=W-M-66, ky=y;
+  function avg(a){var s=0,n=0;a.forEach(function(v){if(v>0){s+=v;n++;}});return n?s/n:0;}
+  var aI=avg(dI),aP=avg(dP),aA=avg(dA);
+  var kp=[['Diagnóstico de entrada',aI?pct(aI):'Sin registro','#e03131'],['Proyección declarada',aP?pct(aP):'Sin registro','#f2b705'],['Consolidado actual',pct(aA),'#1f5fa8'],['Avance desde el inicio',aI?((aA-aI>=0?'+':'')+n1(aA-aI)+' pp'):'—',VER],['Frente a la proyección',aP?((aA-aP>=0?'+':'')+n1(aA-aP)+' pp'):'—',NAVY]];
+  kp.forEach(function(k,i){var by=ky+i*29.6;doc.setFillColor('#ffffff');doc.setDrawColor(LINE);doc.setLineWidth(0.25);doc.roundedRect(kx,by,66,26,2.5,2.5,'FD');doc.setFillColor(k[2]);doc.rect(kx,by+4,1.4,18,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(6.6);doc.setTextColor(MUT);doc.text(k[0].toUpperCase(),kx+6,by+8);
+    doc.setFont('times','bold');doc.setFontSize(17);doc.setTextColor(NAVY);doc.text(k[1],kx+6,by+19);});
+  // ── 4. ASIGNATURAS ──
+  y=nueva('Resultados por asignatura — Año '+ano,4);
+  var asg=ASIG.filter(function(s){return s.a===ano;});
+  var bA=asg.map(function(s){var n=R.asigNotas[s.id]||0;return [s.id,s.n,s.c.join(' · '),n1(n),pct(n/5*100),semN(n)];});
+  var pa=0;asg.forEach(function(s){pa+=R.asigNotas[s.id]||0;});pa=asg.length?pa/asg.length:0;
+  doc.autoTable({startY:y,head:[['ID','Asignatura','Competencias evaluadas','Nota (0-5)','% logro','Semáforo']],body:bA,
+    foot:[['','Promedio de las asignaturas del Año '+ano,'',n1(pa),pct(pa/5*100),semN(pa)],['','Promedio general del programa (35 asignaturas)','',n1(R.prom),pct(R.prom/5*100),semN(R.prom)]],
+    margin:{left:M,right:M},theme:'plain',
+    styles:{font:'helvetica',fontSize:8,cellPadding:2.2,textColor:INK,lineColor:LINE,lineWidth:0.15,valign:'middle'},
+    headStyles:{fillColor:NAVY,textColor:'#ffffff',fontStyle:'bold',fontSize:7.5},footStyles:{fillColor:BG,textColor:NAVY,fontStyle:'bold'},
+    alternateRowStyles:{fillColor:'#fafbfc'},
+    columnStyles:{0:{cellWidth:14,textColor:'#204f88',fontStyle:'bold'},1:{cellWidth:70},2:{cellWidth:'auto',textColor:TXT,fontSize:7.2},3:{cellWidth:22,halign:'center',fontStyle:'bold'},4:{cellWidth:22,halign:'center'},5:{cellWidth:26,halign:'center',fontStyle:'bold'}},
+    didParseCell:function(d){if((d.section==='body'||d.section==='foot')&&d.column.index===5){var t=String(d.cell.raw);var s=t==='VERDE'?[VER,VERc]:t==='AMARILLO'?[AMA,AMAc]:[ROJ,ROJc];d.cell.styles.fillColor=s[1];d.cell.styles.textColor=s[0];}}});
+  // ── 5. INFORME ──
+  y=nueva('Informe de competencias',5);
+  var cw=(W-2*M-12)/3;
+  FAMS.forEach(function(f,i){var cx=M+i*(cw+6);doc.setFillColor(BG);doc.roundedRect(cx,y,cw,34,2.5,2.5,'F');doc.setFillColor(ACC);doc.rect(cx,y+4,1.4,26,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(6.8);doc.setTextColor(MUT);doc.text(f[0].toUpperCase(),cx+6,y+8);
+    doc.setFont('times','bold');doc.setFontSize(18);doc.setTextColor(NAVY);doc.text(pct(famProm[i]*100),cx+6,y+19);
+    doc.setFont('helvetica','normal');doc.setFontSize(6.8);doc.setTextColor(TXT);
+    doc.text(doc.splitTextToSize(f[2].map(function(c){return c+' '+pct((R.C[c]||0)*100);}).join('   '),cw-10),cx+6,y+26);});
+  y+=44;
+  var an=String(R.analisis||'').trim(), sinAn=!an||/pendiente/i.test(an)||/No se pudo generar/i.test(an);
+  doc.setFont('times','bold');doc.setFontSize(12);doc.setTextColor(NAVY);doc.text('Análisis narrativo integral',M,y);y+=6;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK);
+  var txt=sinAn?'El análisis narrativo aún no ha sido generado para este periodo. Genérelo desde el instrumento con el botón "Generar análisis" y descargue nuevamente el portafolio.':an.replace(/\*\*/g,'').replace(/^#+\s*/gm,'');
+  var colW2=(W-2*M-10)/2, colX=[M,M+colW2+10], col=0, lines=doc.splitTextToSize(txt,colW2), lh=4.3, yStart=y;
+  lines.forEach(function(l){if(y>Hh-18){if(col===0){col=1;y=yStart;}else{y=nueva('Informe de competencias (continuación)',5);yStart=y;col=0;}}
+    var esTit=/^D\d|^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ .\-]{6,}$/.test(l.trim());doc.setFont(esTit?'helvetica':'helvetica',esTit?'bold':'normal');doc.setTextColor(esTit?NAVY:INK);
+    doc.text(l,colX[col],y);y+=lh;});
+  // ── pies de página ──
+  var tp=doc.getNumberOfPages();
+  for(var p=1;p<=tp;p++){doc.setPage(p);var dark=p===1;
+    doc.setDrawColor(dark?'#2b4c78':LINE);doc.setLineWidth(0.2);if(!dark)doc.line(M,Hh-10,W-M,Hh-10);
+    doc.setFont('helvetica','normal');doc.setFontSize(6.6);doc.setTextColor(dark?'#9fb0c4':MUT);
+    if(!dark)doc.text('SEDIETIC  ·  Doctorado en Innovación Educativa con uso de TIC  ·  Universidad de La Sabana  ·  SNIES 109126',M,Hh-6);
+    doc.text('Página '+p+' de '+tp,W-M,Hh-6,{align:'right'});}
+  var nom=(R.nombre||'estudiante').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-zA-Z0-9]/g,'_');
+  doc.save('SEDIETIC_Portafolio_'+nom+'_'+(per||R.fecha)+'.pdf');
+}
+
 function descargarPDF(){
+  if(window._modoPF){window._modoPF=false;return descargarPDFPortafolio();}
   if(!resGlobal){alert('Calcule el informe primero.');return;}
   var jsPDF=window.jspdf.jsPDF;
   var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
@@ -2557,6 +2776,184 @@ function descargarPDF(){
   doc.save('SEDIETIC_'+nom+'_'+(resGlobal.periodo||resGlobal.fecha)+'.pdf');
 }
 
+// ══ v5.4 — Hoja "Evaluación de competencias" con formato Portafolio (valores SEDIETIC) ══
+function hojaPortafolioSEDIETIC(P){
+  var RPA_TXT={RPA10:'Identifica necesidades u oportunidades a partir de la exploración de la situación problema que da origen al proceso de innovación educativa.',
+RPA11:'Participa del diseño y construcción de soluciones innovadoras como producto de un proceso de ideación.',
+RPA5:'Argumenta de manera amplia la escogencia de una perspectiva de análisis cualitativa, cuantitativa o mixta. Genera desarrollos conceptuales argumentándolos consistentemente con la naturaleza de su área del saber.',
+RPA4:'Describe con precisión las fases y procesos para realizar una revisión sistemática de literatura y las ejecuta con rigurosidad y precisión.',
+RPA12:'Planea y concreta procesos de innovación sobre la base de la identificación de necesidades u oportunidades.',
+RPA6:'Interactúa activamente con sus pares en el marco de su comunidad académica y de investigación.',
+RPA13:'Realiza difusión efectiva de sus ideas o productos derivados de sus actividades de investigación en el marco de eventos académicos nacionales o internacionales.',
+RPA1:'Describe claramente el problema de investigación de forma que represente el objeto de la misma.',
+RPA2:'Formula de manera clara una pregunta de investigación que corresponda con la situación problémica que justifica la investigación.',
+RPA14:'Plantea objetivos de investigación de manera coherente con la pregunta de investigación.',
+RPA3:'Argumenta de manera suficiente la elección de un diseño metodológico consistente con la naturaleza del objeto de la investigación y sus objetivos.',
+RPA15:'Apoya los procesos de innovación o de investigación relacionados con el proyecto en el que participa.',
+RPA7:'Identifica las diferencias entre los distintos tipos de artículos científicos como insumo base para su participación en procesos de escritura académico-científica.',
+RPA8:'Participa activamente de los procesos de escritura y publicación de artículos científicos con el fin de difundir ideas o productos de investigación.',
+RPA16:'Escucha activamente a las personas involucradas en la situación problema a abordar, sintetizando los aspectos más relevantes para la investigación.',
+RPA17:'Genera propuestas innovadoras como parte de actividades colaborativas de ideación.',
+RPA18:'Participa de la implementación de modelos o prototipos a manera de producto, procesos o estructuras educativas.',
+RPA9:'Consulta efectivamente las bases de datos de literatura especializada con el propósito de extraer información relevante.',
+RPA19:'Documenta de manera precisa sus observaciones con el propósito de clarificar el contexto del problema a intervenir.',
+RPA20:'Participa del testeo de modelos o prototipos que lleven las ideas a soluciones tangibles.',
+RPA21:'Participa del diseño y construcción de modelos o prototipos a manera de producto, procesos o estructuras educativas.',
+RPA22:'Escoge y aplica adecuadamente los instrumentos de investigación de acuerdo con el diseño metodológico seleccionado.'};
+  var COMP_TXT={'CBI-1':'Convierte ideas creativas en soluciones educativas concretas de mejoramiento o transformación.',
+'CBI-2':'Resuelve problemas educativos a partir de procesos de generación de ideas y procesos creativos.',
+'CBI-3':'Desarrolla capacidad de aplicar procesos de pensamiento divergente y convergente al análisis de situaciones educativas complejas.',
+'CBI-4':'Trabaja en equipo alrededor de procesos de ideación, diseño, prototipado e implementación de soluciones educativas transformadoras.',
+'CTEI-1':'Usa de manera crítica mediaciones tecnológicas para explorar situaciones educativas complejas.',
+'CTEI-2':'Participa de manera reflexiva en entornos de colaboración digital como soporte a procesos de conceptualización, planeación y generación de ideas educativas.',
+'CTEI-3':'Diagnostica problemáticas educativas, sobre la base de procesos de indagación, evaluación y uso de información.',
+'CINV-1':'Crea y gestiona nuevo conocimiento derivado de procesos articulados de innovación y tecnología educativa.',
+'CINV-2':'Desarrolla habilidades de observación, cuestionamiento, problematización, argumentación e interpretación de información.',
+'CINV-3':'Participa activamente de la difusión social del conocimiento generado a partir de procesos de innovación, tecnología educativa e investigación.'};
+  var FAM=[['Competencias blandas - innovación',['CBI-1','CBI-2','CBI-3','CBI-4']],['Competencias TE - innovación',['CTEI-1','CTEI-2','CTEI-3']],['Competencias investigativas',['CINV-1','CINV-2','CINV-3']]];
+  var R=P.resGlobal, RO=P.rpas, ano=P.anoNum, per=R.periodo||'', np=P.coevs.length;
+  var BL={style:'thin',color:{rgb:'000000'}}, BM={style:'medium',color:{rgb:'000000'}};
+  var BRD={top:BL,bottom:BL,left:BL,right:BL};
+  function st(o){o=o||{};return{font:{name:'Aptos Narrow',sz:o.sz||10,bold:!!o.b,color:{rgb:o.fc||'000000'}},fill:{patternType:'solid',fgColor:{rgb:o.bg||'FFFFFF'}},
+    alignment:{horizontal:o.h||'center',vertical:o.v||'center',wrapText:o.w!==false},border:o.nb?{}:BRD};}
+  function escCol(v){return v<0.4?'FFA597':(v<0.7?'66CCFF':'92D050');}
+  var ws={}, merges=[], E=XLSX.utils.encode_cell;
+  function put(r,c,v,s,z){var cell={v:v,t:typeof v==='number'?'n':'s',s:s};if(z)cell.z=z;ws[E({r:r,c:c})]=cell;}
+  function mg(r1,c1,r2,c2){if(r1!==r2||c1!==c2)merges.push({s:{r:r1,c:c1},e:{r:r2,c:c2}});}
+  function boxFill(r1,c1,r2,c2,s){for(var r=r1;r<=r2;r++)for(var c=c1;c<=c2;c++){var a=E({r:r,c:c});if(!ws[a])ws[a]={v:'',t:'s',s:s};}}
+  var nombre1=String(R.nombre||'').trim().split(/\s+/)[0]||'Estudiante';
+  nombre1=nombre1.charAt(0)+nombre1.slice(1).toLowerCase();
+  var hayCo=ano>=2, coCols=hayCo?Math.max(np,1):0, conPas=ano>=3;
+  var cIni=1,cPro=2,cAct=3,cCo=4,cHet=4+coCols,cPas=conPas?cHet+1:-1,cCon=(conPas?cHet+2:cHet+1),cFin=cCon+1;
+  var GH='D9D9D9', SUBC=['F8CBAD','E4DFEC','FCE4D6','DDEBF7','E2EFDA'];
+  // Título
+  put(0,0,'SEDIETIC — Evaluación de competencias | '+R.nombre+' | ID '+R.id+' | Cohorte '+(P.cohorte||'—')+' | Año '+ano+' | '+per,st({b:true,fc:'FFFFFF',bg:'143762',h:'left',sz:11,nb:true}));
+  mg(0,0,0,cCon);boxFill(0,1,0,cCon,st({bg:'143762',nb:true}));
+  // Encabezados
+  var hS=st({b:true,bg:GH});
+  put(1,0,'Resultado previsto de aprendizaje (RPA) a Evaluar',hS);mg(1,0,2,0);
+  put(1,cIni,'¿Cómo estaba en '+(P.cohorte||'el inicio')+'?',hS);mg(1,cIni,2,cIni);
+  put(1,cPro,'Cuando inició el Doctorado, ¿cómo proyectaba tenerlas a '+(P.coh3||'el egreso')+'?',hS);mg(1,cPro,2,cPro);
+  put(1,cAct,'¿Cómo estoy en '+per+'?',hS);put(2,cAct,nombre1,st({bg:'C5E0F3',sz:9}));
+  if(hayCo){
+    put(1,cCo,'¿Cómo me ven mis compañeros?',hS);mg(1,cCo,1,cCo+coCols-1);boxFill(1,cCo,1,cCo+coCols-1,hS);
+    if(np===0)put(2,cCo,'Sin coevaluación',st({bg:SUBC[0],sz:9}));
+    P.coevs.forEach(function(co,i){var nm=String(co.nombre||('Compañero '+(i+1))).trim().split(/\s+/).slice(0,2).map(function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(' ');put(2,cCo+i,nm,st({bg:SUBC[i%SUBC.length],sz:9}));});
+  }
+  put(1,cHet,'Heteroevaluación '+per,hS);mg(1,cHet,2,cHet);
+  if(conPas){put(1,cPas,'Pasantía',hS);mg(1,cPas,2,cPas);}
+  put(1,cCon,'Consolidado '+per,hS);mg(1,cCon,2,cCon);
+  for(var hc=0;hc<=cCon;hc++){var ha=E({r:2,c:hc});if(!ws[ha])ws[ha]={v:'',t:'s',s:hS};}
+  // RPAs
+  var sIni=0,nIni=0,sPro=0,nPro=0,sCon=0,nCon=0;
+  RO.forEach(function(rid,i){
+    var r=3+i, vS=st({sz:10}), pc='0%';
+    put(r,0,RPA_TXT[rid]||rid,st({h:'left',sz:10}));
+    var ini=parseFloat(P.h0[rid+'_inicio'])||0, pro=parseFloat(P.h0[rid+'_proyeccion'])||0, act=parseFloat(P.f1[rid+'_actual'])||0;
+    if(ini>0){sIni+=ini;nIni++;} if(pro>0){sPro+=pro;nPro++;}
+    put(r,cIni,ini>0?ini/100:'—',vS,pc);put(r,cPro,pro>0?pro/100:'—',vS,pc);put(r,cAct,act>0?act/100:'—',vS,pc);
+    if(hayCo){if(np===0)put(r,cCo,'—',vS);P.coevs.forEach(function(co,k){var v=parseFloat((co.rpas||{})[rid])||0;put(r,cCo+k,v>0?v/100:'—',vS,pc);});}
+    var het=P.hetero(rid); put(r,cHet,het>0?het/100:'—',vS,pc);
+    if(conPas){put(r,cPas,'',st({bg:'F2F2F2'}));}
+    var cv=R.rpasC[rid]||0; if(cv>0){sCon+=cv;nCon++;}
+    put(r,cCon,cv>0?cv/100:'—',vS,'0.0%');
+  });
+  var rT=3+RO.length;
+  if(conPas){mg(3,cPas,rT-1,cPas);}
+  var tS=st({b:true,sz:10,nb:true});
+  put(rT,cIni,nIni?sIni/nIni/100:'—',st({b:true}),'0.0%');
+  put(rT,cPro,nPro?sPro/nPro/100:'—',st({b:true}),'0.0%');
+  if(conPas)put(rT,cPas,R.pasantia?R.pasantia/100:'No aplica',st({b:true}),'0%');
+  put(rT,cCon,nCon?sCon/nCon/100:0,st({b:true,bg:'92D050'}),'0.0%');
+  put(rT,cFin,'Final',tS);
+  // Bloque competencias
+  var CB=cFin+2, cCod=CB+1, cDes=CB+2, cPct=CB+3, cPrm=CB+4;
+  put(1,CB,'Competencias a evaluar',hS);mg(1,CB,1,cDes);boxFill(1,CB,1,cDes,hS);
+  put(1,cPct,'% desarrollo',hS);put(1,cPrm,'Promedio',hS);
+  var rr=2, resumen=[];
+  FAM.forEach(function(f){
+    var r0=rr, suma=0;
+    put(rr,CB,f[0],st({bg:'DCE6F1',sz:10}));
+    f[1].forEach(function(ck){
+      var v=R.C[ck]||0; suma+=v;
+      put(rr,cCod,'['+ck+']',st({bg:'DCE6F1',sz:9}));
+      put(rr,cDes,COMP_TXT[ck],st({h:'left',sz:9}));
+      put(rr,cPct,v,st({bg:escCol(v),sz:10}),'0.0%');
+      if(rr>r0)ws[E({r:rr,c:CB})]={v:'',t:'s',s:st({bg:'DCE6F1'})};
+      rr++;
+    });
+    var prom=suma/f[1].length;
+    mg(r0,CB,rr-1,CB);
+    put(r0,cPrm,prom,st({sz:10,b:true}),'0.0%');mg(r0,cPrm,rr-1,cPrm);
+    for(var k=r0+1;k<rr;k++)ws[E({r:k,c:cPrm})]={v:'',t:'s',s:st({})};
+    resumen.push({f:f[0],prom:prom,comps:f[1].map(function(ck){return '['+ck+'] '+(Math.round((R.C[ck]||0)*1000)/10).toFixed(1).replace('.',',')+' %';})});
+  });
+  // Escala de evaluación
+  var rE=rr+1;
+  put(rE,CB,'Escala de evaluación',hS);mg(rE,CB,rE,cCod);boxFill(rE,CB,rE,cCod,hS);
+  var niveles=[['Bajo','FFA597',0,3],['Medio','66CCFF',4,6],['Alto','92D050',7,10]];
+  for(var p=0;p<=10;p++)put(rE+1+p,CB,p/10,st({sz:10}),'0%');
+  niveles.forEach(function(n){put(rE+1+n[2],cCod,n[0],st({bg:n[1],sz:10}));mg(rE+1+n[2],cCod,rE+1+n[3],cCod);
+    for(var q=n[2]+1;q<=n[3];q++)ws[E({r:rE+1+q,c:cCod})]={v:'',t:'s',s:st({bg:n[1]})};});
+  // Informe narrativo
+  var rI=rT+3;
+  var txt='';
+  var pg=(R.pct!==undefined?R.pct:Math.round(R.prom/5*1000)/10);
+  txt+='Promedio general del programa: '+(Math.round(R.prom*10)/10).toFixed(1).replace('.',',')+' / 5,0 ('+String(pg).replace('.',',')+' %) — Semáforo '+R.sem+'.\n\nPor bloques de competencia\n';
+  resumen.forEach(function(x){txt+='\n'+x.f+'\n% desarrollo: '+x.comps.join(' · ')+'\nPromedio consolidado: '+(Math.round(x.prom*1000)/10).toFixed(1).replace('.',',')+' %\n';});
+  var an=String(R.analisis||'').trim();
+  txt+='\nAnálisis narrativo\n'+(an&&an.indexOf('pendiente')<0?an:'(Pendiente de generación. Genérelo con el botón "Generar análisis" y descargue de nuevo el Excel.)');
+  put(rI,0,'Informe de Competencias - '+R.nombre,st({b:true,h:'left',sz:10,nb:true}));
+  var rI2=rI+1, rIf=rI2+40;
+  put(rI2,0,txt,{font:{name:'Aptos Narrow',sz:10},alignment:{horizontal:'left',vertical:'top',wrapText:true}});
+  mg(rI2,0,rIf,0);
+  ws['!ref']=XLSX.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(rIf,rE+12),c:cPrm}});
+  ws['!merges']=merges;
+  var cols=[{wch:92},{wch:13},{wch:20},{wch:13}];
+  for(var cc=0;cc<coCols;cc++)cols.push({wch:12});
+  cols.push({wch:14}); if(conPas)cols.push({wch:9}); cols.push({wch:12},{wch:6},{wch:2},{wch:28},{wch:9},{wch:88},{wch:12},{wch:10});
+  ws['!cols']=cols;
+  var rows=[{hpt:22},{hpt:30},{hpt:30}]; for(var ri=0;ri<RO.length;ri++)rows.push({hpt:26}); ws['!rows']=rows;
+  return {ws:ws,
+    a1:{c1:1,r1:rT+2,c2:cFin,r2:rT+26},
+    a2:{c1:cDes,r1:rE,c2:cPrm+1,r2:rE+18}};
+}
+
+async function aplicarEstilosPF(zip, sheetPath, ws){
+  function esc(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var sx=await zip.file('xl/styles.xml').async('string');
+  function cnt(tag){var m=sx.match(new RegExp('<'+tag+' count="(\\d+)"'));return m?parseInt(m[1]):0;}
+  var nF=cnt('fonts'),nFi=cnt('fills'),nB=cnt('borders'),nX=cnt('cellXfs');
+  var fonts=[],fills=[],borders=[],xfs=[],keyF={},keyFi={},keyB={},keyX={},nfAdd='',nfMap={'0%':9,'General':0};
+  var nfId=180;
+  function fmtId(z){if(!z)return 0;if(nfMap[z]!==undefined)return nfMap[z];nfMap[z]=nfId;nfAdd+='<numFmt numFmtId="'+nfId+'" formatCode="'+esc(z)+'"/>';return nfId++;}
+  function idxFont(f){var k=JSON.stringify(f);if(keyF[k]===undefined){keyF[k]=nF+fonts.length;fonts.push('<font>'+(f.bold?'<b/>':'')+'<sz val="'+(f.sz||10)+'"/><color rgb="FF'+((f.color&&f.color.rgb)||'000000')+'"/><name val="'+esc(f.name||'Aptos Narrow')+'"/><family val="2"/></font>');}return keyF[k];}
+  function idxFill(fl){if(!fl||!fl.fgColor)return 0;var c=fl.fgColor.rgb;if(keyFi[c]===undefined){keyFi[c]=nFi+fills.length;fills.push('<fill><patternFill patternType="solid"><fgColor rgb="FF'+c+'"/><bgColor indexed="64"/></patternFill></fill>');}return keyFi[c];}
+  function idxBorder(b){if(!b||!b.top)return 0;var k='thin';if(keyB[k]===undefined){keyB[k]=nB+borders.length;borders.push('<border><left style="thin"><color rgb="FF000000"/></left><right style="thin"><color rgb="FF000000"/></right><top style="thin"><color rgb="FF000000"/></top><bottom style="thin"><color rgb="FF000000"/></bottom><diagonal/></border>');}return keyB[k];}
+  var cellX={};
+  Object.keys(ws).forEach(function(a){
+    if(a.charAt(0)==='!')return; var c=ws[a]; if(!c||!c.s)return;
+    var s=c.s, fo=idxFont(s.font||{}), fi=idxFill(s.fill), bo=idxBorder(s.border), nf=fmtId(c.z), al=s.alignment||{};
+    var k=[fo,fi,bo,nf,al.horizontal||'',al.vertical||'',al.wrapText?1:0].join('|');
+    if(keyX[k]===undefined){keyX[k]=nX+xfs.length;xfs.push('<xf numFmtId="'+nf+'" fontId="'+fo+'" fillId="'+fi+'" borderId="'+bo+'" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment'+(al.horizontal?' horizontal="'+al.horizontal+'"':'')+(al.vertical?' vertical="'+al.vertical+'"':'')+(al.wrapText?' wrapText="1"':'')+'/></xf>');}
+    cellX[a]=keyX[k];
+  });
+  function addTo(tag,items,n){if(!items.length)return;sx=sx.replace(new RegExp('<'+tag+' count="\\d+"'),'<'+tag+' count="'+(n+items.length)+'"').replace('</'+tag+'>',items.join('')+'</'+tag+'>');}
+  addTo('fonts',fonts,nF);addTo('fills',fills,nFi);addTo('borders',borders,nB);addTo('cellXfs',xfs,nX);
+  if(nfAdd){
+    if(/<numFmts count="\d+">/.test(sx)){var nN=parseInt(sx.match(/<numFmts count="(\d+)"/)[1]);sx=sx.replace(/<numFmts count="\d+">/,'<numFmts count="'+(nN+(nfAdd.match(/<numFmt /g)||[]).length)+'">').replace('</numFmts>',nfAdd+'</numFmts>');}
+    else sx=sx.replace(/(<styleSheet[^>]*>)/,'$1<numFmts count="'+(nfAdd.match(/<numFmt /g)||[]).length+'">'+nfAdd+'</numFmts>');
+  }
+  zip.file('xl/styles.xml',sx);
+  var sh=await zip.file(sheetPath).async('string');
+  sh=sh.replace(/<c r="([A-Z]+\d+)"([^>]*?)(\/?)>/g,function(m,ref,attrs,cl){
+    if(cellX[ref]===undefined)return m;
+    attrs=attrs.replace(/\s+s="\d+"/g,'');
+    return '<c r="'+ref+'"'+attrs+' s="'+cellX[ref]+'"'+cl+'>';
+  });
+  zip.file(sheetPath,sh);
+}
+
 async function descargarExcel(){
   if(!resGlobal){alert('Calcule el informe primero.');return;}
   var wb=XLSX.utils.book_new();
@@ -2711,36 +3108,11 @@ async function descargarExcel(){
 
   XLSX.utils.book_append_sheet(wb,ws1,'Instrumento diligen estu-Andres');
 
-  // ══ HOJA 2: Evaluación de competencias ══
-  var aoa2=[];
-  aoa2.push(['SEDIETIC — Evaluación de Competencias | '+resGlobal.nombre+' | Año '+resGlobal.ano+' | '+resGlobal.periodo]);
-  aoa2.push(['Competencia','Familia','Descripción','% Logro','Semáforo']);
-  var familias={'CBI-1':'CBI','CBI-2':'CBI','CBI-3':'CBI','CBI-4':'CBI','CTEI-1':'CTEI','CTEI-2':'CTEI','CTEI-3':'CTEI','CINV-1':'CINV','CINV-2':'CINV','CINV-3':'CINV'};
-  Object.keys(resGlobal.C).forEach(function(ck){
-    var pv=Math.round(resGlobal.C[ck]*1000)/10;
-    aoa2.push([ck,familias[ck]||'',COMP_NOM[ck]||'',sinDatos(pv)?'SIN DATOS':pv/100,semTxt(pv/20)]);
-  });
-  aoa2.push([]);
-  aoa2.push(['Familia','Promedio','Semáforo']);
-  var famData={CBI:[],CTEI:[],CINV:[]};
-  Object.keys(resGlobal.C).forEach(function(ck){var f=familias[ck];if(f&&famData[f])famData[f].push(resGlobal.C[ck]*100);});
-  ['CBI','CTEI','CINV'].forEach(function(f){
-    var vals=famData[f];var avg=vals.length?vals.reduce(function(a,b){return a+b;})/vals.length:0;
-    aoa2.push([f,avg.toFixed(1)+'%',semTxt(avg/20)]);
-  });
-
-  var ws2=XLSX.utils.aoa_to_sheet(aoa2);
-  ws2['!cols']=[{wch:10},{wch:8},{wch:56},{wch:12},{wch:12}];
-  ['A1','B1','C1','D1','E1'].forEach(function(a){if(ws2['A1'])ws2['A1'].s=hdrS(AZUL);});
-  Object.keys(resGlobal.C).forEach(function(ck,i){
-    var r=2+i;
-    var pv=Math.round(resGlobal.C[ck]*1000)/10;
-    var dAddr=XLSX.utils.encode_cell({r:r,c:3});
-    if(ws2[dAddr]&&ws2[dAddr].v!=='SIN DATOS'){ws2[dAddr].s=semS(pv/20);ws2[dAddr].z='0.0%';}
-    else if(ws2[dAddr])ws2[dAddr].s=cellS(ROJO_C,ROJO_H,true);
-  });
-
-  XLSX.utils.book_append_sheet(wb,ws2,'Evaluación de competencias');
+  // ══ HOJA 2: Evaluación de competencias (formato Portafolio, valores SEDIETIC) ══
+  var _f2ActPF=(typeof HIST_DIR_F2!=='undefined'&&HIST_DIR_F2||[]).find(function(h){return String(h.ano)===String(resGlobal.ano);})||{};
+  var _PF=hojaPortafolioSEDIETIC({resGlobal:resGlobal,rpas:RPAS_ORD,anoNum:anoNum,cohorte:_cohX,coh3:_coh3X,h0:_f1ano0X||{},f1:_f1anoActX||{},coevs:coListX,
+    hetero:function(rid){var el=document.getElementById('h_'+rid);var v=el?parseFloat(el.value)||0:0;return v>0?v:(parseFloat(_f2ActPF['hetero_'+rid])||0);}});
+  XLSX.utils.book_append_sheet(wb,_PF.ws,'Evaluación de competencias');
 
   // ══ HOJA 3: Notas Asignaturas (filtradas por año) ══
   var aoa3=[];
@@ -2935,15 +3307,15 @@ async function descargarExcel(){
             'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" '+
             'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
 
-  function _ser(idx, title, color, catArr, valArr){
+  function _ser(idx, title, color, catArr, valArr, noMark){
     return '<c:ser>'+
       '<c:idx val="'+idx+'"/><c:order val="'+idx+'"/>'+
       '<c:tx><c:strRef><c:f></c:f><c:strCache><c:ptCount val="1"/><c:pt idx="0"><c:v>'+title+'</c:v></c:pt></c:strCache></c:strRef></c:tx>'+
       '<c:spPr><a:ln w="25400"><a:solidFill><a:srgbClr val="'+color+'"/></a:solidFill></a:ln></c:spPr>'+
-      '<c:marker><c:symbol val="circle"/><c:size val="4"/><c:spPr>'+
+      (noMark?'<c:marker><c:symbol val="none"/></c:marker>':'<c:marker><c:symbol val="circle"/><c:size val="4"/><c:spPr>'+
         '<a:solidFill><a:srgbClr val="'+color+'"/></a:solidFill>'+
         '<a:ln><a:solidFill><a:srgbClr val="'+color+'"/></a:solidFill></a:ln>'+
-      '</c:spPr></c:marker>'+
+      '</c:spPr></c:marker>')+
       '<c:cat><c:strRef><c:f></c:f><c:strCache><c:ptCount val="'+catArr.length+'"/>'+_spts(catArr)+'</c:strCache></c:strRef></c:cat>'+
       '<c:val><c:numRef><c:f></c:f><c:numCache><c:formatCode>0</c:formatCode><c:ptCount val="'+valArr.length+'"/>'+_npts(valArr)+'</c:numCache></c:numRef></c:val>'+
       '<c:smooth val="0"/>'+
@@ -2993,16 +3365,23 @@ async function descargarExcel(){
     if(sinP){_grafSeriesX.splice(1,1);_grafColsX.splice(1,1);_grafTitlesX.splice(1,1);}
     if(sinD){_grafSeriesX.splice(0,1);_grafColsX.splice(0,1);_grafTitlesX.splice(0,1);}
   })();
+  // Colores formato Portafolio: diagnóstico rojo, proyección amarillo, años previos azul claro, año actual azul
+  var _nSerPF=_grafSeriesX.length;
   _grafSeriesX.forEach(function(vals,si){
-    _seriesXml+=_ser(si,_grafTitlesX[si]||('Serie '+(si+1)),_grafColsX[si]||'143762',rpaLbls,vals);
+    var _t=_grafTitlesX[si]||'', _c;
+    if(/^Diagn/.test(_t))_c='FF0000'; else if(/^Proyec/.test(_t))_c='FFC000'; else if(si===_nSerPF-1)_c='5B9BD5'; else _c=(/Año 1/.test(_t)?'BDD7EE':'9DC3E6');
+    _seriesXml+=_ser(si,_t||('Serie '+(si+1)),_c,rpaLbls,vals,true);
   });
   var chart1 = _chartSpace(_lineChart(_seriesXml, 3, 4, 0, 100, 10));
 
   // CHART 2 — Línea de Competencias: 1 serie (verde)
+  var _cvR = COMP_ORD.map(function(ck){ return Math.round((resGlobal.C[ck]||0)*1000)/10; });
+  var _cMin = Math.max(0, Math.floor((Math.min.apply(null,_cvR)-4)/2)*2), _cMax = Math.min(100, Math.ceil((Math.max.apply(null,_cvR)+2)/2)*2);
+  if(_cMax-_cMin<6){_cMin=Math.max(0,_cMax-6);}
   var chart2 = _chartSpace(
     _lineChart(
-      _ser(0,'% Logro por Competencia','166534', COMP_ORD, compValsInt),
-      1, 2, 0, 100, 10
+      _ser(0,'% desarrollo por competencia','92D050', COMP_ORD.map(function(c){return '['+c+']';}), _cvR, true),
+      1, 2, _cMin, _cMax, 2
     )
   );
 
@@ -3013,8 +3392,8 @@ async function descargarExcel(){
              'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" '+
              'xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart">'+
     '<xdr:twoCellAnchor editAs="oneCell">'+
-      '<xdr:from><xdr:col>1</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>26</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from>'+
-      '<xdr:to><xdr:col>13</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>48</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to>'+
+      '<xdr:from><xdr:col>'+_PF.a1.c1+'</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>'+_PF.a1.r1+'</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from>'+
+      '<xdr:to><xdr:col>'+_PF.a1.c2+'</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>'+_PF.a1.r2+'</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to>'+
       '<xdr:graphicFrame macro=""><xdr:nvGraphicFramePr>'+
         '<xdr:cNvPr id="1" name="Evolución RPAs"/>'+
         '<xdr:cNvGraphicFramePr><a:graphicFrameLocks noGrp="1"/></xdr:cNvGraphicFramePr>'+
@@ -3025,8 +3404,8 @@ async function descargarExcel(){
       '</a:graphicData></a:graphic></xdr:graphicFrame><xdr:clientData/>'+
     '</xdr:twoCellAnchor>'+
     '<xdr:twoCellAnchor editAs="oneCell">'+
-      '<xdr:from><xdr:col>16</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>12</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from>'+
-      '<xdr:to><xdr:col>25</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>30</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to>'+
+      '<xdr:from><xdr:col>'+_PF.a2.c1+'</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>'+_PF.a2.r1+'</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from>'+
+      '<xdr:to><xdr:col>'+_PF.a2.c2+'</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>'+_PF.a2.r2+'</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to>'+
       '<xdr:graphicFrame macro=""><xdr:nvGraphicFramePr>'+
         '<xdr:cNvPr id="2" name="Perfil Competencias"/>'+
         '<xdr:cNvGraphicFramePr><a:graphicFrameLocks noGrp="1"/></xdr:cNvGraphicFramePr>'+
@@ -3065,6 +3444,7 @@ async function descargarExcel(){
     zip.file(sheetPath, sheetStr);
   }
 
+  try{ await aplicarEstilosPF(zip, sheetPath, _PF.ws); }catch(eEst){ console.warn('Estilos portafolio', eEst); }
   // Sheet rels: agregar relación drawing
   var sheetRelsPath = 'xl/worksheets/_rels/sheet' + sheetNum + '.xml.rels';
   var existingRelsStr = '';
