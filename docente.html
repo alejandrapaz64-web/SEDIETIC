@@ -2414,7 +2414,7 @@ function descargarPDFPortafolio(){
     doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(TXT);doc.text(f[2].length+' competencias',cx,yy+38);});
   yy+=54;
   doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(MUT);
-  doc.text(doc.splitTextToSize('Contenido: 1. Resultados previstos de aprendizaje  ·  2. Perfil de competencias  ·  3. Evolución de los RPA  ·  4. Resultados por asignatura  ·  5. Informe de competencias',W-X-M),X,yy);
+  doc.text(doc.splitTextToSize('Contenido: 1. Resultados previstos de aprendizaje  ·  2. Perfil de competencias  ·  3. Evolución de los RPA  ·  4. Informe de Competencias',W-X-M),X,yy);
   // ── 1. RPAs ──
   var y=nueva('Resultados previstos de aprendizaje (RPA)',1);
   var hayCo=ano>=2, np=D.coevs.length, conPas=ano>=3;
@@ -2485,33 +2485,12 @@ function descargarPDFPortafolio(){
   if(ano>=2&&D.h1){var v1=RPAS_ORD.map(function(r){return parseFloat(D.h1[r])||0;});if(v1.some(function(v){return v>0;}))ser.push({v:v1,c:'#a9c7e8',n:'Consolidado Año 1'});}
   if(ano>=3&&D.h2){var v2=RPAS_ORD.map(function(r){return parseFloat(D.h2[r])||0;});if(v2.some(function(v){return v>0;}))ser.push({v:v2,c:'#6f9fd6',n:'Consolidado Año 2'});}
   ser.push({v:dA,c:'#1f5fa8',n:'Consolidado Año '+ano+' ('+per+')',w:1.1,dot:true});
-  doc.setFillColor(BG);doc.roundedRect(M,y,W-2*M-72,148,3,3,'F');
+  doc.setFillColor(BG);doc.roundedRect(M,y,W-2*M,148,3,3,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(MUT);doc.text('PORCENTAJE DE LOGRO POR RPA (eje horizontal: número de RPA según el instrumento)',M+6,y+7);
-  chart(M+14,y+14,W-2*M-72-22,112,lb,ser,0,100,10,function(v){return v+'%';});
+  chart(M+14,y+14,W-2*M-22,112,lb,ser,0,100,10,function(v){return v+'%';});
   var lx=M+6,ly=y+140;ser.forEach(function(s){doc.setDrawColor(s.c);doc.setLineWidth(1.1);doc.line(lx,ly-1,lx+6,ly-1);doc.setFont('helvetica','normal');doc.setFontSize(6.8);doc.setTextColor(INK);doc.text(s.n,lx+8,ly);lx+=10+doc.getTextWidth(s.n)+6;});
-  // indicadores
-  var kx=W-M-66, ky=y;
-  function avg(a){var s=0,n=0;a.forEach(function(v){if(v>0){s+=v;n++;}});return n?s/n:0;}
-  var aI=avg(dI),aP=avg(dP),aA=avg(dA);
-  var kp=[['Diagnóstico de entrada',aI?pct(aI):'Sin registro','#e03131'],['Proyección declarada',aP?pct(aP):'Sin registro','#f2b705'],['Consolidado actual',pct(aA),'#1f5fa8'],['Avance desde el inicio',aI?((aA-aI>=0?'+':'')+n1(aA-aI)+' pp'):'—',VER],['Frente a la proyección',aP?((aA-aP>=0?'+':'')+n1(aA-aP)+' pp'):'—',NAVY]];
-  kp.forEach(function(k,i){var by=ky+i*29.6;doc.setFillColor('#ffffff');doc.setDrawColor(LINE);doc.setLineWidth(0.25);doc.roundedRect(kx,by,66,26,2.5,2.5,'FD');doc.setFillColor(k[2]);doc.rect(kx,by+4,1.4,18,'F');
-    doc.setFont('helvetica','bold');doc.setFontSize(6.6);doc.setTextColor(MUT);doc.text(k[0].toUpperCase(),kx+6,by+8);
-    doc.setFont('times','bold');doc.setFontSize(17);doc.setTextColor(NAVY);doc.text(k[1],kx+6,by+19);});
-  // ── 4. ASIGNATURAS ──
-  y=nueva('Resultados por asignatura — Año '+ano,4);
-  var asg=ASIG.filter(function(s){return s.a===ano;});
-  var bA=asg.map(function(s){var n=R.asigNotas[s.id]||0;return [s.id,s.n,s.c.join(' · '),n1(n),pct(n/5*100),semN(n)];});
-  var pa=0;asg.forEach(function(s){pa+=R.asigNotas[s.id]||0;});pa=asg.length?pa/asg.length:0;
-  doc.autoTable({startY:y,head:[['ID','Asignatura','Competencias evaluadas','Nota (0-5)','% logro','Semáforo']],body:bA,
-    foot:[['','Promedio de las asignaturas del Año '+ano,'',n1(pa),pct(pa/5*100),semN(pa)],['','Promedio general del programa (35 asignaturas)','',n1(R.prom),pct(R.prom/5*100),semN(R.prom)]],
-    margin:{left:M,right:M},theme:'plain',
-    styles:{font:'helvetica',fontSize:8,cellPadding:2.2,textColor:INK,lineColor:LINE,lineWidth:0.15,valign:'middle'},
-    headStyles:{fillColor:NAVY,textColor:'#ffffff',fontStyle:'bold',fontSize:7.5},footStyles:{fillColor:BG,textColor:NAVY,fontStyle:'bold'},
-    alternateRowStyles:{fillColor:'#fafbfc'},
-    columnStyles:{0:{cellWidth:14,textColor:'#204f88',fontStyle:'bold'},1:{cellWidth:70},2:{cellWidth:'auto',textColor:TXT,fontSize:7.2},3:{cellWidth:22,halign:'center',fontStyle:'bold'},4:{cellWidth:22,halign:'center'},5:{cellWidth:26,halign:'center',fontStyle:'bold'}},
-    didParseCell:function(d){if((d.section==='body'||d.section==='foot')&&d.column.index===5){var t=String(d.cell.raw);var s=t==='VERDE'?[VER,VERc]:t==='AMARILLO'?[AMA,AMAc]:[ROJ,ROJc];d.cell.styles.fillColor=s[1];d.cell.styles.textColor=s[0];}}});
-  // ── 5. INFORME ──
-  y=nueva('Informe de competencias',5);
+  // ── 4. INFORME ──
+  y=nueva('Informe de Competencias',4);
   var cw=(W-2*M-12)/3;
   FAMS.forEach(function(f,i){var cx=M+i*(cw+6);doc.setFillColor(BG);doc.roundedRect(cx,y,cw,34,2.5,2.5,'F');doc.setFillColor(ACC);doc.rect(cx,y+4,1.4,26,'F');
     doc.setFont('helvetica','bold');doc.setFontSize(6.8);doc.setTextColor(MUT);doc.text(f[0].toUpperCase(),cx+6,y+8);
@@ -2520,11 +2499,11 @@ function descargarPDFPortafolio(){
     doc.text(doc.splitTextToSize(f[2].map(function(c){return c+' '+pct((R.C[c]||0)*100);}).join('   '),cw-10),cx+6,y+26);});
   y+=44;
   var an=String(R.analisis||'').trim(), sinAn=!an||/pendiente/i.test(an)||/No se pudo generar/i.test(an);
-  doc.setFont('times','bold');doc.setFontSize(12);doc.setTextColor(NAVY);doc.text('Análisis narrativo integral',M,y);y+=6;
+  doc.setFont('times','bold');doc.setFontSize(12);doc.setTextColor(NAVY);doc.text('Informe de Competencias - '+R.nombre,M,y);y+=6;
   doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(INK);
   var txt=sinAn?'El análisis narrativo aún no ha sido generado para este periodo. Genérelo desde el instrumento con el botón "Generar análisis" y descargue nuevamente el portafolio.':an.replace(/\*\*/g,'').replace(/^#+\s*/gm,'');
   var colW2=(W-2*M-10)/2, colX=[M,M+colW2+10], col=0, lines=doc.splitTextToSize(txt,colW2), lh=4.3, yStart=y;
-  lines.forEach(function(l){if(y>Hh-18){if(col===0){col=1;y=yStart;}else{y=nueva('Informe de competencias (continuación)',5);yStart=y;col=0;}}
+  lines.forEach(function(l){if(y>Hh-18){if(col===0){col=1;y=yStart;}else{y=nueva('Informe de Competencias (continuación)',4);yStart=y;col=0;}}
     var esTit=/^D\d|^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ .\-]{6,}$/.test(l.trim());doc.setFont(esTit?'helvetica':'helvetica',esTit?'bold':'normal');doc.setTextColor(esTit?NAVY:INK);
     doc.text(l,colX[col],y);y+=lh;});
   // ── pies de página ──
