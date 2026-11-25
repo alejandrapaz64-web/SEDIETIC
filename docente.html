@@ -1132,7 +1132,7 @@ function renderLista(lista){
     var fnClick='selEst(this.dataset.eid)';
     var pdfBtn='<span class="btn-pdf-lista" data-pid="'+e.id+'" data-pano="'+e.ano+'" data-peval="'+ev+'" onclick="event.stopPropagation();window._modoPF=false;descargarPDFListaBtn(this)" title="Descargar PDF" style="background:var(--azul);color:white;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-left:4px;display:inline-block;letter-spacing:.3px;">PDF</span>';
     var xlsBtn=ev&&String(e.ano)!=='0'?('<span class="btn-xls-lista" data-xid="'+e.id+'" data-xano="'+e.ano+'" onclick="event.stopPropagation();descargarExcelListaBtn(this)" title="Descargar Excel" style="background:#166534;color:white;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-left:4px;display:inline-block;letter-spacing:.3px;">XLS</span>'):'';
-    var pfBtn=ev&&String(e.ano)!=='0'?('<span class="btn-pdf-lista" data-pid="'+e.id+'" data-pano="'+e.ano+'" data-peval="true" onclick="event.stopPropagation();window._modoPF=true;descargarPDFListaBtn(this)" title="PDF Portafolio para comité evaluador" style="background:#0f2c4f;color:white;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-left:4px;display:inline-block;letter-spacing:.3px;">PORTAFOLIO</span>'):'';
+    var pfBtn=ev&&String(e.ano)==='3'?('<span class="btn-pdf-lista" data-pid="'+e.id+'" data-pano="'+e.ano+'" data-peval="true" onclick="event.stopPropagation();window._modoPF=true;descargarPDFListaBtn(this)" title="PDF Portafolio para comité evaluador" style="background:#0f2c4f;color:white;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-left:4px;display:inline-block;letter-spacing:.3px;">PORTAFOLIO</span>'):'';
     return'<div class="est-item'+(ev?' ya-eval':'')+' " id="item-'+e.id+'" data-eid="'+e.id+'" data-ano="'+e.ano+'" onclick="'+fnClick+'">'
       +'<div><div class="est-nombre" style="font-size:12px;">'+e.nombre+' '+anoBadge(e.ano)+badge+'</div>'
       +'<div class="est-meta">ID: '+e.id+' &middot; '+cl+'</div>'
@@ -2197,6 +2197,7 @@ function calcularYGuardar(){
   renderConsolidado(rpasC, isAno1, coList, pA, pC, pH, anoEstudiante);
 
   document.getElementById('res-section').classList.add('show');
+  document.querySelectorAll('.btn-pf').forEach(function(b){b.style.display=(resGlobal&&String(resGlobal.ano)==='3')?'':'none';});
   document.getElementById('res-section').scrollIntoView({behavior:'smooth',block:'start'});
 
   // Guardar en Sheet
@@ -2337,6 +2338,7 @@ function recolectarDatosPF(){
 }
 function descargarPDFPortafolio(){
   if(!resGlobal){alert('Calcule el informe primero.');return;}
+  if(String(resGlobal.ano)!=='3'){alert('El PDF Portafolio está disponible solo para estudiantes de Año 3 (defensa de tesis). Para los demás años use el PDF y el Excel del informe.');return;}
   var D=recolectarDatosPF(), R=D.R, ano=parseInt(R.ano||'1');
   var jsPDF=window.jspdf.jsPDF, doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
   var W=297,Hh=210,M=16;

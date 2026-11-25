@@ -1910,7 +1910,7 @@ function seleccionarEstudianteHist(id) {
         var yaEval = tieneAuto && tieneHetero;
         btns += '<span onclick="window._modoPF=false;histPDF(\''+id+'\',\''+ano+'\','+yaEval+',this)" style="background:var(--azul);color:#fff;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:inline-block;margin-right:4px;">PDF</span>';
         if (ano !== '0') btns += '<span onclick="histXLS(\''+id+'\',\''+ano+'\',this)" style="background:#166534;color:#fff;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:inline-block;">XLS</span>';
-        if (ano !== '0' && yaEval) btns += '<span onclick="window._modoPF=true;histPDF(\''+id+'\',\''+ano+'\',true,this)" title="PDF Portafolio para comité evaluador" style="background:#0f2c4f;color:#fff;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:inline-block;margin-left:4px;">PORTAFOLIO</span>';
+        if (ano === '3' && yaEval) btns += '<span onclick="window._modoPF=true;histPDF(\''+id+'\',\''+ano+'\',true,this)" title="PDF Portafolio para comité evaluador" style="background:#0f2c4f;color:#fff;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:inline-block;margin-left:4px;">PORTAFOLIO</span>';
       }
 
       var bg = i % 2 === 0 ? '#fff' : '#f8fafc';
@@ -2814,6 +2814,7 @@ function recolectarDatosPF(){
 }
 function descargarPDFPortafolio(){
   if(!resGlobal){alert('Calcule el informe primero.');return;}
+  if(String(resGlobal.ano)!=='3'){alert('El PDF Portafolio está disponible solo para estudiantes de Año 3 (defensa de tesis). Para los demás años use el PDF y el Excel del informe.');return;}
   var D=recolectarDatosPF(), R=D.R, ano=parseInt(R.ano||'1');
   var jsPDF=window.jspdf.jsPDF, doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
   var W=297,Hh=210,M=16;
