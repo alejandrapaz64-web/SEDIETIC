@@ -329,6 +329,33 @@ body{background:var(--g50);color:var(--g800);font-family:'Inter',system-ui,sans-
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+/* NEXO · PDF: evita símbolos que las fuentes estándar de jsPDF no dibujan (✓ ✕ ★ emojis) */
+(function(){
+  var J=window.jspdf&&window.jspdf.jsPDF; if(!J||J.__nexo) return; J.__nexo=true;
+  var OK='\u20ac\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u0160\u2039\u0152\u017d\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\u0161\u203a\u0153\u017e\u0178';
+  var MAP={'\u2605':'*','\u2606':'*','\u25b2':'+','\u25bc':'-','\u2192':'>','\u2190':'<','\u2264':'<=','\u2265':'>=','\u2212':'-','\u00b7':'\u00b7'};
+  function limpiar(t){
+    if(typeof t!=='string') return t;
+    var o='';
+    for(var i=0;i<t.length;i++){var ch=t[i],c=t.charCodeAt(i);
+      if(c<256||OK.indexOf(ch)>=0){o+=ch;continue;}
+      if(MAP[ch]!==undefined){o+=MAP[ch];continue;}
+      if(c>=0xD800&&c<=0xDBFF){i++;}
+    }
+    return o.replace(/^\s+/,'').replace(/  +/g,' ');
+  }
+  function J2(){
+    var d=new (Function.prototype.bind.apply(J,[null].concat(Array.prototype.slice.call(arguments))))();
+    var t=d.text;
+    d.text=function(text){var a=Array.prototype.slice.call(arguments);
+      a[0]=Array.isArray(text)?text.map(limpiar):limpiar(text); return t.apply(d,a);};
+    return d;
+  }
+  J2.prototype=J.prototype; for(var k in J){ if(Object.prototype.hasOwnProperty.call(J,k)) J2[k]=J[k]; } J2.API=J.API;
+  window.jspdf.jsPDF=J2;
+})();
+</script>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style id="nexo-theme">
@@ -422,6 +449,61 @@ body{font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;backgro
 @media (max-width:768px){.pnl-l,.pnl-r{max-height:none!important;}}
 .lbox-title{font-family:'Playfair Display',Georgia,serif;font-size:20px!important;}
 #calc-login{background:var(--nx-navy)!important;}
+/* ── Pulido NEXO v2: botones, filtros y tarjetas ── */
+.btn-xls,.btn-dl.btn-excel{background:#316c51!important;color:#fff!important;border:none!important;}
+.btn-xls:hover,.btn-dl.btn-excel:hover{background:#26573f!important;}
+.btn-pdfn,.btn-dl.btn-pdf{background:var(--nx-navy)!important;color:#fff!important;border:none!important;}
+.btn-pdfn:hover,.btn-dl.btn-pdf:hover{background:var(--nx-navy-2)!important;}
+.btn-dl,.btn-xls,.btn-pdfn{border-radius:8px!important;font-weight:700!important;letter-spacing:.2px;transition:background .15s,transform .15s;}
+.btn-dl:hover,.btn-xls:hover,.btn-pdfn:hover{transform:translateY(-1px);}
+.btn-s{border-radius:8px!important;}
+.btn-e{background:#fff!important;color:var(--nx-navy)!important;border:1.5px solid #c3d3e6!important;border-radius:8px!important;padding:5px 12px!important;font-weight:600;}
+.btn-e:hover{background:#e8eff7!important;border-color:var(--nx-navy)!important;}
+.btn-r{background:#fff!important;color:#991b1b!important;border:1.5px solid #f3c4c4!important;border-radius:8px!important;padding:5px 12px!important;font-weight:600;}
+.btn-r:hover{background:#fef2f2!important;border-color:#991b1b!important;}
+.pills-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.pills-lbl{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--nx-accent);}
+.fpills{display:flex;gap:6px;flex-wrap:wrap;background:#fff;border:1px solid var(--nx-line);border-radius:12px;padding:4px;}
+.fpill{border:none;background:transparent;color:var(--nx-text);font:600 12.5px 'DM Sans',sans-serif;padding:7px 14px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;}
+.fpill b{font-weight:700;margin-left:4px;opacity:.6;}
+.fpill:hover{background:#eef2f7;}
+.fpill.on{background:var(--nx-navy);color:#fff;}
+.fpill.on b{opacity:.85;}
+.proc-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 20px 6px;}
+.proc-stat-card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--nx-line);border-radius:14px;padding:18px 14px 16px;text-align:center;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 1px 2px rgba(20,55,98,.04);transition:transform .15s,box-shadow .15s,border-color .15s;}
+.proc-stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.proc-stat-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,55,98,.08);}
+.proc-stat-card .pc-num{font-family:'Playfair Display',Georgia,serif;font-size:34px;font-weight:700;line-height:1;}
+.proc-stat-card .pc-lbl{font-size:12px;font-weight:700;letter-spacing:.4px;}
+.pc-verde::before{background:#316c51;} .pc-verde .pc-num,.pc-verde .pc-lbl{color:#316c51;}
+.pc-amar::before{background:#d7a437;} .pc-amar .pc-num,.pc-amar .pc-lbl{color:#8a6416;}
+.pc-rojo::before{background:#b4232a;} .pc-rojo .pc-num,.pc-rojo .pc-lbl{color:#991b1b;}
+.pc-total::before{background:linear-gradient(90deg,var(--nx-navy),var(--nx-accent));} .pc-total .pc-num,.pc-total .pc-lbl{color:var(--nx-navy);}
+.proc-stat-card.on{border-color:var(--nx-navy);box-shadow:0 0 0 3px rgba(20,55,98,.14),0 10px 24px rgba(20,55,98,.08);}
+.pc-verde.on{background:#f1f8f4;} .pc-amar.on{background:#fdf8ec;} .pc-rojo.on{background:#fdf3f3;} .pc-total.on{background:#f3f6fb;}
+.proc-hint{font-size:12px;color:var(--gris-t);margin:4px 20px 14px;}
+.stat-card{position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--nx-navy),var(--nx-accent));}
+.stat-num{font-size:40px!important;font-weight:700!important;}
+.stat-lbl{letter-spacing:1.6px!important;font-weight:600;}
+.tab-btn{font-family:'DM Sans',sans-serif!important;display:inline-flex;align-items:center;gap:6px;}
+.tab-btn svg{flex-shrink:0;}
+table.prev tbody tr:hover td,table.at tr:hover td{background:#f3f6fb!important;}
+.nsel,.ninp,.search-inp{border-radius:10px!important;border-color:var(--nx-line)!important;}
+.nsel:focus,.ninp:focus,.search-inp:focus{border-color:var(--nx-navy)!important;box-shadow:0 0 0 3px rgba(20,55,98,.08);}
+@media (max-width:768px){.proc-cards{grid-template-columns:1fr 1fr;margin:16px 12px 6px;}}
+/* ── Pulido NEXO v3: tabla de proceso, filtros en línea, pestañas ── */
+table.tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+table.tbl thead th{background:var(--nx-navy);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:11px 10px;text-align:left;white-space:nowrap;}
+table.tbl tbody td{padding:10px;border-bottom:1px solid #eef0f3;vertical-align:middle;}
+table.tbl tbody tr:hover td{background:#f3f6fb;}
+#filtro-ano-proceso,#filtro-cohorte-proceso{width:auto!important;flex:0 0 auto;}
+#tab-proceso .card-hdr{align-items:center!important;}
+.tabs-inner{overflow-x:auto;scrollbar-width:none;}
+.tabs-inner::-webkit-scrollbar{display:none;}
+.tab-btn{white-space:nowrap!important;padding:14px 14px!important;font-size:13px!important;}
+@media (min-width:769px){.tabs-inner{flex-wrap:wrap;justify-content:center;overflow:visible;}}
+#busq-estudiante-proceso{width:190px!important;}
 </style>
 </head>
 <body>
@@ -519,8 +601,8 @@ async function calcLogin(){
       <div id="tabPaste">
         <textarea class="tarea" id="pasteArea"
           placeholder="Seleccione las 22 celdas de la columna Consolidado 2025 en Excel (sin encabezado), Ctrl+C y pegue aqui con Ctrl+V..."></textarea>
-        <p class="hint"><strong>Como hacerlo?</strong> En el Excel seleccione las 22 celdas de la columna <strong>Consolidado 2025</strong> (sin encabezado), copie con Ctrl+C y pegue aqui con Ctrl+V. Los valores pueden ser 90%, 0.9 o 90 - SEDIETIC los detecta automaticamente.</p>
-        <button class="bcargar" onclick="parsear()">Cargar valores automaticamente</button>
+        <p class="hint"><strong>¿Cómo hacerlo?</strong> En el Excel seleccione las 22 celdas de la columna <strong>Consolidado 2025</strong> (sin encabezado), copie con Ctrl+C y pegue aquí con Ctrl+V. Los valores pueden ser 90%, 0.9 o 90 - SEDIETIC los detecta automáticamente.</p>
+        <button class="bcargar" onclick="parsear()">Cargar valores automáticamente</button>
         <div class="fb" id="fb"></div>
       </div>
       <div id="tabManual" style="display:none;">
@@ -543,7 +625,7 @@ async function calcLogin(){
     <div class="res" id="res">
       <div class="stu-card">
         <div>
-          <div class="stu-meta">Doctorado DIETIC - Evaluacion de Competencias</div>
+          <div class="stu-meta">Doctorado DIETIC - Evaluación de Competencias</div>
           <div class="stu-name" id="rNom">-</div>
           <div class="stu-fecha" id="rFch"></div>
         </div>
@@ -574,7 +656,7 @@ async function calcLogin(){
         <div style="padding:0;">
           <table class="at">
             <thead><tr>
-              <th>ID</th><th>Asignatura</th><th>Nota (0-5)</th><th>%</th><th>Semaforo</th>
+              <th>ID</th><th>Asignatura</th><th>Nota (0-5)</th><th>%</th><th>Semáforo</th>
             </tr></thead>
             <tbody id="aTbody"></tbody>
           </table>
@@ -582,8 +664,8 @@ async function calcLogin(){
         <div class="rcard-body" style="padding-top:0;">
           <div class="copy-bar">
             <div class="copy-txt">
-              <strong>Copiar resultados para analisis</strong>
-              Copia las notas y abre el asistente SEDIETIC para generar el analisis narrativo completo.
+              <strong>Copiar resultados para análisis</strong>
+              Copia las notas y abre el asistente SEDIETIC para generar el análisis narrativo completo.
             </div>
             <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;">
               <a class="btn-copy" id="btnCopiarAbrir" href="#" onclick="copiarYAbrir(event)">Copiar y abrir SEDIETIC</a>
@@ -603,28 +685,28 @@ async function calcLogin(){
 
 <script>
 var RPAS = [
-  {id:'RPA10',d:'Identifica necesidades en situacion problema'},
-  {id:'RPA11',d:'Diseno de soluciones innovadoras'},
-  {id:'RPA5', d:'Argumenta perspectiva de analisis y desarrollos conceptuales'},
+  {id:'RPA10',d:'Identifica necesidades en situación problema'},
+  {id:'RPA11',d:'Diseño de soluciones innovadoras'},
+  {id:'RPA5', d:'Argumenta perspectiva de análisis y desarrollos conceptuales'},
   {id:'RPA4', d:'Revision sistematica de literatura'},
-  {id:'RPA12',d:'Planea y concreta procesos de innovacion'},
-  {id:'RPA6', d:'Interaccion activa con pares academicos'},
-  {id:'RPA13',d:'Difusion efectiva en eventos academicos'},
-  {id:'RPA1', d:'Describe el problema de investigacion'},
-  {id:'RPA2', d:'Formula la pregunta de investigacion'},
+  {id:'RPA12',d:'Planea y concreta procesos de innovación'},
+  {id:'RPA6', d:'Interacción activa con pares académicos'},
+  {id:'RPA13',d:'Difusión efectiva en eventos académicos'},
+  {id:'RPA1', d:'Describe el problema de investigación'},
+  {id:'RPA2', d:'Formula la pregunta de investigación'},
   {id:'RPA14',d:'Plantea objetivos coherentes con la pregunta'},
-  {id:'RPA3', d:'Argumenta el diseno metodologico'},
-  {id:'RPA15',d:'Apoya procesos de innovacion del proyecto'},
-  {id:'RPA7', d:'Identifica tipos de articulos cientificos'},
-  {id:'RPA8', d:'Escritura y publicacion de articulos'},
+  {id:'RPA3', d:'Argumenta el diseno metodológico'},
+  {id:'RPA15',d:'Apoya procesos de innovación del proyecto'},
+  {id:'RPA7', d:'Identifica tipos de artículos científicos'},
+  {id:'RPA8', d:'Escritura y publicación de artículos'},
   {id:'RPA16',d:'Escucha activa a personas involucradas'},
-  {id:'RPA17',d:'Propuestas innovadoras en ideacion colaborativa'},
-  {id:'RPA18',d:'Implementacion de modelos o prototipos'},
+  {id:'RPA17',d:'Propuestas innovadoras en ideación colaborativa'},
+  {id:'RPA18',d:'Implementación de modelos o prototipos'},
   {id:'RPA9', d:'Consulta bases de datos especializadas'},
   {id:'RPA19',d:'Documenta observaciones del contexto'},
   {id:'RPA20',d:'Testeo de modelos o prototipos'},
-  {id:'RPA21',d:'Diseno y construccion de prototipos'},
-  {id:'RPA22',d:'Aplica instrumentos de investigacion'}
+  {id:'RPA21',d:'Diseño y construcción de prototipos'},
+  {id:'RPA22',d:'Aplica instrumentos de investigación'}
 ];
 
 var CR = {
@@ -647,45 +729,45 @@ var CF = {
 };
 
 var ASIG = [
-  {id:'A01',n:'Diseno de Proyecto',a:1,c:['CBI-2','CTEI-3','CINV-2','CINV-3']},
-  {id:'A02',n:'Conceptualizacion 1',a:1,c:['CTEI-1','CINV-1']},
+  {id:'A01',n:'Diseño de Proyecto',a:1,c:['CBI-2','CTEI-3','CINV-2','CINV-3']},
+  {id:'A02',n:'Conceptualización 1',a:1,c:['CTEI-1','CINV-1']},
   {id:'A03',n:'Trabajo de campo 1',a:1,c:['CBI-2','CBI-4','CTEI-2','CINV-1','CINV-2']},
-  {id:'A04',n:'Analisis de datos 1',a:1,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},
-  {id:'A05',n:'Difusion y Socializacion 1',a:1,c:['CTEI-1','CTEI-2','CINV-3']},
-  {id:'A06',n:'Escritura Academica 1',a:1,c:['CBI-3','CINV-1','CINV-3']},
-  {id:'A07',n:'Observacion 1',a:1,c:['CBI-3']},
-  {id:'A08',n:'Exploracion 1',a:1,c:['CBI-4']},
-  {id:'A09',n:'Indagacion 1',a:1,c:['CBI-1','CBI-3']},
+  {id:'A04',n:'Análisis de datos 1',a:1,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},
+  {id:'A05',n:'Difusión y Socialización 1',a:1,c:['CTEI-1','CTEI-2','CINV-3']},
+  {id:'A06',n:'Escritura Académica 1',a:1,c:['CBI-3','CINV-1','CINV-3']},
+  {id:'A07',n:'Observación 1',a:1,c:['CBI-3']},
+  {id:'A08',n:'Exploración 1',a:1,c:['CBI-4']},
+  {id:'A09',n:'Indagación 1',a:1,c:['CBI-1','CBI-3']},
   {id:'A10',n:'Actividades empaticas 1',a:1,c:['CBI-3']},
-  {id:'A11',n:'Definicion y Sintesis 1',a:1,c:['CBI-1','CBI-4']},
-  {id:'A12',n:'Ideacion 1',a:1,c:['CBI-4']},
-  {id:'A13',n:'Analisis 1',a:1,c:['CBI-1','CBI-2']},
+  {id:'A11',n:'Definición y Síntesis 1',a:1,c:['CBI-1','CBI-4']},
+  {id:'A12',n:'Ideación 1',a:1,c:['CBI-4']},
+  {id:'A13',n:'Análisis 1',a:1,c:['CBI-1','CBI-2']},
   {id:'A14',n:'Electiva 1',a:1,c:['CBI-3','CTEI-1','CTEI-3']},
-  {id:'A15',n:'Conceptualizacion 2',a:2,c:['CTEI-1','CINV-1']},
+  {id:'A15',n:'Conceptualización 2',a:2,c:['CTEI-1','CINV-1']},
   {id:'A16',n:'Trabajo de campo 2',a:2,c:['CBI-2','CBI-4','CTEI-2','CINV-1','CINV-2']},
-  {id:'A17',n:'Analisis de datos 2',a:2,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},
-  {id:'A18',n:'Difusion y Socializacion 2',a:2,c:['CTEI-1','CTEI-2','CINV-3']},
-  {id:'A19',n:'Escritura Academica 2',a:2,c:['CBI-3','CINV-1','CINV-3']},
-  {id:'A20',n:'Observacion 2',a:2,c:['CBI-3']},
-  {id:'A21',n:'Indagacion 2',a:2,c:['CBI-1','CBI-3']},
-  {id:'A22',n:'Ideacion 2',a:2,c:['CBI-4']},
+  {id:'A17',n:'Análisis de datos 2',a:2,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},
+  {id:'A18',n:'Difusión y Socialización 2',a:2,c:['CTEI-1','CTEI-2','CINV-3']},
+  {id:'A19',n:'Escritura Académica 2',a:2,c:['CBI-3','CINV-1','CINV-3']},
+  {id:'A20',n:'Observación 2',a:2,c:['CBI-3']},
+  {id:'A21',n:'Indagación 2',a:2,c:['CBI-1','CBI-3']},
+  {id:'A22',n:'Ideación 2',a:2,c:['CBI-4']},
   {id:'A23',n:'Prototipado 1',a:2,c:['CBI-1']},
   {id:'A24',n:'Pilotaje',a:2,c:['CBI-3']},
-  {id:'A25',n:'Implementacion 1',a:2,c:['CBI-1','CBI-4']},
+  {id:'A25',n:'Implementación 1',a:2,c:['CBI-1','CBI-4']},
   {id:'A26',n:'Electiva 2',a:2,c:['CBI-3','CTEI-1','CTEI-3']},
-  {id:'A27',n:'Conceptualizacion 3',a:3,c:['CTEI-1','CINV-1']},
+  {id:'A27',n:'Conceptualización 3',a:3,c:['CTEI-1','CINV-1']},
   {id:'A28',n:'Trabajo de campo 3',a:3,c:['CBI-2','CBI-4','CTEI-2','CINV-1','CINV-2']},
-  {id:'A29',n:'Analisis de datos 3',a:3,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},
-  {id:'A30',n:'Difusion y Socializacion 3',a:3,c:['CTEI-1','CTEI-2','CINV-3']},
-  {id:'A31',n:'Escritura Academica 3',a:3,c:['CBI-3','CINV-1','CINV-3']},
-  {id:'A32',n:'Indagacion 3',a:3,c:['CBI-1','CBI-3']},
+  {id:'A29',n:'Análisis de datos 3',a:3,c:['CBI-1','CBI-2','CBI-3','CTEI-2','CINV-1']},
+  {id:'A30',n:'Difusión y Socialización 3',a:3,c:['CTEI-1','CTEI-2','CINV-3']},
+  {id:'A31',n:'Escritura Académica 3',a:3,c:['CBI-3','CINV-1','CINV-3']},
+  {id:'A32',n:'Indagación 3',a:3,c:['CBI-1','CBI-3']},
   {id:'A33',n:'Prototipado 2',a:3,c:['CBI-1']},
-  {id:'A34',n:'Implementacion 2',a:3,c:['CBI-1','CBI-4']},
+  {id:'A34',n:'Implementación 2',a:3,c:['CBI-1','CBI-4']},
   {id:'A35',n:'Electiva 3',a:3,c:['CBI-3','CTEI-1','CTEI-3']}
 ];
 
-var GPT_URL = 'https://chatgpt.com/g/g-69bd9181c2ac819183648e40b784d09b-sedietic-evaluacion-dietic';
-var GPT_URL_NEW = 'https://chatgpt.com/g/g-69bd9181c2ac819183648e40b784d09b-sedietic-evaluacion-dietic';
+var GPT_URL = 'https://chatgpt.com/g/g-69bd9181c2ac819183648e40b784d09b-sedietic-evaluación-dietic';
+var GPT_URL_NEW = 'https://chatgpt.com/g/g-69bd9181c2ac819183648e40b784d09b-sedietic-evaluación-dietic';
 
 function rd1(v) {
   var n = Math.round(v * 10000) / 10000;
@@ -787,7 +869,7 @@ function calcular() {
     var el = document.getElementById('i_' + RPAS[i].id);
     var v = parseFloat(el ? el.value : '');
     if (isNaN(v) || v < 0 || v > 100) {
-      alert('Valor invalido en ' + RPAS[i].id + '. Use 0-100.');
+      alert('Valor inválido en ' + RPAS[i].id + '. Use 0-100.');
       return;
     }
     D[RPAS[i].id] = v / 100;
@@ -821,7 +903,7 @@ function mostrar(C, A, prom) {
   document.getElementById('res').classList.add('show');
   var nom = document.getElementById('nomEst').value.trim() || 'Estudiante sin nombre';
   document.getElementById('rNom').textContent = nom;
-  document.getElementById('rFch').textContent = 'Evaluacion: ' + new Date().toLocaleDateString('es-CO',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('rFch').textContent = 'Evaluación: ' + new Date().toLocaleDateString('es-CO',{year:'numeric',month:'long',day:'numeric'});
   var sp = sem(prom);
   var elP = document.getElementById('rProm');
   elP.textContent = prom.toFixed(1);
@@ -856,11 +938,11 @@ function mostrar(C, A, prom) {
     if (s.a !== anoA) {
       if (anoA > 0) {
         var pA = rd1(sumA/cntA), spA = sem(pA);
-        tb += '<tr class="sub"><td colspan="2" style="font-family:monospace;font-size:10px;letter-spacing:1px;">PROMEDIO ANO ' + anoA + '</td><td class="tnt ' + spA.pc + '">' + pA.toFixed(1) + '</td><td class="tpc ' + spA.pc + '">' + rd1(pA/5*100).toFixed(1) + '%</td><td><span class="pill ' + spA.pp + '" style="font-size:10px;">' + spA.t + '</span></td></tr>';
+        tb += '<tr class="sub"><td colspan="2" style="font-family:monospace;font-size:10px;letter-spacing:1px;">PROMEDIO AÑO ' + anoA + '</td><td class="tnt ' + spA.pc + '">' + pA.toFixed(1) + '</td><td class="tpc ' + spA.pc + '">' + rd1(pA/5*100).toFixed(1) + '%</td><td><span class="pill ' + spA.pp + '" style="font-size:10px;">' + spA.t + '</span></td></tr>';
         sumA = 0; cntA = 0;
       }
       var rng = s.a===1?'A01-A14':(s.a===2?'A15-A26':'A27-A35');
-      tb += '<tr class="yr"><td colspan="5">ANO ' + s.a + ' - ' + rng + '</td></tr>';
+      tb += '<tr class="yr"><td colspan="5">AÑO ' + s.a + ' - ' + rng + '</td></tr>';
       anoA = s.a;
     }
     sumA += d.n; cntA++;
@@ -869,7 +951,7 @@ function mostrar(C, A, prom) {
   }
   if (cntA > 0) {
     var pF = rd1(sumA/cntA), spF = sem(pF);
-    tb += '<tr class="sub"><td colspan="2" style="font-family:monospace;font-size:10px;letter-spacing:1px;">PROMEDIO ANO ' + anoA + '</td><td class="tnt ' + spF.pc + '">' + pF.toFixed(1) + '</td><td class="tpc ' + spF.pc + '">' + rd1(pF/5*100).toFixed(1) + '%</td><td><span class="pill ' + spF.pp + '" style="font-size:10px;">' + spF.t + '</span></td></tr>';
+    tb += '<tr class="sub"><td colspan="2" style="font-family:monospace;font-size:10px;letter-spacing:1px;">PROMEDIO AÑO ' + anoA + '</td><td class="tnt ' + spF.pc + '">' + pF.toFixed(1) + '</td><td class="tpc ' + spF.pc + '">' + rd1(pF/5*100).toFixed(1) + '%</td><td><span class="pill ' + spF.pp + '" style="font-size:10px;">' + spF.t + '</span></td></tr>';
   }
   var promVis = cntTotal > 0 ? rd1(sumTotal/cntTotal) : prom;
   var spT = sem(promVis);
@@ -913,43 +995,43 @@ function construirTexto() {
       }
     });
   }
-  var txt = 'Universidad de La Sabana - Doctorado en Innovacion Educativa con uso de TIC\n';
+  var txt = 'Universidad de La Sabana - Doctorado en Innovación Educativa con uso de TIC\n';
   txt += 'SNIES 109126 - Sistema SEDIETIC v3.0\n' + fecha + '\n' + sep + '\n';
   txt += 'ESTUDIANTE: ' + nom + '\nPROMEDIO GENERAL: ' + prom + ' (' + pct + ')\n' + sep + '\n\n';
   txt += 'BLOQUE A - CONSOLIDADO 2025 (22 RPAs):\n' + rpaT;
-  txt += '\nBLOQUE B - COMPETENCIAS:\nCompetencia | % Logro | Semaforo\n' + compT;
+  txt += '\nBLOQUE B - COMPETENCIAS:\nCompetencia | % Logro | Semáforo\n' + compT;
   txt += '\nPromedios por familia:\n' + famT;
-  txt += '\nBLOQUE C - ASIGNATURAS (35):\nID | Nombre | Nota | % | Semaforo\n' + asT;
+  txt += '\nBLOQUE C - ASIGNATURAS (35):\nID | Nombre | Nota | % | Semáforo\n' + asT;
   txt += '\n' + sep + '\n';
   txt += '================================================\n';
-  txt += 'INSTRUCCION PARA SEDIETIC - BLOQUE D\n';
+  txt += 'INSTRUCCIÓN PARA SEDIETIC - BLOQUE D\n';
   txt += '================================================\n\n';
-  txt += 'Eres SEDIETIC, el sistema de evaluacion del Doctorado en Innovacion Educativa con uso de TIC de la Universidad de La Sabana (SNIES 109126), grupo PROVENTUS categoria A1 Minciencias.\n\n';
-  txt += 'Con los datos anteriores genera el BLOQUE D - Analisis Narrativo Integral.\n';
-  txt += 'El analisis debe ser CLARO, PROPOSITIVO, ARGUMENTADO, ESTRATEGICO, ACADEMICO e INNOVADOR.\n';
-  txt += 'Tono: informe academico doctoral formal. Extension: 500-700 palabras. Sin listas de puntos - solo prosa academica fluida por seccion.\n\n';
+  txt += 'Eres SEDIETIC, el sistema de evaluación del Doctorado en Innovación Educativa con uso de TIC de la Universidad de La Sabana (SNIES 109126), grupo PROVENTUS categoria A1 Minciencias.\n\n';
+  txt += 'Con los datos anteriores genera el BLOQUE D - Análisis Narrativo Integral.\n';
+  txt += 'El análisis debe ser CLARO, PROPOSITIVO, ARGUMENTADO, ESTRATEGICO, ACADEMICO e INNOVADOR.\n';
+  txt += 'Tono: informe academico doctoral formal. Extension: 500-700 palabras. Sin listas de puntos - solo prosa académica fluida por sección.\n\n';
   txt += 'CONTEXTO DEL PROGRAMA:\n';
-  txt += '- Competencias: CBI (blandas innovacion): CBI-1 creatividad e ideacion, CBI-2 solucion de problemas, CBI-3 pensamiento divergente/convergente, CBI-4 prototipado.\n';
-  txt += '- CTEI (tecnologia educativa): CTEI-1 exploracion con TIC, CTEI-2 conceptualizacion, CTEI-3 diagnostico.\n';
-  txt += '- CINV (investigativas): CINV-1 generacion de conocimiento, CINV-2 observacion/problematizacion, CINV-3 difusion cientifica.\n';
-  txt += '- Lineas PROVENTUS: (1) Practicas Innovadoras Educativas mediadas por TIC, (2) Ambientes de aprendizaje apoyados con TIC, (3) Diseno desarrollo y evaluacion de soluciones informaticas para la academia.\n';
-  txt += '- Perfil de egreso: investigador autonomo, innovador, lider en transformacion educativa, capaz de publicar en revistas indexadas Scopus/ISI y participar en debate academico internacional.\n\n';
+  txt += '- Competencias: CBI (blandas innovación): CBI-1 creatividad e ideación, CBI-2 solución de problemas, CBI-3 pensamiento divergente/convergente, CBI-4 prototipado.\n';
+  txt += '- CTEI (tecnología educativa): CTEI-1 exploración con TIC, CTEI-2 conceptualización, CTEI-3 diagnóstico.\n';
+  txt += '- CINV (investigativas): CINV-1 generación de conocimiento, CINV-2 observación/problematización, CINV-3 difusion científica.\n';
+  txt += '- Lineas PROVENTUS: (1) Practicas Innovadoras Educativas mediadas por TIC, (2) Ambientes de aprendizaje apoyados con TIC, (3) Diseño desarrollo y evaluación de soluciones informaticas para la academia.\n';
+  txt += '- Perfil de egreso: investigador autonomo, innovador, lider en transformación educativa, capaz de publicar en revistas indexadas Scopus/ISI y participar en debate academico internacional.\n\n';
   txt += 'GENERA LAS SIGUIENTES 7 SECCIONES:\n\n';
   txt += 'D1. RESUMEN EJECUTIVO\n';
-  txt += 'Sintesis estrategica del desempeno global: promedio, semaforo, patron competencial dominante y lo que revela sobre el perfil doctoral del estudiante. Maximo 4 lineas con alto poder comunicativo.\n\n';
+  txt += 'Síntesis estrategica del desempeno global: promedio, semáforo, patron competencial dominante y lo que revela sobre el perfil doctoral del estudiante. Maximo 4 lineas con alto poder comunicativo.\n\n';
   txt += 'D2. FORTALEZAS Y CAPITAL ACADEMICO\n';
-  txt += 'Identifica las 3 asignaturas y 2-3 competencias con mayor logro. Argumenta pedagogicamente que habilidades doctorales evidencian, que RPAs especificos las sustentan y como estas fortalezas posicionan al estudiante en el campo de la innovacion educativa con TIC. Se propositivo: indica como capitalizar estas fortalezas.\n\n';
+  txt += 'Identifica las 3 asignaturas y 2-3 competencias con mayor logro. Argumenta pedagogicamente que habilidades doctorales evidencian, que RPAs especificos las sustentan y como estas fortalezas posicionan al estudiante en el campo de la innovación educativa con TIC. Se propositivo: indica como capitalizar estas fortalezas.\n\n';
   txt += 'D3. OPORTUNIDADES ESTRATEGICAS DE DESARROLLO\n';
-  txt += 'Las 2-3 asignaturas y competencias con menor logro. Explica la causa desde la logica de la cascada (que RPAs especificos bajan esas notas). No las trates como debilidades sino como oportunidades de crecimiento estrategico. Propone acciones concretas e innovadoras para fortalecer esos espacios.\n\n';
-  txt += 'D4. ANALISIS POR FAMILIA DE COMPETENCIAS\n';
-  txt += 'Compara CBI (blandas innovacion) vs CTEI (tecnologia educativa) vs CINV (investigativas). Cual familia lidera y por que? Que dice ese patron del perfil identitario del doctorando como futuro investigador e innovador? Argumenta desde la teoria del programa.\n\n';
-  txt += 'D5. RECOMENDACION PEDAGOGICA ESTRATEGICA\n';
-  txt += 'Dirigida explicitamente al Dr. Andres Chiappe Laverde y Mg. Alejandra Paz. Propuesta concreta, innovadora y viable: accion especifica, espacio formativo donde implementarla, proposito de transformacion y horizonte temporal. Que sea una recomendacion que agregue valor real al proceso de acompanamiento doctoral.\n\n';
-  txt += 'D6. OBSERVACION CRITICA SOBRE EL RPA CLAVE\n';
-  txt += 'Identifica el RPA con menor logro. Cuantas y cuales asignaturas impacta (por cascada). Por que es estrategicamente importante para el perfil doctoral? Que accion especifica y diferenciada se recomienda para transformar ese indicador en el proximo periodo academico?\n\n';
-  txt += 'D7. PROYECCION DOCTORAL E IMPACTO CIENTIFICO\n';
-  txt += 'Con base en el perfil competencial, determina: (a) linea de investigacion PROVENTUS mas afin y por que, (b) si el estudiante esta en ruta para tesis por compendio de articulos (criterios: publicaciones, difusion, dominio metodologico), (c) recomendacion estrategica para el comite de programa sobre los proximos pasos del doctorando hacia la defensa y el impacto cientifico.\n\n';
-  txt += 'Cierra con: Quedo a su disposicion para cualquier consulta adicional. SEDIETIC - Universidad de La Sabana\n';
+  txt += 'Las 2-3 asignaturas y competencias con menor logro. Explica la causa desde la logica de la cascada (que RPAs especificos bajan esas notas). No las trates como debilidades sino como oportunidades de crecimiento estratégico. Propone acciones concretas e innovadoras para fortalecer esos espacios.\n\n';
+  txt += 'D4. ANÁLISIS POR FAMILIA DE COMPETENCIAS\n';
+  txt += 'Compara CBI (blandas innovación) vs CTEI (tecnología educativa) vs CINV (investigativas). Cual familia lidera y por que? Que dice ese patron del perfil identitario del doctorando como futuro investigador e innovador? Argumenta desde la teoria del programa.\n\n';
+  txt += 'D5. RECOMENDACIÓN PEDAGÓGICA ESTRATEGICA\n';
+  txt += 'Dirigida explicitamente al Dr. Andrés Chiappe Laverde y Mg. Alejandra Paz. Propuesta concreta, innovadora y viable: acción especifica, espacio formativo donde implementarla, proposito de transformación y horizonte temporal. Que sea una recomendación que agregue valor real al proceso de acompanamiento doctoral.\n\n';
+  txt += 'D6. OBSERVACIÓN CRÍTICA SOBRE EL RPA CLAVE\n';
+  txt += 'Identifica el RPA con menor logro. Cuantas y cuales asignaturas impacta (por cascada). Por que es estrategicamente importante para el perfil doctoral? Que acción especifica y diferenciada se recomienda para transformar ese indicador en el proximo periodo academico?\n\n';
+  txt += 'D7. PROYECCIÓN DOCTORAL E IMPACTO CIENTÍFICO\n';
+  txt += 'Con base en el perfil competencial, determina: (a) linea de investigación PROVENTUS mas afin y por que, (b) si el estudiante esta en ruta para tesis por compendio de artículos (criterios: publicaciones, difusion, dominio metodológico), (c) recomendación estrategica para el comite de programa sobre los proximos pasos del doctorando hacia la defensa y el impacto científico.\n\n';
+  txt += 'Cierra con: Quedo a su disposición para cualquier consulta adicional. SEDIETIC - Universidad de La Sabana\n';
   txt += sep;
   return txt;
 }
@@ -1018,7 +1100,7 @@ function irAsistenteMovil() {
 
 
 function soloAbrir() {
-  window.open('https://chatgpt.com/g/g-69bd9181c2ac819183648e40b784d09b-sedietic-evaluacion-dietic', '_blank');
+  window.open('https://chatgpt.com/g/g-69bd9181c2ac819183648e40b784d09b-sedietic-evaluación-dietic', '_blank');
 }
 
 function limpiar() {
@@ -1073,7 +1155,7 @@ function ejecutarGuardado(sinAnalisis) {
     if (!cohorte && elC) { elC.style.border = '2px solid #991B1B'; elC.focus(); }
     if (!periodo && elP) { elP.style.border = '2px solid #991B1B'; if (cohorte) elP.focus(); }
     alert('Por favor complete la Cohorte y el Periodo antes de guardar.');
-    if (btn) { btn.textContent = 'Guardar notas + analisis'; btn.disabled = false; }
+    if (btn) { btn.textContent = 'Guardar notas + análisis'; btn.disabled = false; }
     return;
   }
   // Limpiar bordes de error si ya estan completos
@@ -1149,10 +1231,10 @@ function ejecutarGuardado(sinAnalisis) {
         btnR.style.background = '#166534';
       }, 3000);
     }
-    if (btn) { btn.textContent = 'Guardar notas + analisis'; btn.disabled = false; }
+    if (btn) { btn.textContent = 'Guardar notas + análisis'; btn.disabled = false; }
   }).catch(function() {
     alert('Error al guardar. Verifique la URL del Apps Script.');
-    if (btn) { btn.textContent = 'Guardar notas + analisis'; btn.disabled = false; }
+    if (btn) { btn.textContent = 'Guardar notas + análisis'; btn.disabled = false; }
   });
 }
 
@@ -1168,9 +1250,9 @@ function selAno(ano) {
 }
 
 function anoLabel(ano) {
-  if (ano === 1) return 'Ano 1 (A01-A14)';
-  if (ano === 2) return 'Ano 2 (A15-A26)';
-  if (ano === 3) return 'Ano 3 (A27-A35)';
+  if (ano === 1) return 'Año 1 (A01-A14)';
+  if (ano === 2) return 'Año 2 (A15-A26)';
+  if (ano === 3) return 'Año 3 (A27-A35)';
   return 'Todos los anos';
 }
 
@@ -1236,7 +1318,7 @@ function descargarPDF() {
     // Logo Universidad de La Sabana sin fondo (sobre blanco)
     var logoB64 = 'data:image/png;base64,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';
     try {
-      doc.addImage(logoB64, 'PNG', margin, 5, 52, 16.25);
+      doc.addImage(logoB64,'PNG',margin,5+0.81,52,14.63);
     } catch(e) {
       doc.setTextColor(azul[0], azul[1], azul[2]);
       doc.setFontSize(7);
@@ -1253,10 +1335,10 @@ function descargarPDF() {
     doc.setTextColor(azul[0], azul[1], azul[2]);
     doc.setFontSize(7.5);
     doc.setFont('helvetica', 'normal');
-    doc.text('Universidad de La Sabana - Facultad de Educacion', margin + 59, 13);
+    doc.text('Universidad de La Sabana - Facultad de Educación', margin + 59, 13);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9.5);
-    doc.text('Doctorado en Innovacion Educativa con uso de TIC', margin + 59, 22);
+    doc.text('Doctorado en Innovación Educativa con uso de TIC', margin + 59, 22);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7);
     doc.setTextColor(dorado[0], dorado[1], dorado[2]);
@@ -1268,8 +1350,8 @@ function descargarPDF() {
     doc.setTextColor(azul[0], azul[1], azul[2]);
     doc.setFontSize(13);
     doc.setFont('helvetica', 'bold');
-    var subTitPDF = anoActivo === 0 ? 'Evaluacion Completa - Todos los Anos' : 'Evaluacion ' + anoLabel(anoActivo);
-    doc.text('Sistema de Evaluacion de Competencias Doctorales', margin, 50);
+    var subTitPDF = anoActivo === 0 ? 'Evaluación Completa - Todos los Años' : 'Evaluación ' + anoLabel(anoActivo);
+    doc.text('Sistema de Evaluación de Competencias Doctorales', margin, 50);
     doc.setFontSize(9);
     doc.setTextColor(dorado[0], dorado[1], dorado[2]);
     doc.text(subTitPDF, margin, 58);
@@ -1396,17 +1478,17 @@ function descargarPDF() {
     // Recopilar datos de asignaturas
     var asigData = [];
     var ASIG_NAMES = {
-      'A01':'Diseno de Proyecto','A02':'Conceptualizacion 1','A03':'Trabajo de campo 1',
-      'A04':'Analisis de datos 1','A05':'Difusion y Socializacion 1','A06':'Escritura Academica 1',
-      'A07':'Observacion 1','A08':'Exploracion 1','A09':'Indagacion 1','A10':'Actividades empaticas 1',
-      'A11':'Definicion y Sintesis 1','A12':'Ideacion 1','A13':'Analisis 1','A14':'Electiva 1',
-      'A15':'Conceptualizacion 2','A16':'Trabajo de campo 2','A17':'Analisis de datos 2',
-      'A18':'Difusion y Socializacion 2','A19':'Escritura Academica 2','A20':'Observacion 2',
-      'A21':'Indagacion 2','A22':'Ideacion 2','A23':'Prototipado 1','A24':'Pilotaje',
-      'A25':'Implementacion 1','A26':'Electiva 2','A27':'Conceptualizacion 3',
-      'A28':'Trabajo de campo 3','A29':'Analisis de datos 3','A30':'Difusion y Socializacion 3',
-      'A31':'Escritura Academica 3','A32':'Indagacion 3','A33':'Prototipado 2',
-      'A34':'Implementacion 2','A35':'Electiva 3'
+      'A01':'Diseño de Proyecto','A02':'Conceptualización 1','A03':'Trabajo de campo 1',
+      'A04':'Análisis de datos 1','A05':'Difusión y Socialización 1','A06':'Escritura Académica 1',
+      'A07':'Observación 1','A08':'Exploración 1','A09':'Indagación 1','A10':'Actividades empaticas 1',
+      'A11':'Definición y Síntesis 1','A12':'Ideación 1','A13':'Análisis 1','A14':'Electiva 1',
+      'A15':'Conceptualización 2','A16':'Trabajo de campo 2','A17':'Análisis de datos 2',
+      'A18':'Difusión y Socialización 2','A19':'Escritura Académica 2','A20':'Observación 2',
+      'A21':'Indagación 2','A22':'Ideación 2','A23':'Prototipado 1','A24':'Pilotaje',
+      'A25':'Implementación 1','A26':'Electiva 2','A27':'Conceptualización 3',
+      'A28':'Trabajo de campo 3','A29':'Análisis de datos 3','A30':'Difusión y Socialización 3',
+      'A31':'Escritura Académica 3','A32':'Indagación 3','A33':'Prototipado 2',
+      'A34':'Implementación 2','A35':'Electiva 3'
     };
     var ASIG_IDS = Object.keys(ASIG_NAMES);
     var rows = document.querySelectorAll('#aTbody tr');
@@ -1438,9 +1520,9 @@ function descargarPDF() {
                anoActivo === 1 ? [todosAnos[0]] :
                anoActivo === 2 ? [todosAnos[1]] : [todosAnos[2]];
     var anoLabels = anoActivo === 0 ?
-      ['ANO 1 - A01 a A14', 'ANO 2 - A15 a A26', 'ANO 3 - A27 a A35'] :
-      anoActivo === 1 ? ['ANO 1 - A01 a A14'] :
-      anoActivo === 2 ? ['ANO 2 - A15 a A26'] : ['ANO 3 - A27 a A35'];
+      ['AÑO 1 - A01 a A14', 'AÑO 2 - A15 a A26', 'AÑO 3 - A27 a A35'] :
+      anoActivo === 1 ? ['AÑO 1 - A01 a A14'] :
+      anoActivo === 2 ? ['AÑO 2 - A15 a A26'] : ['AÑO 3 - A27 a A35'];
     var rowH = 5.8;
 
     anos.forEach(function(grupo, gi) {
@@ -1495,7 +1577,7 @@ function descargarPDF() {
       doc.setTextColor(azul[0], azul[1], azul[2]);
       doc.setFontSize(6);
       doc.setFont('helvetica', 'bold');
-      doc.text('PROMEDIO ANO ' + (gi + 1), margin + 3, y + 3.8);
+      doc.text('PROMEDIO AÑO ' + (gi + 1), margin + 3, y + 3.8);
       doc.setTextColor(scAno[0], scAno[1], scAno[2]);
       doc.text(promAno.toFixed(1), pageW - margin - 36, y + 3.8, { align: 'right' });
       y += 7;
@@ -1535,12 +1617,12 @@ function descargarPDF() {
       doc.setFontSize(6);
       doc.setFont('helvetica', 'normal');
       doc.text('SEDIETIC v3.0  |  Universidad de La Sabana  |  SNIES 109126  |  PROVENTUS A1 Minciencias', pageW / 2, pageH - 4, { align: 'center' });
-      doc.text('Pagina ' + p + ' de ' + totalPages, pageW - margin, pageH - 4, { align: 'right' });
+      doc.text('Página ' + p + ' de ' + totalPages, pageW - margin, pageH - 4, { align: 'right' });
     }
 
     // Guardar
     var nomArchivo = nom.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
-    var sufAno = anoActivo === 0 ? '_TodosLosAnos' : '_' + anoLabel(anoActivo).replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+    var sufAno = anoActivo === 0 ? '_TodosLosAnos' : '_' + anoLabel(anoActivo).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
     doc.save('SEDIETIC_' + nomArchivo + sufAno + '_' + new Date().toISOString().slice(0, 10) + '.pdf');
 
   } catch(err) {
@@ -1562,10 +1644,10 @@ function descargarPDF() {
 <!-- Panel repositorio: pegar análisis narrativo -->
 <div class="panel-repo-overlay" id="panelRepo">
   <div class="panel-repo-inner">
-    <div class="panel-repo-title">Guardar evaluacion en repositorio</div>
+    <div class="panel-repo-title">Guardar evaluación en repositorio</div>
     <div class="panel-repo-sub">
       <strong>Paso 1:</strong> Complete Cohorte y Periodo <span style="color:#991B1B;font-weight:700;">(obligatorios)</span>.<br>
-      <strong>Paso 2:</strong> Pegue el analisis narrativo de GPT o Claude.<br>
+      <strong>Paso 2:</strong> Pegue el análisis narrativo de GPT o Claude.<br>
       <strong>Paso 3:</strong> Presione Guardar.
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
@@ -1579,12 +1661,12 @@ function descargarPDF() {
       </div>
     </div>
     <div>
-      <label style="font-size:11px;font-weight:600;color:var(--azul);display:block;margin-bottom:4px;">Analisis narrativo (D1 al D7) — opcional</label>
+      <label style="font-size:11px;font-weight:600;color:var(--azul);display:block;margin-bottom:4px;">Análisis narrativo (D1 al D7) — opcional</label>
       <textarea class="panel-repo-text" id="textoAnalisis"
         placeholder="Pegue aqui el analisis narrativo generado por GPT SEDIETIC o Claude..."></textarea>
     </div>
-    <button class="btn-repo-guardar" id="btnGuardarRepo" onclick="ejecutarGuardado()">Guardar notas + analisis</button>
-    <button class="btn-repo-sin" onclick="ejecutarGuardado(true)">Guardar solo notas (sin analisis)</button>
+    <button class="btn-repo-guardar" id="btnGuardarRepo" onclick="ejecutarGuardado()">Guardar notas + análisis</button>
+    <button class="btn-repo-sin" onclick="ejecutarGuardado(true)">Guardar solo notas (sin análisis)</button>
     <button class="btn-repo-cerrar" onclick="cerrarPanelRepo()">Cancelar</button>
   </div>
 </div>
@@ -1592,9 +1674,9 @@ function descargarPDF() {
 <!-- Panel movil: copiar resultados -->
 <div class="panel-movil-overlay" id="panelMovil">
   <div class="panel-movil-inner">
-    <div class="panel-movil-title">Resultados copiados y listos para analisis</div>
+    <div class="panel-movil-title">Resultados copiados y listos para análisis</div>
     <div class="panel-movil-steps">
-      <strong>Paso 1:</strong> Los resultados ya fueron copiados automaticamente.<br>
+      <strong>Paso 1:</strong> Los resultados ya fueron copiados automáticamente.<br>
       <strong>Paso 2:</strong> Presione "Ir al asistente SEDIETIC".<br>
       <strong>Paso 3:</strong> En el chat del GPT pegue con <strong>Ctrl+V</strong> (PC) o toque largo → Pegar (movil) y presione Enter.
     </div>

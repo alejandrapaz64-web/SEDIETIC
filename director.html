@@ -7,6 +7,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+/* NEXO · PDF: evita símbolos que las fuentes estándar de jsPDF no dibujan (✓ ✕ ★ emojis) */
+(function(){
+  var J=window.jspdf&&window.jspdf.jsPDF; if(!J||J.__nexo) return; J.__nexo=true;
+  var OK='\u20ac\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u0160\u2039\u0152\u017d\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\u0161\u203a\u0153\u017e\u0178';
+  var MAP={'\u2605':'*','\u2606':'*','\u25b2':'+','\u25bc':'-','\u2192':'>','\u2190':'<','\u2264':'<=','\u2265':'>=','\u2212':'-','\u00b7':'\u00b7'};
+  function limpiar(t){
+    if(typeof t!=='string') return t;
+    var o='';
+    for(var i=0;i<t.length;i++){var ch=t[i],c=t.charCodeAt(i);
+      if(c<256||OK.indexOf(ch)>=0){o+=ch;continue;}
+      if(MAP[ch]!==undefined){o+=MAP[ch];continue;}
+      if(c>=0xD800&&c<=0xDBFF){i++;}
+    }
+    return o.replace(/^\s+/,'').replace(/  +/g,' ');
+  }
+  function J2(){
+    var d=new (Function.prototype.bind.apply(J,[null].concat(Array.prototype.slice.call(arguments))))();
+    var t=d.text;
+    d.text=function(text){var a=Array.prototype.slice.call(arguments);
+      a[0]=Array.isArray(text)?text.map(limpiar):limpiar(text); return t.apply(d,a);};
+    return d;
+  }
+  J2.prototype=J.prototype; for(var k in J){ if(Object.prototype.hasOwnProperty.call(J,k)) J2[k]=J[k]; } J2.API=J.API;
+  window.jspdf.jsPDF=J2;
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
@@ -377,6 +404,61 @@ body{font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;backgro
   .hdr .hdr-uni{letter-spacing:1.2px;}
   .nexo-pill{padding:6px 12px;font-size:10px;}
 }
+/* ── Pulido NEXO v2: botones, filtros y tarjetas ── */
+.btn-xls,.btn-dl.btn-excel{background:#316c51!important;color:#fff!important;border:none!important;}
+.btn-xls:hover,.btn-dl.btn-excel:hover{background:#26573f!important;}
+.btn-pdfn,.btn-dl.btn-pdf{background:var(--nx-navy)!important;color:#fff!important;border:none!important;}
+.btn-pdfn:hover,.btn-dl.btn-pdf:hover{background:var(--nx-navy-2)!important;}
+.btn-dl,.btn-xls,.btn-pdfn{border-radius:8px!important;font-weight:700!important;letter-spacing:.2px;transition:background .15s,transform .15s;}
+.btn-dl:hover,.btn-xls:hover,.btn-pdfn:hover{transform:translateY(-1px);}
+.btn-s{border-radius:8px!important;}
+.btn-e{background:#fff!important;color:var(--nx-navy)!important;border:1.5px solid #c3d3e6!important;border-radius:8px!important;padding:5px 12px!important;font-weight:600;}
+.btn-e:hover{background:#e8eff7!important;border-color:var(--nx-navy)!important;}
+.btn-r{background:#fff!important;color:#991b1b!important;border:1.5px solid #f3c4c4!important;border-radius:8px!important;padding:5px 12px!important;font-weight:600;}
+.btn-r:hover{background:#fef2f2!important;border-color:#991b1b!important;}
+.pills-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.pills-lbl{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--nx-accent);}
+.fpills{display:flex;gap:6px;flex-wrap:wrap;background:#fff;border:1px solid var(--nx-line);border-radius:12px;padding:4px;}
+.fpill{border:none;background:transparent;color:var(--nx-text);font:600 12.5px 'DM Sans',sans-serif;padding:7px 14px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;}
+.fpill b{font-weight:700;margin-left:4px;opacity:.6;}
+.fpill:hover{background:#eef2f7;}
+.fpill.on{background:var(--nx-navy);color:#fff;}
+.fpill.on b{opacity:.85;}
+.proc-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 20px 6px;}
+.proc-stat-card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--nx-line);border-radius:14px;padding:18px 14px 16px;text-align:center;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 1px 2px rgba(20,55,98,.04);transition:transform .15s,box-shadow .15s,border-color .15s;}
+.proc-stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.proc-stat-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,55,98,.08);}
+.proc-stat-card .pc-num{font-family:'Playfair Display',Georgia,serif;font-size:34px;font-weight:700;line-height:1;}
+.proc-stat-card .pc-lbl{font-size:12px;font-weight:700;letter-spacing:.4px;}
+.pc-verde::before{background:#316c51;} .pc-verde .pc-num,.pc-verde .pc-lbl{color:#316c51;}
+.pc-amar::before{background:#d7a437;} .pc-amar .pc-num,.pc-amar .pc-lbl{color:#8a6416;}
+.pc-rojo::before{background:#b4232a;} .pc-rojo .pc-num,.pc-rojo .pc-lbl{color:#991b1b;}
+.pc-total::before{background:linear-gradient(90deg,var(--nx-navy),var(--nx-accent));} .pc-total .pc-num,.pc-total .pc-lbl{color:var(--nx-navy);}
+.proc-stat-card.on{border-color:var(--nx-navy);box-shadow:0 0 0 3px rgba(20,55,98,.14),0 10px 24px rgba(20,55,98,.08);}
+.pc-verde.on{background:#f1f8f4;} .pc-amar.on{background:#fdf8ec;} .pc-rojo.on{background:#fdf3f3;} .pc-total.on{background:#f3f6fb;}
+.proc-hint{font-size:12px;color:var(--gris-t);margin:4px 20px 14px;}
+.stat-card{position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--nx-navy),var(--nx-accent));}
+.stat-num{font-size:40px!important;font-weight:700!important;}
+.stat-lbl{letter-spacing:1.6px!important;font-weight:600;}
+.tab-btn{font-family:'DM Sans',sans-serif!important;display:inline-flex;align-items:center;gap:6px;}
+.tab-btn svg{flex-shrink:0;}
+table.prev tbody tr:hover td,table.at tr:hover td{background:#f3f6fb!important;}
+.nsel,.ninp,.search-inp{border-radius:10px!important;border-color:var(--nx-line)!important;}
+.nsel:focus,.ninp:focus,.search-inp:focus{border-color:var(--nx-navy)!important;box-shadow:0 0 0 3px rgba(20,55,98,.08);}
+@media (max-width:768px){.proc-cards{grid-template-columns:1fr 1fr;margin:16px 12px 6px;}}
+/* ── Pulido NEXO v3: tabla de proceso, filtros en línea, pestañas ── */
+table.tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+table.tbl thead th{background:var(--nx-navy);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:11px 10px;text-align:left;white-space:nowrap;}
+table.tbl tbody td{padding:10px;border-bottom:1px solid #eef0f3;vertical-align:middle;}
+table.tbl tbody tr:hover td{background:#f3f6fb;}
+#filtro-ano-proceso,#filtro-cohorte-proceso{width:auto!important;flex:0 0 auto;}
+#tab-proceso .card-hdr{align-items:center!important;}
+.tabs-inner{overflow-x:auto;scrollbar-width:none;}
+.tabs-inner::-webkit-scrollbar{display:none;}
+.tab-btn{white-space:nowrap!important;padding:14px 14px!important;font-size:13px!important;}
+@media (min-width:769px){.tabs-inner{flex-wrap:wrap;justify-content:center;overflow:visible;}}
+#busq-estudiante-proceso{width:190px!important;}
 </style>
 </head>
 <body>
@@ -2168,7 +2250,7 @@ function descargarPDF(){
   // Fondo blanco para el logo
   doc.setFillColor(255,255,255);doc.roundedRect(margin,7,46,18,3,3,'F');
   // Logo encima del fondo blanco
-  try{doc.addImage(LOGO_B64,'PNG',margin+1,8,44,16);}catch(e){}
+  try{doc.addImage(LOGO_B64,'PNG',margin+1,8+1.6,44,12.81);}catch(e){}
   // Texto blanco
   doc.setTextColor(255,255,255);
   doc.setFont('helvetica','normal');doc.setFontSize(8);
@@ -2424,12 +2506,12 @@ function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetDa
   doc.setFillColor(azul[0],azul[1],azul[2]);doc.rect(0,0,pageW,32,'F');
   doc.setFillColor(dorado[0],dorado[1],dorado[2]);doc.rect(0,32,pageW,1.5,'F');
   doc.setFillColor(255,255,255);doc.roundedRect(margin,7,46,18,3,3,'F');
-  try{doc.addImage(LOGO_B64,'PNG',margin+1,8,44,16);}catch(e){}
+  try{doc.addImage(LOGO_B64,'PNG',margin+1,8+1.6,44,12.81);}catch(e){}
   doc.setTextColor(255,255,255);
   doc.setFont('helvetica','normal');doc.setFontSize(8);
-  doc.text('Universidad de La Sabana — Facultad de Educacion',margin+50,11);
+  doc.text('Universidad de La Sabana — Facultad de Educación',margin+50,11);
   doc.setFont('helvetica','bold');doc.setFontSize(10);
-  doc.text('Doctorado en Innovacion Educativa con uso de TIC',margin+50,18);
+  doc.text('Doctorado en Innovación Educativa con uso de TIC',margin+50,18);
   doc.setFont('helvetica','normal');doc.setFontSize(7);
   doc.text('SEDIETIC v3.0  |  SNIES 109126  |  PROVENTUS A1 Minciencias',margin+50,24);
   y=36;
@@ -2448,7 +2530,7 @@ function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetDa
   // SECCIÓN A — AUTOEVALUACIÓN
   doc.setFillColor(azul[0],azul[1],azul[2]);doc.rect(margin,y,colW,7,'F');
   doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(8);
-  doc.text('A   AUTOEVALUACION'+(esAno0?' (Evaluacion Inicial)':'')+'  —  '+nombre,margin+3,y+5);y+=8;
+  doc.text('A   AUTOEVALUACIÓN'+(esAno0?' (Evaluación Inicial)':'')+'  —  '+nombre,margin+3,y+5);y+=8;
 
   // Cabecera columnas
   var xIni = esAno0 ? margin+colW*0.62 : margin+colW*0.58;
@@ -2496,7 +2578,7 @@ function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetDa
     y+=5;if(y>260){newPage();}
     doc.setFillColor(azul[0],azul[1],azul[2]);doc.rect(margin,y,colW,7,'F');
     doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(8);
-    doc.text('B   COEVALUACION DE COMPANEROS ('+coList.length+')',margin+3,y+5);y+=8;
+    doc.text('B   COEVALUACIÓN DE COMPANEROS ('+coList.length+')',margin+3,y+5);y+=8;
     coList.forEach(function(co){
       if(y>265){newPage();}
       doc.setFillColor(230,238,245);doc.rect(margin,y,colW,6,'F');
@@ -2527,7 +2609,7 @@ function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetDa
     y+=5;if(y>260){newPage();}
     doc.setFillColor(dorado[0],dorado[1],dorado[2]);doc.rect(margin,y,colW,7,'F');
     doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(8);
-    doc.text('C   HETEROEVALUACION — Director del programa',margin+3,y+5);y+=8;
+    doc.text('C   HETEROEVALUACIÓN — Director del programa',margin+3,y+5);y+=8;
     // Info header
     doc.setFillColor(248,250,252);doc.rect(margin,y,colW,8,'F');
     doc.setTextColor(azul[0],azul[1],azul[2]);doc.setFont('helvetica','bold');doc.setFontSize(7);
@@ -2538,7 +2620,7 @@ function _generarPDFResumen(id, nombre, cohorte, ano, periodo, f1, coList, hetDa
     doc.setFillColor(dorado[0],dorado[1],dorado[2]);doc.rect(margin,y,colW,5,'F');
     doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(5.5);
     doc.text('RPA',margin+2,y+3.5);doc.text('Descripcion',margin+14,y+3.5);
-    doc.text('Heteroevaluacion (%)',xHetHoy,y+3.5);
+    doc.text('Heteroevaluación (%)',xHetHoy,y+3.5);
     doc.text('Consolidado (%)',xHetHoy+18,y+3.5);
     y+=6;
     RO.forEach(function(rid,i){
@@ -3032,7 +3114,7 @@ function descargarPDFPercepcionDir(p) {
   doc.setFillColor(azul[0],azul[1],azul[2]); doc.rect(0,0,pageW,32,'F');
   doc.setFillColor(dorado[0],dorado[1],dorado[2]); doc.rect(0,32,pageW,1.5,'F');
   doc.setFillColor(255,255,255); doc.roundedRect(margin,7,46,18,3,3,'F');
-  try{if(typeof LOGO_B64!=='undefined')doc.addImage(LOGO_B64,'PNG',margin+1,8,44,16);}catch(e){}
+  try{if(typeof LOGO_B64!=='undefined')doc.addImage(LOGO_B64,'PNG',margin+1,8+1.6,44,12.81);}catch(e){}
   doc.setTextColor(255,255,255); doc.setFont('helvetica','normal'); doc.setFontSize(8);
   doc.text('Universidad de La Sabana \u2014 Facultad de Educaci\u00f3n',margin+50,11);
   doc.setFont('helvetica','bold'); doc.setFontSize(10);
@@ -3378,9 +3460,9 @@ function exportarNotasPDF(){
     doc.setFillColor(azul[0],azul[1],azul[2]);doc.rect(0,0,pageW,28,'F');
     doc.setFillColor(dorado[0],dorado[1],dorado[2]);doc.rect(0,28,pageW,1.5,'F');
     doc.setFillColor(255,255,255);doc.roundedRect(margin,6,42,16,3,3,'F');
-    try{doc.addImage(LOGO_B64,'PNG',margin+1,7,40,14);}catch(e){}
+    try{doc.addImage(LOGO_B64,'PNG',margin+1,7+1.18,40,11.64);}catch(e){}
     doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(10);
-    doc.text('Doctorado en Innovacion Educativa con uso de TIC',margin+48,12);
+    doc.text('Doctorado en Innovación Educativa con uso de TIC',margin+48,12);
     doc.setFont('helvetica','normal');doc.setFontSize(7);
     doc.text('SEDIETIC v3.0  |  Reporte de Notas Finales  |  '+new Date().toLocaleDateString('es-CO'),margin+48,18);
   }
